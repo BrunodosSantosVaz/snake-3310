@@ -17,7 +17,7 @@ licenca = "MIT"                        # obrigatório se publico (identificador 
 [entrega]
 perfil = "deploy"                      # deploy | compilado
 alvo = "vps-docker"                    # deploy: vps-docker | aws | paas ; compilado: ""
-caminhos_artefato = ["src/", "migrations/", "Dockerfile", "package.json", "package-lock.json"]
+caminhos_artefato = ["src/", "migrations/", "Dockerfile", "package.json", "package-lock.json", "vite.config.ts", "tsconfig.json"]
 arquivo_versao = "package.json"          # único arquivo com a versão do artefato (definido em F2)
 ecossistemas = ["npm", "docker"]           # pacotes da stack para o Dependabot (definido em F2)
 
@@ -30,9 +30,10 @@ build_linux-x64 = "bash packaging/linux/build.sh"
 
 [deploy]                               # só no perfil deploy
 imagem = "ghcr.io/brunodossantosvaz/snake-3310"
-url_staging = "https://staging.exemplo.com"
-url_producao = "https://exemplo.com"
+url_staging = "https://tsuru.frontzap.com.br/staging/snake-3310"
+url_producao = "https://tsuru.frontzap.com.br/snake-3310"
 smoke = "npm run test:smoke"
+plataformas = ["linux/arm64"]           # vm-oracle é ARM64 (Oracle A1)
 # Opcionais (com o padrão): servicos = ["app=Dockerfile"] (servico=Dockerfile, uma imagem por serviço),
 # plataformas = ["linux/amd64"] (linux/arm64 para servidor ARM), caminho_saude = "/api/health",
 # servico_migrar = "migrar", servico_checar = "" (pré-checagem do servidor antes de migrar).
@@ -49,13 +50,13 @@ build = "npm run build"
 
 [testes]
 cobertura_minima = 80                  # % nas camadas de domínio e aplicação
-marca_pendente = "test.failing"        # como a stack marca teste com falha esperada (xfail strict, test.failing…)
+marca_pendente = "test.fails"           # como a stack marca teste com falha esperada (xfail strict, test.failing…)
 padrao_teste = "(it|test)\\("          # regex que identifica a declaração de um teste na stack
 
 [seguranca]
 nivel_asvs = "L1"                      # L1 | L2 (L2 obrigatório com dado pessoal ou dinheiro)
 banco_no_navegador = false             # true só com ADR (SEG-IA-01)
-zonas_sensiveis = ["src/**/auth/**", "src/**/payments/**", "migrations/**"]
+zonas_sensiveis = ["migrations/**", "src/interface/http/seguranca/**", "src/dominio/apelido/**"]
 # Sempre sensíveis, além da lista: .github/**, tests/aceite/** (exceto no PR de teste do épico, cuja revisão
 # segue as labels testes-revisao-*), STACK.md, DESIGN.md, PRODUTO.md, bigbang.toml, flags.toml e os arquivos
 # de dependência da stack.
