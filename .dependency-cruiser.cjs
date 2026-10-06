@@ -59,6 +59,7 @@ module.exports = {
     doNotFollow: { path: 'node_modules' },
     tsPreCompilationDeps: true,
     tsConfig: { fileName: 'tsconfig.json' },
+    // Tests are left out on purpose: a test may wire layers together to exercise them (TST-09 covers src only).
     exclude: { path: '\\.test\\.ts$' },
   },
 };

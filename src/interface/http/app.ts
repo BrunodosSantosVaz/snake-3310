@@ -2,6 +2,7 @@ import fastifyStatic from '@fastify/static';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { normalizeBasePath } from '../../infra/config.js';
 import type { Db } from '../../infra/database/db.js';
+import { problemFor, sendProblem } from './problem.js';
 
 export interface AppOptions {
   basePath: string;
@@ -15,12 +16,12 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
   const basePath = normalizeBasePath(options.basePath);
   const app = Fastify({ logger: options.logger ?? false, trustProxy: false });
 
-  // Set before the routes so every plugin inherits it: internal errors never reach the client.
-  app.setErrorHandler(async (error: { statusCode?: number; message?: string }, request, reply) => {
+  // Set before the routes so every plugin inherits them (Fastify encapsulation).
+  app.setErrorHandler(async (error: { statusCode?: number }, request, reply) => {
     request.log.error(error);
-    const status = error.statusCode && error.statusCode < 500 ? error.statusCode : 500;
-    return reply.code(status).send({ erro: status < 500 ? error.message : 'erro interno' });
+    return sendProblem(reply, problemFor(error.statusCode));
   });
+  app.setNotFoundHandler(async (_request, reply) => sendProblem(reply, problemFor(404)));
 
   await app.register(
     async (api) => {
@@ -31,7 +32,8 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
   );
 
   if (options.webDir) {
-    await app.register(fastifyStatic, { root: options.webDir, prefix: `${basePath}/`, index: 'index.html' });
+    // dotfiles ignored: a stray .env in the build output is never served (SEG-13).
+    await app.register(fastifyStatic, { root: options.webDir, prefix: `${basePath}/`, index: 'index.html', dotfiles: 'ignore' });
     if (basePath) app.get(basePath, async (_request, reply) => reply.redirect(`${basePath}/`, 301));
   }
 
