@@ -1,8 +1,10 @@
 import fastifyStatic from '@fastify/static';
 import Fastify, { type FastifyInstance } from 'fastify';
+import { CheckReadiness } from '../../aplicacao/health.js';
 import { normalizeBasePath } from '../../infra/config.js';
-import type { Db } from '../../infra/database/db.js';
-import { problemFor, sendProblem } from './problem.js';
+import { describeError, type Db } from '../../infra/database/db.js';
+import { SqlDatabaseProbe } from '../../infra/database/probe.js';
+import { problemFor, sendProblem, UNAVAILABLE } from './problem.js';
 
 export interface AppOptions {
   basePath: string;
@@ -15,6 +17,9 @@ export interface AppOptions {
 export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
   const basePath = normalizeBasePath(options.basePath);
   const app = Fastify({ logger: options.logger ?? false, trustProxy: false });
+  const readiness = new CheckReadiness(new SqlDatabaseProbe(options.db), (error) =>
+    app.log.warn({ banco: describeError(error) }, 'banco indisponível'),
+  );
 
   // Set before the routes so every plugin inherits them (Fastify encapsulation).
   app.setErrorHandler(async (error: { statusCode?: number }, request, reply) => {
@@ -25,8 +30,11 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
 
   await app.register(
     async (api) => {
-      // RN-0003: alive does not depend on the database.
+      // RN-0003: alive does not depend on the database; ready does, and never shows the error.
       api.get('/health', async () => ({ status: 'ok' }));
+      api.get('/ready', async (_request, reply) =>
+        (await readiness.execute()) ? { status: 'ok' } : sendProblem(reply, UNAVAILABLE),
+      );
     },
     { prefix: `${basePath}/api` },
   );

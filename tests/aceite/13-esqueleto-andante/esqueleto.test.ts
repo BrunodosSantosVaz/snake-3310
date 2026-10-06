@@ -55,7 +55,7 @@ describe('Esqueleto andante (#13)', () => {
       expect(response.json()).toEqual({ status: 'ok' });
     }));
 
-  test.fails('CA-2 RN-0003: ready responde 200 com o banco no ar e 503 com o banco fora', () => // pendente da tarefa #16
+  test('CA-2 RN-0003: ready responde 200 com o banco no ar e 503 com o banco fora', () =>
     withCleanup(async (defer) => {
       const { buildApp } = await load('../../../src/interface/http/app');
       const { createTestDatabase } = await load('../../apoio/banco');

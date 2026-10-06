@@ -59,10 +59,12 @@ label `fundacao`.
 - O processo de trabalho: `.bigbang/processo/`. Pegadinhas: `docs/memoria.md`.
 - Requisitos: Node.js 22 ou mais novo (a imagem de produção usa o Node 24) e npm.
 - Comandos: `npm ci` (instala), `npm run lint`, `npm run typecheck`, `npm test` (unidade),
-  `npm run test:acceptance` (aceite), `npm run test:architecture` (camadas), `npm run test:coverage` e
-  `npm run build`.
+  `npm run test:acceptance` (aceite), `npm run test:architecture` (camadas), `npm run test:coverage`,
+  `npm run test:migracoes` e `npm run build`. Depois do build: `npm run migrar` (aplica as migrações) e `npm start`.
+- Os testes usam um Postgres em memória (PGlite, ADR-0002); não é preciso instalar banco para desenvolver.
 - Variáveis de ambiente do servidor (os valores ficam só no servidor): `BASE_PATH` (endereço do jogo, por exemplo
-  `/snake-3310`), `DATABASE_URL`, `PORT` (padrão 8080) e `WEB_DIR` (padrão `dist/web`).
+  `/snake-3310`), `DATABASE_URL`, `PORT` (padrão 8080), `WEB_DIR` (padrão `dist/web`) e, para `npm run migrar`, `MIGRATIONS_DIR` (padrão
+  `migrations`).
 
 (a preencher) — estrutura do repositório, como rodar a partir do código, testes e build (comandos de
 `bigbang.toml` `[comandos]`), variáveis de ambiente sem valores.
