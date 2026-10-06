@@ -16,4 +16,4 @@ C4Context
 | --- | --- |
 | Jogador | Joga no PC ou no celular e manda o placar ao ranking com um apelido |
 | Dono | Aprova as publicações em produção e cuida do ranking |
-| Cloudflare e Nginx Proxy Manager | Terminam o HTTPS e mandam cada caminho (`/snake-3310`, `/staging/snake-3310`) ao ambiente certo |
+| Cloudflare e Nginx Proxy Manager | Terminam o HTTPS e mandam cada caminho (`/snake-3310`, `/snake-3310-hom`) ao ambiente certo |

@@ -30,7 +30,7 @@ build_linux-x64 = "bash packaging/linux/build.sh"
 
 [deploy]                               # só no perfil deploy
 imagem = "ghcr.io/brunodossantosvaz/snake-3310"
-url_staging = "https://tsuru.frontzap.com.br/staging/snake-3310"
+url_staging = "https://tsuru.frontzap.com.br/snake-3310-hom"
 url_producao = "https://tsuru.frontzap.com.br/snake-3310"
 smoke = "npm run test:smoke"
 plataformas = ["linux/arm64"]           # vm-oracle é ARM64 (Oracle A1)

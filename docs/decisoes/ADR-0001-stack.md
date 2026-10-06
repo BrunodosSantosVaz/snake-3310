@@ -67,6 +67,9 @@ Escolhida a **opção A, com entrega pela ponte (3)**.
   ambiente.
 - **IP real no limite de envios:** a cadeia Cloudflare → NPM → app exige `trustProxy` restrito aos saltos
   conhecidos.
+- **Homologação em `/snake-3310-hom`**, por decisão do dono, e não em `/staging/snake-3310`, que era o que a
+  pesquisa sugeria. O endereço `/snake-3310` é prefixo de `/snake-3310-hom`. O proxy escolhe o prefixo mais
+  longo, e a app só aceita rotas em `BASE_PATH` exato ou `BASE_PATH/`, com teste.
 - **Placar falso:** o servidor não vê a partida. A validação cobre faixa, plausibilidade e tempo mínimo de partida.
   Um placar falso, mas plausível, é risco aceito para um jogo de portfólio.
 - **Filtro de palavrões em português:** não há biblioteca madura, então a lista é própria, no domínio e testada.

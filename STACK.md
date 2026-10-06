@@ -33,7 +33,7 @@ Postgres 18 no servidor que já existe, com banco e usuário próprios do Snake 
 - **Perfil:** `deploy`.
 - **Alvo:** `vps-docker` no `vm-oracle` (ARM64), com imagem `linux/arm64` no GHCR, publicada pelo digest.
 - **URLs:** produção em `https://tsuru.frontzap.com.br/snake-3310` e staging em
-  `https://tsuru.frontzap.com.br/staging/snake-3310`. O NPM manda cada caminho para o contêiner do ambiente
+  `https://tsuru.frontzap.com.br/snake-3310-hom`. O NPM manda cada caminho para o contêiner do ambiente
   (*custom location*).
 - **Prefixo de caminho:** a variável `BASE_PATH` é lida na execução, e o Vite usa `base: './'`. A mesma imagem
   roda em qualquer caminho (ARQ-07).
