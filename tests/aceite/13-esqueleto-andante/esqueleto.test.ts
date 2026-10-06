@@ -72,7 +72,7 @@ describe('Esqueleto andante (#13)', () => {
       expect(response.body).not.toContain('banco fora do ar');
     }));
 
-  test.fails('CA-3 RN-0001: ranking mostra os 10 maiores, do maior para o menor, empate pelo mais antigo', () => // pendente da tarefa #17
+  test('CA-3 RN-0001: ranking mostra os 10 maiores, do maior para o menor, empate pelo mais antigo', () =>
     withCleanup(async (defer) => {
       const { buildApp } = await load('../../../src/interface/http/app');
       const { createTestDatabase } = await load('../../apoio/banco');
@@ -117,7 +117,7 @@ describe('Esqueleto andante (#13)', () => {
       ]);
     }));
 
-  test.fails('CA-4 RN-0001: ranking vazio devolve lista vazia', () => // pendente da tarefa #17
+  test('CA-4 RN-0001: ranking vazio devolve lista vazia', () =>
     withCleanup(async (defer) => {
       const { buildApp } = await load('../../../src/interface/http/app');
       const { createTestDatabase } = await load('../../apoio/banco');
