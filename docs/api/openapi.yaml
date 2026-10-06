@@ -1,0 +1,68 @@
+openapi: 3.1.0
+info:
+  title: Snake 3310 — Ranking público
+  version: 0.0.0
+  description: Contrato da listagem implementada na tarefa #17; não inclui envio de placares.
+servers:
+  - url: '{basePath}'
+    variables:
+      basePath:
+        default: /snake-3310
+        description: Prefixo BASE_PATH configurado no servidor; pode ser vazio na raiz.
+paths:
+  /api/placares:
+    get:
+      operationId: listRanking
+      summary: Lista os dez maiores placares públicos (RN-0001)
+      description: Pontos em ordem decrescente; empates pelo envio mais antigo. Sem paginação nem parâmetros; campos de consulta desconhecidos recebem 400. Lista vazia quando não há placares.
+      security: []
+      responses:
+        '200':
+          description: Ranking limitado a dez entradas, sem datas nem identificadores internos.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [scores]
+                additionalProperties: false
+                properties:
+                  scores:
+                    type: array
+                    maxItems: 10
+                    items:
+                      type: object
+                      required: [nickname, points]
+                      additionalProperties: false
+                      properties:
+                        nickname:
+                          type: string
+                        points:
+                          type: integer
+                          minimum: 0
+        '400':
+          description: Parâmetro de consulta desconhecido.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Falha interna ou de leitura do banco, sem detalhes internos.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+components:
+  schemas:
+    Problem:
+      type: object
+      required: [type, title, status]
+      additionalProperties: false
+      properties:
+        type:
+          type: string
+          const: about:blank
+        title:
+          type: string
+        status:
+          type: integer
+          enum: [400, 500]
