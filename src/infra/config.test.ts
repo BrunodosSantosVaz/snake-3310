@@ -23,7 +23,13 @@ describe('readConfig', () => {
       basePath: '/snake-3310',
       databaseUrl: 'postgres://x',
       webDir: resolve('dist/web'),
+      production: false,
     });
+  });
+
+  test('enables production transport policy only for NODE_ENV=production', () => {
+    expect(readConfig({ DATABASE_URL: 'postgres://x', NODE_ENV: 'production' }).production).toBe(true);
+    expect(readConfig({ DATABASE_URL: 'postgres://x', NODE_ENV: 'development' }).production).toBe(false);
   });
 
   test('requires DATABASE_URL and a valid port', () => {

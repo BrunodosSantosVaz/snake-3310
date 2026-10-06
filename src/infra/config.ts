@@ -6,6 +6,7 @@ export interface Config {
   basePath: string;
   databaseUrl: string;
   webDir: string;
+  production: boolean;
 }
 
 const BASE_PATH = /^(\/[a-z0-9][a-z0-9-]*)*$/;
@@ -28,5 +29,6 @@ export function readConfig(env: NodeJS.ProcessEnv): Config {
     basePath: normalizeBasePath(env.BASE_PATH),
     databaseUrl,
     webDir: resolve(env.WEB_DIR ?? 'dist/web'), // @fastify/static needs an absolute path
+    production: env.NODE_ENV === 'production',
   };
 }

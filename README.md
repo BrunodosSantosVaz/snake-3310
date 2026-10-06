@@ -33,8 +33,11 @@ construírem e manterem sistemas profissionais.
 ## Estado atual
 
 O épico [#13](https://github.com/BrunodosSantosVaz/snake-3310/issues/13) está em implementação. O código já tem
-servidor sob `BASE_PATH`, saúde, prontidão, migrações e listagem do ranking. Ainda não há release publicada;
-a tela do jogo e a entrega do ambiente continuam pendentes.
+servidor sob `BASE_PATH`, saúde, prontidão, migrações e listagem do ranking. A tela do aparelho já permite navegar
+no menu e consultar os cinco maiores placares. Ainda não há release publicada; a partida e a entrega do ambiente
+continuam pendentes.
+
+![Menu do Snake 3310 na tela de um aparelho azul, com teclas numéricas clicáveis](docs/imagens/menu-3310.png)
 
 <!-- Depois da primeira release: a versão em produção, o que ela já faz e o que vem a seguir, em duas ou três frases. -->
 
@@ -47,6 +50,8 @@ a tela do jogo e a entrega do ambiente continuam pendentes.
 - API pública de leitura `GET <BASE_PATH>/api/placares`: no máximo dez placares, por pontos decrescentes e, em
   empate, pelo envio mais antigo (RN-0001). Sem placares, retorna `{ "scores": [] }`.
 - Servidor Fastify com `/api/health`, `/api/ready` e migrações Postgres, sempre sob `BASE_PATH`.
+- Aparelho 3310 responsivo com menu, instruções e ranking conectado à API, operado por teclado ou pelas teclas
+  clicáveis. Trata carregando, vazio, erro e nova tentativa; a opção Jogar ainda informa “Em breve”.
 
 ## Instalação
 
@@ -57,20 +62,30 @@ a tela do jogo e a entrega do ambiente continuam pendentes.
 Para consultar o ranking local depois de configurar o banco, aplicar as migrações e iniciar o servidor, faça
 `GET <BASE_PATH>/api/placares`. A resposta contém só `nickname` e `points`; datas e IDs ficam no servidor.
 A rota não aceita parâmetros de consulta: campos desconhecidos recebem 400. O contrato está em
-[docs/api/openapi.yaml](docs/api/openapi.yaml). A interface jogável ainda não está disponível.
+[docs/api/openapi.yaml](docs/api/openapi.yaml). Na tela, use 2/8, setas ou W/S para selecionar, OK/Enter para abrir e
+C/Esc para voltar. No ranking, OK repete a consulta. A partida ainda não está disponível; veja o
+[guia da interface](docs/guias/interface.md).
 
 ## Para desenvolvedores
 
 - Instruções para IAs: `AGENTS.md`. O que o sistema é: `PRODUTO.md`. A stack: `STACK.md`. O design: `DESIGN.md`.
 - O processo de trabalho: `.bigbang/processo/`. Pegadinhas: `docs/memoria.md`.
-- Requisitos: Node.js 22 ou mais novo (a imagem de produção usa o Node 24) e npm.
+- Requisitos: Node.js 24 e npm, conforme a stack e o runtime da imagem.
 - Comandos: `npm ci` (instala), `npm run lint`, `npm run typecheck`, `npm test` (unidade),
   `npm run test:acceptance` (aceite), `npm run test:architecture` (camadas), `npm run test:coverage`,
   `npm run test:migracoes` e `npm run build`. Depois do build: `npm run migrar` (aplica as migrações) e `npm start`.
+- `npm run dev` abre o Vite para a interface e encaminha `/api` para o servidor local na porta 8080;
+  `npm run build` compila servidor e front em `dist/server` e `dist/web`, com caminhos relativos no front.
+- `npm run test:ui` serve o build real sob a CSP do Fastify e valida teclado, cinco linhas, contraste/acessibilidade
+  com axe, layout em 360 px e texto ampliado em 200% no Chromium.
+  Instale o navegador de teste com `npx playwright install chromium` antes de executar esse comando. Os testes DOM
+  e de semântica com axe também rodam em `npm test` na CI.
 - Os testes usam um Postgres em memória (PGlite, ADR-0002); não é preciso instalar banco para desenvolver.
 - Variáveis de ambiente do servidor (os valores ficam só no servidor): `BASE_PATH` (endereço do jogo, por exemplo
   `/snake-3310`), `DATABASE_URL`, `PORT` (padrão 8080), `WEB_DIR` (padrão `dist/web`) e, para `npm run migrar`, `MIGRATIONS_DIR` (padrão
   `migrations`).
+- `NODE_ENV=production` ativa HSTS por um ano. CSP restrita ao próprio site, proteção contra frames, nosniff,
+  política de referrer e bloqueio de câmera/microfone/localização são enviados em todas as respostas.
 
 (a preencher) — estrutura do repositório, como rodar a partir do código, testes e build (comandos de
 `bigbang.toml` `[comandos]`), variáveis de ambiente sem valores.
