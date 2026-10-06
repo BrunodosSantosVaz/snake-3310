@@ -47,6 +47,10 @@ export function createPool(databaseUrl: string, report: DbErrorReporter): Closab
     },
     transaction: async <T>(work: (tx: Db) => Promise<T>) => {
       const client = await pool.connect();
+      // While checked out, a dropped connection is emitted on the client, not on the pool.
+      const onError = (error: Error) => report(describeError(error));
+      client.on('error', onError);
+      let broken: Error | undefined;
       const tx: Db = {
         query: async <R>(sql: string, params?: unknown[]) => ({ rows: (await client.query(sql, params)).rows as R[] }),
       };
@@ -56,10 +60,13 @@ export function createPool(databaseUrl: string, report: DbErrorReporter): Closab
         await client.query('commit');
         return result;
       } catch (error) {
-        await client.query('rollback').catch(() => undefined);
+        await client.query('rollback').catch((rollbackError: Error) => {
+          broken = rollbackError; // a connection that cannot roll back is discarded, never reused
+        });
         throw error;
       } finally {
-        client.release();
+        client.off('error', onError);
+        client.release(broken);
       }
     },
     close: async () => {

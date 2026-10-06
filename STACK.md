@@ -67,7 +67,7 @@ C4Container
 | Para quê | Ferramenta | Comando (`[comandos]` no `bigbang.toml`) |
 | --- | --- | --- |
 | Testes | Vitest 5 | `npm test` |
-| Testes de aceite | Vitest 5, com a API via `fastify.inject` e Postgres em memória (PGlite, [ADR-0002](docs/decisoes/ADR-0002-testes-com-pglite.md)) | `npm run test:acceptance` |
+| Testes de aceite | Vitest 5, com a API via `fastify.inject` e Postgres em memória (PGlite; proposta no [ADR-0002](docs/decisoes/ADR-0002-testes-com-pglite.md), aguardando o dono) | `npm run test:acceptance` |
 | Fumaça (smoke) | Playwright 1.63, contra a URL do ambiente | `npm run test:smoke` |
 | Lint e formatação | ESLint 10 com typescript-eslint 8 | `npm run lint` |
 | Tipos | `tsc --noEmit` | `npm run typecheck` |
@@ -123,4 +123,4 @@ Dependências de desenvolvimento são livres. Linha nova só com ADR e pelo port
 | Data | O que mudou | ADR |
 | --- | --- | --- |
 | 06/10/2026 | Versão inicial (Fundação F2) | ADR-0001 |
-| 06/10/2026 | Testes de aceite e de integração com PGlite no lugar de contêiner | ADR-0002 |
+| 06/10/2026 | Testes de aceite e de integração com PGlite no lugar de contêiner (proposta) | ADR-0002 |

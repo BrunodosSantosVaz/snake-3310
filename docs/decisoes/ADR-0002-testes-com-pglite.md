@@ -1,8 +1,8 @@
 # ADR-0002: Testes de aceite e de integração com PGlite
 
-- **Situação:** aceita
+- **Situação:** proposta (aguarda a decisão do dono, registrada com `bb decisao`)
 - **Data:** 2026-10-06
-- **Decisores:** Bruno dos Santos Vaz (dono, pela aprovação ampla registrada no #6); Claude (proposta)
+- **Decisores:** Claude (proposta); o dono decide
 
 ## Contexto e problema
 
@@ -25,7 +25,7 @@ testes de aceite que dependem do Postgres não rodariam na CI.
 
 ## Decisão e justificativa
 
-Escolhida a **opção 1, PGlite**. Ela roda o mesmo motor do Postgres, sem Docker, e cria um banco isolado por teste
+Proposta a **opção 1, PGlite**. Ela roda o mesmo motor do Postgres, sem Docker, e cria um banco isolado por teste
 em milissegundos.
 
 ## Consequências
