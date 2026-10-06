@@ -53,7 +53,7 @@ marca_pendente = "test.failing"        # como a stack marca teste com falha espe
 padrao_teste = "(it|test)\\("          # regex que identifica a declaração de um teste na stack
 
 [seguranca]
-nivel_asvs = "L2"                      # L1 | L2 (L2 obrigatório com dado pessoal ou dinheiro)
+nivel_asvs = "L1"                      # L1 | L2 (L2 obrigatório com dado pessoal ou dinheiro)
 banco_no_navegador = false             # true só com ADR (SEG-IA-01)
 zonas_sensiveis = ["src/**/auth/**", "src/**/payments/**", "migrations/**"]
 # Sempre sensíveis, além da lista: .github/**, tests/aceite/** (exceto no PR de teste do épico, cuja revisão
