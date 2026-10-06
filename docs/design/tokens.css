@@ -1,0 +1,46 @@
+/* Tokens do design kit do Snake 3310 (DESIGN.md). Única fonte de cor, fonte, espaço, raio e sombra (FE-01). */
+:root {
+  /* Cores */
+  --cor-fundo: #0E1A33;          /* página atrás do aparelho */
+  --cor-aparelho: #2B4C8C;       /* corpo azul do 3310 */
+  --cor-aparelho-borda: #1C3566; /* contorno e sombra do corpo */
+  --cor-tela: #C7F0D8;           /* tela verde-azulada */
+  --cor-pixel: #43523D;          /* pixels acesos: cobra, comida, texto da tela */
+  --cor-tecla: #DCE3EE;          /* teclas */
+  --cor-tecla-texto: #16213A;    /* rótulo das teclas */
+  --cor-texto: #F2F5FA;          /* texto sobre fundo e aparelho */
+  --cor-texto-suave: #A9B8D0;    /* texto secundário sobre o fundo */
+  --cor-primaria: #8FD3FF;       /* ação principal e links sobre o fundo */
+  --cor-primaria-texto: #0E1A33; /* texto sobre a cor primária */
+  --cor-erro: #FF8A80;
+  --cor-sucesso: #7EE2A8;
+  --cor-alerta: #FFD166;
+  --cor-foco: #FFD166;           /* anel de foco */
+
+  /* Tipografia */
+  --fonte-corpo: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fonte-tela: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; /* fora do canvas; no canvas, fonte bitmap 5×7 própria */
+  --tamanho-corpo: 1rem;
+  --tamanho-pequeno: 0.875rem;
+  --tamanho-titulo: 1.5rem;
+  --peso-normal: 400;
+  --peso-forte: 700;
+  --altura-linha: 1.5;
+
+  /* Espaço, raio e sombra */
+  --espaco-1: 4px;
+  --espaco-2: 8px;
+  --espaco-3: 12px;
+  --espaco-4: 16px;
+  --espaco-5: 24px;
+  --espaco-6: 32px;
+  --raio-padrao: 8px;
+  --raio-tecla: 14px;
+  --raio-aparelho: 48px;
+  --sombra-padrao: 0 8px 24px rgb(0 0 0 / 0.35);
+  --toque-minimo: 44px;          /* área de toque mínima (FE-03) */
+
+  /* Tela do jogo */
+  --tela-colunas: 21;            /* grade lógica 21 × 13, como o Snake II do 3310 */
+  --tela-linhas: 13;
+}

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" shape-rendering="crispEdges" role="img" aria-label="Snake 3310">
+  <rect width="48" height="48" rx="10" fill="#2B4C8C"/>
+  <rect x="6" y="6" width="36" height="36" rx="3" fill="#C7F0D8"/>
+  <g fill="#43523D">
+    <rect x="10" y="30" width="16" height="4"/>
+    <rect x="22" y="18" width="4" height="12"/>
+    <rect x="22" y="14" width="12" height="4"/>
+    <rect x="30" y="14" width="4" height="4" fill="#43523D"/>
+    <rect x="34" y="26" width="4" height="4"/>
+  </g>
+  <rect x="31" y="15" width="1" height="1" fill="#C7F0D8"/>
+</svg>
