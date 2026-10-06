@@ -24,14 +24,24 @@ const databaseDown = {
   },
 };
 
-// Runs the scenario and always releases what it opened, even when an assertion fails.
+// Runs the scenario and always releases what it opened. A failing cleanup never hides the scenario's own failure,
+// and never stops the other cleanups.
 async function withCleanup(scenario: (defer: (cleanup: () => unknown) => void) => Promise<void>): Promise<void> {
   const cleanups: Array<() => unknown> = [];
+  let failure: unknown;
   try {
     await scenario((cleanup) => cleanups.unshift(cleanup));
-  } finally {
-    for (const cleanup of cleanups) await cleanup();
+  } catch (error) {
+    failure = error;
   }
+  for (const cleanup of cleanups) {
+    try {
+      await cleanup();
+    } catch (error) {
+      failure ??= error;
+    }
+  }
+  if (failure !== undefined) throw failure;
 }
 
 describe('Esqueleto andante (#13)', () => {
@@ -68,14 +78,15 @@ describe('Esqueleto andante (#13)', () => {
       const { createTestDatabase } = await load('../../apoio/banco');
       const { db, close } = await createTestDatabase();
       defer(close);
-      // Two ties. In the first the older score is inserted last; in the second the older score is inserted first and
-      // has the nickname that sorts last. Only created_at separates them in both.
+      // Two ties that only created_at separates in both: DUDA (older) is inserted after CAIO and sorts after it by
+      // nickname; ABEL (older) is inserted before JOAO and sorts before it. So ordering by insertion (either way) or by
+      // nickname (either way) fails one of them.
       const rows: Array<[string, number, string]> = [
         ['ANA', 50, '2026-10-01T10:00:00Z'],
         ['BIA', 90, '2026-10-01T10:01:00Z'],
         ['CAIO', 70, '2026-10-01T10:02:00Z'],
         ['DUDA', 70, '2026-10-01T09:00:00Z'],
-        ['ZECA', 30, '2026-10-01T08:00:00Z'],
+        ['ABEL', 30, '2026-10-01T08:00:00Z'],
         ['EVA', 10, '2026-10-01T10:04:00Z'],
         ['FABIO', 80, '2026-10-01T10:05:00Z'],
         ['GUI', 20, '2026-10-01T10:06:00Z'],
@@ -101,7 +112,7 @@ describe('Esqueleto andante (#13)', () => {
         { nickname: 'HUGO', points: 60 },
         { nickname: 'ANA', points: 50 },
         { nickname: 'IVO', points: 40 },
-        { nickname: 'ZECA', points: 30 },
+        { nickname: 'ABEL', points: 30 },
         { nickname: 'JOAO', points: 30 },
       ]);
     }));

@@ -7,16 +7,16 @@ criada_em: 2026-10-06
 
 ## Descrição
 
-O sistema tem dois endereços de verificação para a operação. "Vivo" (`/api/health`) responde que está tudo bem
-sempre que o servidor está de pé, mesmo sem banco. "Pronto" (`/api/ready`) só responde que está tudo bem quando o
-banco de dados responde. Quando não está pronto, ele avisa que está indisponível (503), sem mostrar detalhes do erro.
+O sistema tem duas verificações para quem opera o servidor. "Vivo" diz que está tudo bem sempre que o servidor está
+de pé, mesmo sem o banco de dados. "Pronto" só diz que está tudo bem quando o banco de dados responde; quando não
+está pronto, avisa que está indisponível, sem mostrar detalhes do erro.
 
 ## Exemplos
 
-- Dado o servidor de pé e o banco fora, quando a operação pergunta se está vivo, então recebe 200 com
+- Dado o servidor de pé e o banco fora, quando a operação pede `/api/health` (vivo), então recebe 200 com
   `{"status":"ok"}`.
-- Dado o banco no ar, quando a operação pergunta se está pronto, então recebe 200.
-- Dado o banco fora, quando a operação pergunta se está pronto, então recebe 503, sem a mensagem do erro.
+- Dado o banco no ar, quando a operação pede `/api/ready` (pronto), então recebe 200.
+- Dado o banco fora, quando a operação pede `/api/ready`, então recebe 503, sem a mensagem do erro.
 
 ## Exceções
 
