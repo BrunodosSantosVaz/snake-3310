@@ -16,3 +16,7 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
   no mesmo balde.
 - 2026-10-06 (#15): todo erro da API sai em Problem Details (`src/interface/http/problem.ts`), com título controlado.
   Só os 4xx mantêm o status; o resto vira 500.
+- 2026-10-06 (#16): as migrações são SQL puro em `migrations/NNNN_nome.sql`, aplicadas em ordem e uma vez só
+  (`schema_migrations`). Nunca altere uma migração já publicada: crie outra (DAD-02, expandir e contrair).
+- 2026-10-06 (#16): o "não pronto" do `/api/ready` usa `UNAVAILABLE` (503). O `problemFor` transforma tudo que não
+  é 4xx em 500, de propósito, para erros inesperados.
