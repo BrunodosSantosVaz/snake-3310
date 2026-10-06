@@ -20,3 +20,7 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
   (`schema_migrations`). Nunca altere uma migração já publicada: crie outra (DAD-02, expandir e contrair).
 - 2026-10-06 (#16): o "não pronto" do `/api/ready` usa `UNAVAILABLE` (503). O `problemFor` transforma tudo que não
   é 4xx em 500, de propósito, para erros inesperados.
+- 2026-10-06 (#16): o pool do `pg` precisa de ouvinte no evento `error` (`listenForErrors`), senão uma conexão parada
+  que cai derruba o processo. Nunca logue o pool: ele carrega a connection string com a senha.
+- 2026-10-06 (#16): transação no `pg` só com cliente dedicado (`pool.connect()`); `pool.query` pode trocar de conexão a
+  cada comando. Use `db.transaction(...)`.

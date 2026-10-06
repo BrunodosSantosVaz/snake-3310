@@ -22,7 +22,6 @@ const TITLES: Record<number, string> = {
   422: 'Dados inválidos',
   429: 'Muitas requisições',
   500: 'Erro interno',
-  503: 'Indisponível',
 };
 
 export function problemFor(statusCode: number | undefined): Problem {

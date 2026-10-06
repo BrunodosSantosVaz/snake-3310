@@ -14,7 +14,7 @@
     "migrar": "node dist/server/interface/migrate.js",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run src",
+    "test": "vitest run src tests/migracoes",
     "test:acceptance": "vitest run tests/aceite",
     "test:architecture": "depcruise src --config .dependency-cruiser.cjs",
     "test:coverage": "vitest run src --coverage",

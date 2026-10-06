@@ -1,31 +1,33 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { Db } from './db.js';
+import type { TransactionalDb } from './db.js';
 
-// Plain SQL migrations (migrations/NNNN_name.sql), applied once and in order (DAD-02: expand and contract, never
-// undone by "Voltar versão").
-export const MIGRATIONS_DIR = process.env.MIGRATIONS_DIR ?? 'migrations';
+// Plain SQL migrations (migrations/NNNN_name.sql), each applied once, in order and inside its own transaction
+// (DAD-01). A published migration is never edited: a new one is added (DAD-02, expand and contract).
+const MIGRATION_FILE = /^\d{4}_[a-z0-9_]+\.sql$/;
+const LOCK_ID = 3310; // pg_advisory_xact_lock: two concurrent runs never apply the same migration twice
 
-export async function migrate(db: Db, dir: string = MIGRATIONS_DIR): Promise<string[]> {
+export async function migrate(db: TransactionalDb, dir = 'migrations'): Promise<string[]> {
   await db.query(
     'create table if not exists schema_migrations (name text primary key, applied_at timestamptz not null default now())',
   );
-  const done = new Set((await db.query<{ name: string }>('select name from schema_migrations')).rows.map((r) => r.name));
-  const files = (await readdir(dir)).filter((name) => /^\d{4}_[a-z0-9_]+\.sql$/.test(name)).sort();
+  const files = (await readdir(dir)).filter((name) => MIGRATION_FILE.test(name)).sort();
   const applied: string[] = [];
   for (const name of files) {
-    if (done.has(name)) continue;
     const sql = await readFile(join(dir, name), 'utf8');
-    await db.query('begin');
     try {
-      await db.query(sql);
-      await db.query('insert into schema_migrations (name) values ($1)', [name]);
-      await db.query('commit');
+      const ran = await db.transaction(async (tx) => {
+        await tx.query('select pg_advisory_xact_lock($1)', [LOCK_ID]);
+        const done = await tx.query('select 1 from schema_migrations where name = $1', [name]);
+        if (done.rows.length > 0) return false;
+        await tx.query(sql);
+        await tx.query('insert into schema_migrations (name) values ($1)', [name]);
+        return true;
+      });
+      if (ran) applied.push(name);
     } catch (error) {
-      await db.query('rollback');
       throw new Error(`migração ${name} falhou`, { cause: error });
     }
-    applied.push(name);
   }
   return applied;
 }

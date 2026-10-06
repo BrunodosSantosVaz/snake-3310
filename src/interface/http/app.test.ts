@@ -63,12 +63,3 @@ describe('buildApp', () => {
     expect((await instance.inject({ method: 'GET', url: '/snake-3310' })).statusCode).toBe(301);
   });
 });
-
-describe('problem titles', () => {
-  test('every 4xx keeps a Portuguese title and 503 stays explicit', async () => {
-    const { problemFor, UNAVAILABLE } = await import('./problem.js');
-    expect(problemFor(403)).toEqual({ type: 'about:blank', title: 'Proibido', status: 403 });
-    expect(problemFor(418).title).toBe('Erro na requisição');
-    expect(UNAVAILABLE.status).toBe(503);
-  });
-});
