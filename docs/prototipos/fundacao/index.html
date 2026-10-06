@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snake 3310 · protótipo</title>
+<link rel="icon" href="../../design/icone.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../design/tokens.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; background: var(--cor-fundo); color: var(--cor-texto);
+         font: var(--peso-normal) var(--tamanho-corpo)/var(--altura-linha) var(--fonte-corpo);
+         display: flex; flex-direction: column; align-items: center; gap: var(--espaco-5); padding: var(--espaco-4); }
+  a { color: var(--cor-primaria); }
+  :focus-visible { outline: 3px solid var(--cor-foco); outline-offset: 2px; }
+  .topo { display: flex; align-items: center; gap: var(--espaco-3); }
+  .topo img { width: 40px; height: 40px; }
+  .topo h1 { font-size: var(--tamanho-titulo); margin: 0; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Aparelho */
+  .aparelho { width: min(340px, 100%); background: var(--cor-aparelho); border: 3px solid var(--cor-aparelho-borda);
+              border-radius: var(--raio-aparelho) var(--raio-aparelho) 64px 64px; padding: var(--espaco-5) var(--espaco-4) var(--espaco-6);
+              box-shadow: var(--sombra-padrao); display: flex; flex-direction: column; align-items: center; gap: var(--espaco-4); }
+  .marca { font: var(--peso-forte) var(--tamanho-pequeno) var(--fonte-tela); letter-spacing: 0.3em; color: var(--cor-texto); }
+  .tela { width: 100%; aspect-ratio: 84 / 56; background: var(--cor-tela); border-radius: var(--raio-padrao);
+          border: 6px solid var(--cor-aparelho-borda); position: relative; overflow: hidden; color: var(--cor-pixel);
+          font-family: var(--fonte-tela); }
+  .tela canvas { width: 100%; height: 100%; image-rendering: pixelated; display: block; }
+  .tela .camada { position: absolute; inset: 0; padding: var(--espaco-2) var(--espaco-3); display: flex; flex-direction: column; }
+  .tela .camada[hidden] { display: none; }
+  .tela h2 { margin: 0 0 var(--espaco-1); font-size: var(--tamanho-corpo); text-transform: uppercase; border-bottom: 2px solid var(--cor-pixel); }
+  .tela ol, .tela ul { margin: 0; padding: 0; list-style: none; font-size: var(--tamanho-pequeno); line-height: 1.35; }
+  .tela li { display: flex; justify-content: space-between; }
+  .tela .menu li { padding: 0 var(--espaco-1); }
+  .tela .menu li[aria-selected="true"] { background: var(--cor-pixel); color: var(--cor-tela); }
+  .tela .placar { position: absolute; top: var(--espaco-1); right: var(--espaco-2); font-size: var(--tamanho-pequeno); }
+  .tela .aviso { margin: auto; text-align: center; font-size: var(--tamanho-pequeno); }
+
+  /* Teclado */
+  .teclado { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--espaco-2); width: 100%; }
+  .tecla { min-height: var(--toque-minimo); border: 0; border-radius: var(--raio-tecla); background: var(--cor-tecla);
+           color: var(--cor-tecla-texto); font: var(--peso-forte) var(--tamanho-corpo) var(--fonte-corpo); cursor: pointer;
+           display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; }
+  .tecla small { font-size: 0.7rem; font-weight: var(--peso-normal); }
+  .tecla:active { transform: translateY(1px); }
+  .acoes { display: grid; grid-template-columns: 1fr 1fr; gap: var(--espaco-2); width: 100%; }
+
+  /* Modal e botões */
+  dialog { background: var(--cor-fundo); color: var(--cor-texto); border: 2px solid var(--cor-aparelho); border-radius: var(--raio-padrao);
+           padding: var(--espaco-5); width: min(360px, calc(100% - var(--espaco-6))); box-shadow: var(--sombra-padrao); }
+  dialog::backdrop { background: rgb(0 0 0 / 0.6); }
+  dialog h2 { margin: 0 0 var(--espaco-2); font-size: var(--tamanho-titulo); }
+  label { display: block; font-weight: var(--peso-forte); margin-bottom: var(--espaco-1); }
+  input:not([type=radio]) { width: 100%; min-height: var(--toque-minimo); padding: 0 var(--espaco-3); border-radius: var(--raio-padrao);
+          border: 2px solid var(--cor-texto-suave); background: var(--cor-fundo); color: var(--cor-texto); font: inherit; }
+  .ajuda { color: var(--cor-texto-suave); font-size: var(--tamanho-pequeno); margin: var(--espaco-1) 0 0; }
+  .msg { font-size: var(--tamanho-pequeno); margin: var(--espaco-2) 0 0; min-height: 1.5em; }
+  .msg.erro { color: var(--cor-erro); } .msg.sucesso { color: var(--cor-sucesso); } .msg.alerta { color: var(--cor-alerta); }
+  .botoes { display: flex; gap: var(--espaco-2); margin-top: var(--espaco-4); flex-wrap: wrap; }
+  .botao { min-height: var(--toque-minimo); padding: 0 var(--espaco-4); border-radius: var(--raio-padrao); font: var(--peso-forte) var(--tamanho-corpo) var(--fonte-corpo); cursor: pointer; }
+  .botao.primario { background: var(--cor-primaria); color: var(--cor-primaria-texto); border: 0; }
+  .botao.secundario { background: transparent; color: var(--cor-texto); border: 2px solid var(--cor-texto-suave); }
+  .botao[disabled] { opacity: 0.6; cursor: progress; }
+
+  /* Painel do protótipo (fora do produto) */
+  .painel { width: min(340px, 100%); border: 1px dashed var(--cor-texto-suave); border-radius: var(--raio-padrao); padding: var(--espaco-3); font-size: var(--tamanho-pequeno); color: var(--cor-texto-suave); }
+  .painel fieldset { border: 0; padding: 0; margin: var(--espaco-2) 0 0; display: flex; flex-wrap: wrap; gap: var(--espaco-2); }
+  .painel legend { padding: 0; font-weight: var(--peso-forte); color: var(--cor-texto); }
+  .painel input { accent-color: var(--cor-primaria); width: 20px; height: 20px; }
+  .painel label { display: inline-flex; align-items: center; gap: var(--espaco-1); font-weight: var(--peso-normal); margin: 0; min-height: var(--toque-minimo); }
+</style>
+</head>
+<body>
+<header class="topo"><img src="../../design/icone.svg" alt=""><h1>Snake 3310</h1></header>
+
+<main class="aparelho" aria-label="Celular Nokia 3310">
+  <div class="marca" aria-hidden="true">NOKIA</div>
+  <div class="tela" id="tela">
+    <canvas id="canvas" width="84" height="56" role="img" aria-label="Tela do jogo"></canvas>
+    <div class="placar" id="placar" hidden aria-live="off">0000</div>
+
+    <div class="camada" id="menu">
+      <h2>Snake 3310</h2>
+      <ul class="menu" role="listbox" aria-label="Menu" id="itens-menu">
+        <li role="option" aria-selected="true">Jogar</li>
+        <li role="option" aria-selected="false">Ranking</li>
+        <li role="option" aria-selected="false">Instruções</li>
+      </ul>
+    </div>
+
+    <div class="camada" id="ranking" hidden>
+      <h2>Ranking</h2>
+      <ol id="lista-ranking" aria-live="polite"></ol>
+    </div>
+
+    <div class="camada" id="instrucoes" hidden>
+      <h2>Instruções</h2>
+      <ul>
+        <li>2 4 6 8 ou setas: mover</li>
+        <li>5 ou espaço: pausar</li>
+        <li>C: voltar</li>
+      </ul>
+    </div>
+
+    <div class="camada" id="pausa" hidden><p class="aviso">PAUSA<br>5 continua · C sai</p></div>
+  </div>
+
+  <div class="acoes">
+    <button class="tecla" data-tecla="ok" aria-label="Selecionar">OK</button>
+    <button class="tecla" data-tecla="c" aria-label="Voltar">C</button>
+  </div>
+  <div class="teclado" role="group" aria-label="Teclado numérico">
+    <button class="tecla" data-tecla="1">1<small>.,</small></button>
+    <button class="tecla" data-tecla="2" aria-label="2, para cima">2<small>abc ▲</small></button>
+    <button class="tecla" data-tecla="3">3<small>def</small></button>
+    <button class="tecla" data-tecla="4" aria-label="4, para a esquerda">4<small>◀ ghi</small></button>
+    <button class="tecla" data-tecla="5" aria-label="5, pausar ou selecionar">5<small>jkl</small></button>
+    <button class="tecla" data-tecla="6" aria-label="6, para a direita">6<small>mno ▶</small></button>
+    <button class="tecla" data-tecla="7">7<small>pqrs</small></button>
+    <button class="tecla" data-tecla="8" aria-label="8, para baixo">8<small>tuv ▼</small></button>
+    <button class="tecla" data-tecla="9">9<small>wxyz</small></button>
+  </div>
+</main>
+
+<dialog id="fim" aria-labelledby="fim-titulo">
+  <form id="form-placar" novalidate>
+    <h2 id="fim-titulo">Fim de jogo</h2>
+    <p>Você fez <strong id="fim-pontos">0</strong> pontos.</p>
+    <label for="apelido">Apelido para o ranking</label>
+    <input id="apelido" name="apelido" maxlength="12" autocomplete="nickname" aria-describedby="apelido-ajuda fim-msg" required>
+    <p class="ajuda" id="apelido-ajuda">De 3 a 12 letras ou números. Aparece em público.</p>
+    <p class="msg" id="fim-msg" role="status"></p>
+    <div class="botoes">
+      <button class="botao primario" id="enviar" type="submit">Enviar placar</button>
+      <button class="botao secundario" id="pular" type="button">Jogar de novo</button>
+    </div>
+  </form>
+</dialog>
+
+<aside class="painel" aria-label="Painel do protótipo">
+  <strong>Painel do protótipo</strong> (não faz parte do jogo): simula as respostas da API.
+  <fieldset><legend>Ranking</legend>
+    <label><input type="radio" name="r" value="ok" checked> com placares</label>
+    <label><input type="radio" name="r" value="vazio"> vazio</label>
+    <label><input type="radio" name="r" value="erro"> erro</label>
+  </fieldset>
+  <fieldset><legend>Envio do placar</legend>
+    <label><input type="radio" name="e" value="ok" checked> aceito</label>
+    <label><input type="radio" name="e" value="palavrao"> apelido recusado</label>
+    <label><input type="radio" name="e" value="limite"> limite (429)</label>
+    <label><input type="radio" name="e" value="erro"> erro</label>
+  </fieldset>
+</aside>
+
+<script>
+(() => {
+  const COLS = 21, ROWS = 13, CEL = 4, X0 = 0, Y0 = 2;            // grade 21×13 em pixels de 4×4 numa tela 84×56
+  const cv = document.getElementById('canvas'), g = cv.getContext('2d');
+  const css = getComputedStyle(document.documentElement);
+  const COR_TELA = css.getPropertyValue('--cor-tela').trim(), COR_PIXEL = css.getPropertyValue('--cor-pixel').trim();
+  const $ = (id) => document.getElementById(id);
+  const camadas = ['menu', 'ranking', 'instrucoes', 'pausa'];
+  let tela = 'menu', item = 0, jogo = null, timer = null;
+  const ranking = [['BRUNO', 412], ['NOKIA', 330], ['COBRA', 287], ['PIXEL', 201], ['3310', 150], ['ZEZE', 92], ['ANA', 64]];
+  const fmt = new Intl.NumberFormat('pt-BR');
+  const opcao = (n) => document.querySelector(`input[name=${n}]:checked`).value;
+
+  function mostrar(nome) {
+    tela = nome;
+    camadas.forEach((c) => { $(c).hidden = c !== nome; });
+    $('placar').hidden = !(nome === 'jogo' || nome === 'pausa');
+    if (nome !== 'jogo' && nome !== 'pausa') limpar();
+  }
+  function limpar() { g.fillStyle = COR_TELA; g.fillRect(0, 0, 84, 56); }
+  function marcarMenu() { [...$('itens-menu').children].forEach((li, i) => li.setAttribute('aria-selected', i === item)); }
+
+  function carregarRanking() {
+    mostrar('ranking');
+    const ol = $('lista-ranking');
+    ol.innerHTML = '<li>Carregando…</li>';
+    setTimeout(() => {
+      const r = opcao('r');
+      if (r === 'erro') { ol.innerHTML = '<li>Sem conexão.</li><li>OK tenta de novo</li>'; return; }
+      if (r === 'vazio') { ol.innerHTML = '<li>Ninguém ainda.</li><li>Seja o primeiro!</li>'; return; }
+      ol.innerHTML = ranking.slice(0, 5).map(([n, p], i) => `<li><span>${i + 1}. ${n}</span><span>${fmt.format(p)}</span></li>`).join('');
+    }, 600);
+  }
+
+  function novoJogo() {
+    mostrar('jogo');
+    jogo = { cobra: [[6, 6], [5, 6], [4, 6]], dir: [1, 0], prox: [1, 0], comida: null, pontos: 0 };
+    sortearComida(); desenhar();
+    clearInterval(timer); timer = setInterval(passo, 180);
+  }
+  function sortearComida() {
+    do { jogo.comida = [Math.floor(Math.random() * COLS), Math.floor(Math.random() * ROWS)]; }
+    while (jogo.cobra.some(([x, y]) => x === jogo.comida[0] && y === jogo.comida[1]));
+  }
+  function passo() {
+    if (tela !== 'jogo') return;
+    jogo.dir = jogo.prox;
+    const [hx, hy] = jogo.cobra[0], nx = hx + jogo.dir[0], ny = hy + jogo.dir[1];
+    const bateu = nx < 0 || ny < 0 || nx >= COLS || ny >= ROWS || jogo.cobra.some(([x, y]) => x === nx && y === ny);
+    if (bateu) return fimDeJogo();
+    jogo.cobra.unshift([nx, ny]);
+    if (nx === jogo.comida[0] && ny === jogo.comida[1]) { jogo.pontos += 7; sortearComida(); } else jogo.cobra.pop();
+    desenhar();
+  }
+  function px(x, y, w = CEL, h = CEL) { g.fillRect(X0 + x * CEL, Y0 + y * CEL, w, h); }
+  function desenhar() {
+    limpar(); g.fillStyle = COR_PIXEL;
+    g.fillRect(0, 0, 84, 1); g.fillRect(0, 55, 84, 1); // bordas da arena
+    jogo.cobra.forEach(([x, y]) => px(x, y, CEL - 1, CEL - 1));
+    const [cx, cy] = jogo.comida; g.fillRect(X0 + cx * CEL + 1, Y0 + cy * CEL, 1, 1); g.fillRect(X0 + cx * CEL, Y0 + cy * CEL + 1, 3, 1); g.fillRect(X0 + cx * CEL + 1, Y0 + cy * CEL + 2, 1, 1);
+    $('placar').textContent = String(jogo.pontos).padStart(4, '0');
+  }
+  function virar(dx, dy) { if (jogo && !(dx === -jogo.dir[0] && dy === -jogo.dir[1])) jogo.prox = [dx, dy]; }
+  function fimDeJogo() {
+    clearInterval(timer); tela = 'fim';
+    $('fim-pontos').textContent = fmt.format(jogo.pontos);
+    $('fim-msg').textContent = ''; $('fim-msg').className = 'msg';
+    $('enviar').disabled = false; $('fim').showModal(); $('apelido').focus();
+  }
+
+  function tecla(t) {
+    if (tela === 'menu') {
+      if (t === '2' || t === '8') { item = (item + (t === '8' ? 1 : 2)) % 3; marcarMenu(); }
+      if (t === 'ok' || t === '5') [novoJogo, carregarRanking, () => mostrar('instrucoes')][item]();
+    } else if (tela === 'jogo') {
+      ({ 2: () => virar(0, -1), 8: () => virar(0, 1), 4: () => virar(-1, 0), 6: () => virar(1, 0), 5: () => mostrar('pausa'), c: () => mostrar('pausa') })[t]?.();
+    } else if (tela === 'pausa') {
+      if (t === '5' || t === 'ok') { mostrar('jogo'); desenhar(); }
+      if (t === 'c') { clearInterval(timer); mostrar('menu'); }
+    } else if (tela === 'ranking') {
+      if (t === 'ok' && opcao('r') === 'erro') carregarRanking();
+      if (t === 'c') mostrar('menu');
+    } else if (t === 'c') mostrar('menu');
+  }
+  document.querySelectorAll('[data-tecla]').forEach((b) => b.addEventListener('click', () => tecla(b.dataset.tecla)));
+  const mapa = { ArrowUp: '2', ArrowDown: '8', ArrowLeft: '4', ArrowRight: '6', w: '2', s: '8', a: '4', d: '6', ' ': '5', Enter: 'ok', Escape: 'c', Backspace: 'c', c: 'c' };
+  document.addEventListener('keydown', (e) => {
+    if ($('fim').open || e.target.tagName === 'INPUT') return;
+    const t = mapa[e.key] ?? (/^[1-9]$/.test(e.key) ? e.key : null);
+    if (t && !(e.key === 'Enter' && e.target.tagName === 'BUTTON')) { e.preventDefault(); tecla(t); }
+  });
+
+  $('form-placar').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const msg = $('fim-msg'), apelido = $('apelido').value.trim();
+    if (!/^[\p{L}\p{N}]{3,12}$/u.test(apelido)) { msg.className = 'msg erro'; msg.textContent = 'Use de 3 a 12 letras ou números.'; $('apelido').focus(); return; }
+    $('enviar').disabled = true; msg.className = 'msg'; msg.textContent = 'Enviando…';
+    setTimeout(() => {
+      const r = opcao('e');
+      $('enviar').disabled = false;
+      if (r === 'palavrao') { msg.className = 'msg erro'; msg.textContent = 'Esse apelido não pode. Escolha outro.'; return; }
+      if (r === 'limite') { msg.className = 'msg alerta'; msg.textContent = 'Muitos envios seguidos. Tente de novo em 1 minuto.'; return; }
+      if (r === 'erro') { msg.className = 'msg erro'; msg.textContent = 'Não deu para enviar. Tente de novo.'; return; }
+      ranking.push([apelido.toUpperCase(), jogo.pontos]); ranking.sort((a, b) => b[1] - a[1]);
+      msg.className = 'msg sucesso'; msg.textContent = 'Placar enviado!';
+      setTimeout(() => { $('fim').close(); carregarRanking(); }, 700);
+    }, 600);
+  });
+  $('pular').addEventListener('click', () => { $('fim').close(); novoJogo(); });
+  $('fim').addEventListener('cancel', () => setTimeout(() => mostrar('menu')));
+  mostrar('menu');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" width="220" height="56" shape-rendering="crispEdges" role="img" aria-label="Snake 3310">
+  <rect width="56" height="56" rx="12" fill="#2B4C8C"/>
+  <rect x="7" y="7" width="42" height="42" rx="4" fill="#C7F0D8"/>
+  <g fill="#43523D">
+    <rect x="12" y="35" width="18" height="5"/><rect x="25" y="21" width="5" height="14"/>
+    <rect x="25" y="16" width="15" height="5"/><rect x="40" y="30" width="5" height="5"/>
+  </g>
+  <text x="68" y="36" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="22" font-weight="700" fill="#F2F5FA">SNAKE 3310</text>
+</svg>
