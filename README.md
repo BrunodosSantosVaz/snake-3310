@@ -49,7 +49,7 @@ continuam pendentes.
 
 - API pública de leitura `GET <BASE_PATH>/api/placares`: no máximo dez placares, por pontos decrescentes e, em
   empate, pelo envio mais antigo (RN-0001). Sem placares, retorna `{ "scores": [] }`.
-- Servidor Fastify com `/api/health`, `/api/ready` e migrações Postgres, sempre sob `BASE_PATH`.
+- Servidor Fastify com `/api/health`, `/api/ready` e migrações SQLite, sempre sob `BASE_PATH`.
 - Aparelho 3310 responsivo com menu, instruções e ranking conectado à API, operado por teclado ou pelas teclas
   clicáveis. Trata carregando, vazio, erro e nova tentativa; a opção Jogar ainda informa “Em breve”.
 
@@ -70,7 +70,7 @@ C/Esc para voltar. No ranking, OK repete a consulta. A partida ainda não está 
 
 - Instruções para IAs: `AGENTS.md`. O que o sistema é: `PRODUTO.md`. A stack: `STACK.md`. O design: `DESIGN.md`.
 - O processo de trabalho: `.bigbang/processo/`. Pegadinhas: `docs/memoria.md`.
-- Requisitos: Node.js 24 e npm, conforme a stack e o runtime da imagem.
+- Requisitos: Node.js 24.18.1 e npm, conforme a stack e o runtime da imagem.
 - Comandos: `npm ci` (instala), `npm run lint`, `npm run typecheck`, `npm test` (unidade),
   `npm run test:acceptance` (aceite), `npm run test:architecture` (camadas), `npm run test:coverage`,
   `npm run test:migracoes` e `npm run build`. Depois do build: `npm run migrar` (aplica as migrações) e `npm start`.
@@ -80,10 +80,12 @@ C/Esc para voltar. No ranking, OK repete a consulta. A partida ainda não está 
   com axe, layout em 360 px e texto ampliado em 200% no Chromium.
   Instale o navegador de teste com `npx playwright install chromium` antes de executar esse comando. Os testes DOM
   e de semântica com axe também rodam em `npm test` na CI.
-- Os testes usam um Postgres em memória (PGlite, ADR-0002); não é preciso instalar banco para desenvolver.
+- Os testes usam SQLite nativo real, isolado em memória e em arquivo temporário (ADR-0003); não é preciso instalar banco nem fornecer credenciais.
 - Variáveis de ambiente do servidor (os valores ficam só no servidor): `BASE_PATH` (endereço do jogo, por exemplo
-  `/snake-3310`), `DATABASE_URL`, `PORT` (padrão 8080), `WEB_DIR` (padrão `dist/web`) e, para `npm run migrar`, `MIGRATIONS_DIR` (padrão
+  `/snake-3310`), `SQLITE_PATH` (arquivo persistente, padrão `data/snake-3310.sqlite`, fora de `dist`), `PORT` (padrão 8080), `WEB_DIR` (padrão `dist/web`) e, para `npm run migrar`, `MIGRATIONS_DIR` (padrão
   `migrations`).
+- Para rodar localmente: `npm ci`, `npm run build`, `npm run migrar` e `npm start`. O ranking persiste no arquivo mesmo após reiniciar o processo; o diretório `data/` é ignorado pelo Git.
+- Produção precisa de volume persistente por ambiente e uma réplica; arquivo efêmero perde placares. A imagem e o startup com migração antes de listen serão entregues pela tarefa #19. Nunca copie só o arquivo principal para backup enquanto WAL estiver ativo. Veja [ADR-0003](docs/decisoes/ADR-0003-sqlite-embutido.md).
 - `NODE_ENV=production` ativa HSTS por um ano. CSP restrita ao próprio site, proteção contra frames, nosniff,
   política de referrer e bloqueio de câmera/microfone/localização são enviados em todas as respostas.
 

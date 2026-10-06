@@ -54,7 +54,12 @@ test('a migração espera o escritor de outro processo sem aplicar parcialmente'
   `, join(dir, 'scores.sqlite')], { stdio: ['ignore', 'pipe', 'pipe'] });
   try {
     const exited = once(child, 'exit');
-    await once(child.stdout!, 'data');
+    let childError = '';
+    child.stderr!.on('data', (chunk) => { childError += String(chunk); });
+    await Promise.race([
+      once(child.stdout!, 'data'),
+      exited.then(([code]) => { throw new Error(`writer exited before lock handshake (${code}): ${childError}`); }),
+    ]);
     expect(await migrate(db)).toEqual(['0001_create_scores.sql']);
     expect((await db.query('select n from previous_version')).rows).toEqual([{ n: 7 }]);
     expect((await exited)[0]).toBe(0);

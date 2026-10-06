@@ -43,7 +43,10 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
   (`schema_migrations`). Nunca altere uma migração já publicada: crie outra (DAD-02, expandir e contrair).
 - 2026-10-06 (#16): o "não pronto" do `/api/ready` usa `UNAVAILABLE` (503). O `problemFor` transforma tudo que não
   é 4xx em 500, de propósito, para erros inesperados.
-- 2026-10-06 (#16): o pool do `pg` precisa de ouvinte no evento `error` (`listenForErrors`), senão uma conexão parada
-  que cai derruba o processo. Nunca logue o pool: ele carrega a connection string com a senha.
-- 2026-10-06 (#16): transação no `pg` só com cliente dedicado (`pool.connect()`); `pool.query` pode trocar de conexão a
-  cada comando. Use `db.transaction(...)`.
+- 2026-10-06 (#27): ADR-0003 substitui PostgreSQL/pg/PGlite por SQLite nativo, Node 24.18.1 (API Release Candidate).
+  Runtime e testes usam o mesmo adaptador. `SQLITE_PATH` é durável, padrão `data/snake-3310.sqlite`; não use `dist`, URI ou memória na configuração de execução.
+- 2026-10-06 (#27): `$n` é binding nativo, sem interpolação; transações serializam todas as operações da conexão.
+  WAL + FULL + timeout 5000 ms + BEGIN IMMEDIATE protegem migrações idempotentes e sobreposição de processos.
+- 2026-10-06 (#27): ordene o instante UTC com `julianday(created_at)`, usando o índice correspondente; comparar texto mistura datas com/sem milissegundos e muda o empate. Datas são UTC com Z; ID desempata instantes iguais.
+- 2026-10-06 (#27): a migração inicial foi adaptada antes da primeira release publicada. Nunca altere uma migração publicada; próximas alterações são expansivas e compatíveis com a versão anterior.
+- 2026-10-06 (#27): #19 precisa migrar a mesma conexão/arquivo antes de listen no Tsuru. Job independente não compartilha PVC. Exceções ARQ-07/DAD-03 aprovadas estão em docs/padroes/excecoes.md; uma réplica e volume separado por ambiente.

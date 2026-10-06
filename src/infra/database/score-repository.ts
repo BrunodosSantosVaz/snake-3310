@@ -7,7 +7,7 @@ export class SqlScoreRepository implements ScoreRepository {
 
   async top(limit: number): Promise<Score[]> {
     const { rows } = await this.db.query<{ nickname: string; points: number; created_at: Date | string }>(
-      'select nickname, points, created_at from scores order by points desc, created_at asc limit $1',
+      'select nickname, points, created_at from scores order by points desc, julianday(created_at) asc, id asc limit $1',
       [limit],
     );
     return rows.map((row) => ({ nickname: row.nickname, points: row.points, createdAt: new Date(row.created_at) }));

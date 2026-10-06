@@ -1,15 +1,11 @@
 import { readConfig } from '../infra/config.js';
-import { createPool, describeError } from '../infra/database/db.js';
+import { createSqliteDatabase, describeError } from '../infra/database/db.js';
 import { buildApp } from './http/app.js';
 
-// Composition root (ARQ-05): configuration, database pool and HTTP server.
+// Composition root (ARQ-05): configuration, database and HTTP server.
 const config = readConfig(process.env);
-let log: { error(details: object, message: string): void } = {
-  error: (details, message) => console.error(message, details),
-};
-const db = createPool(config.databaseUrl, (error) => log.error({ banco: error }, 'erro numa conexão parada do banco'));
+const db = createSqliteDatabase(config.sqlitePath);
 const app = await buildApp({ basePath: config.basePath, db, webDir: config.webDir, logger: true, production: config.production });
-log = app.log;
 
 let stopping = false;
 async function shutdown(reason: string, code: number): Promise<void> {
