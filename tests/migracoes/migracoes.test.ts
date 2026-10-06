@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, test } from 'vitest';
 import { migrate } from '../../src/infra/database/migrations.js';
-import { createPgliteDatabase } from '../apoio/banco.js';
+import { createSqliteDatabase } from '../../src/infra/database/db.js';
 
 const cleanup: Array<() => unknown> = [];
 afterEach(async () => {
@@ -13,21 +13,28 @@ afterEach(async () => {
 
 describe('migrações', () => {
   test('rodam do zero, em ordem, e uma segunda vez não fazem nada', async () => {
-    const db = await createPgliteDatabase();
+    const db = createSqliteDatabase(':memory:');
     cleanup.push(() => db.close());
     const files = readdirSync('migrations').filter((f) => f.endsWith('.sql')).sort();
     expect(await migrate(db)).toEqual(files);
     expect(await migrate(db)).toEqual([]);
   });
 
+  test('migrações concorrentes no mesmo adaptador são aplicadas só uma vez', async () => {
+    const db = createSqliteDatabase(':memory:');
+    cleanup.push(() => db.close());
+    const results = await Promise.all([migrate(db), migrate(db)]);
+    expect(results.flat().sort()).toEqual(readdirSync('migrations').filter((f) => f.endsWith('.sql')).sort());
+  });
+
   test('uma migração que falha no meio desfaz o que já tinha feito e não fica marcada', async () => {
-    const db = await createPgliteDatabase();
+    const db = createSqliteDatabase(':memory:');
     cleanup.push(() => db.close());
     const dir = mkdtempSync(join(tmpdir(), 'mig-'));
     cleanup.push(() => rmSync(dir, { recursive: true, force: true }));
-    writeFileSync(join(dir, '0001_half.sql'), 'create table y (id int); select 1/0;');
+    writeFileSync(join(dir, '0001_half.sql'), 'create table y (id int); select * from missing_table;');
     await expect(migrate(db, dir)).rejects.toThrow('0001_half.sql');
     expect((await db.query('select name from schema_migrations')).rows).toEqual([]);
-    expect((await db.query("select to_regclass('y') as t")).rows).toEqual([{ t: null }]);
+    expect((await db.query("select name from sqlite_schema where name = 'y'")).rows).toEqual([]);
   });
 });
