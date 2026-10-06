@@ -17,13 +17,15 @@ try {
   await page.goto('http://127.0.0.1:5174/');
   await page.addScriptTag({ content: await readFile(require.resolve('axe-core/axe.min.js'), 'utf8') });
   const accessibility = async () => {
-    const violations = await page.evaluate(async () => (await window.axe.run()).violations.map(({ id }) => id));
+    const violations = await page.evaluate(async () => (await globalThis.axe.run()).violations.map(({ id, nodes }) => ({
+      id, elements: nodes.map(({ target, failureSummary }) => ({ target, failureSummary })),
+    })));
     assert.deepEqual(violations, []);
   };
   await accessibility();
   const layout = await page.evaluate(() => ({
-    overflow: document.documentElement.scrollWidth > window.innerWidth,
-    keys: [...document.querySelectorAll('.key')].map((key) => {
+    overflow: globalThis.document.documentElement.scrollWidth > globalThis.innerWidth,
+    keys: [...globalThis.document.querySelectorAll('.key, .menu button')].map((key) => {
       const { width, height } = key.getBoundingClientRect();
       return { width, height };
     }),
@@ -38,7 +40,7 @@ try {
   assert.equal(await page.locator('#ranking-list li').count(), 5);
   const visible = await page.locator('#ranking-list li').evaluateAll((items) => items.every((item) => {
     const row = item.getBoundingClientRect();
-    const screen = document.querySelector('.screen').getBoundingClientRect();
+    const screen = globalThis.document.querySelector('.screen').getBoundingClientRect();
     return row.bottom <= screen.bottom && row.right <= screen.right;
   }));
   assert.equal(visible, true);
