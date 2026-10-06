@@ -51,7 +51,7 @@ build = "npm run build"
 [testes]
 cobertura_minima = 80                  # % nas camadas de domínio e aplicação
 marca_pendente = "test.fails"           # como a stack marca teste com falha esperada (xfail strict, test.failing…)
-padrao_teste = "(it|test)\\("          # regex que identifica a declaração de um teste na stack
+padrao_teste = "(it|test)(\\.fails)?\\(" # regex que identifica a declaração de um teste na stack (com e sem a marca test.fails)
 
 [seguranca]
 nivel_asvs = "L1"                      # L1 | L2 (L2 obrigatório com dado pessoal ou dinheiro)
