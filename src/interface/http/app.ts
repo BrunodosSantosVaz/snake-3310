@@ -1,9 +1,11 @@
 import fastifyStatic from '@fastify/static';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { CheckReadiness } from '../../aplicacao/health.js';
+import { ListRanking } from '../../aplicacao/ranking.js';
 import { normalizeBasePath } from '../../infra/config.js';
 import { describeError, type Db } from '../../infra/database/db.js';
 import { SqlDatabaseProbe } from '../../infra/database/probe.js';
+import { SqlScoreRepository } from '../../infra/database/score-repository.js';
 import { problemFor, sendProblem, UNAVAILABLE } from './problem.js';
 
 export interface AppOptions {
@@ -16,10 +18,11 @@ export interface AppOptions {
 // Everything lives under basePath (RN-0002): <basePath>/ serves the game, <basePath>/api/* the API.
 export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
   const basePath = normalizeBasePath(options.basePath);
-  const app = Fastify({ logger: options.logger ?? false, trustProxy: false });
+  const app = Fastify({ logger: options.logger ?? false, trustProxy: false, ajv: { customOptions: { removeAdditional: false } } });
   const readiness = new CheckReadiness(new SqlDatabaseProbe(options.db), (error) =>
     app.log.warn({ banco: describeError(error) }, 'banco indisponível'),
   );
+  const ranking = new ListRanking(new SqlScoreRepository(options.db));
 
   // Set before the routes so every plugin inherits them (Fastify encapsulation).
   app.setErrorHandler(async (error: { statusCode?: number }, request, reply) => {
@@ -35,6 +38,9 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
       api.get('/ready', async (_request, reply) =>
         (await readiness.execute()) ? { status: 'ok' } : sendProblem(reply, UNAVAILABLE),
       );
+      api.get('/placares', {
+        schema: { querystring: { type: 'object', properties: {}, additionalProperties: false } },
+      }, async () => ({ scores: await ranking.execute() }));
     },
     { prefix: `${basePath}/api` },
   );

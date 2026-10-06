@@ -32,8 +32,9 @@ construírem e manterem sistemas profissionais.
 
 ## Estado atual
 
-Em **Fundação**: as decisões de produto, stack, design e GitHub ainda estão sendo tomadas. Acompanhe pelas issues com a
-label `fundacao`.
+O épico [#13](https://github.com/BrunodosSantosVaz/snake-3310/issues/13) está em implementação. O código já tem
+servidor sob `BASE_PATH`, saúde, prontidão, migrações e listagem do ranking. Ainda não há release publicada;
+a tela do jogo e a entrega do ambiente continuam pendentes.
 
 <!-- Depois da primeira release: a versão em produção, o que ela já faz e o que vem a seguir, em duas ou três frases. -->
 
@@ -43,7 +44,9 @@ label `fundacao`.
 
 ## Recursos
 
-(a preencher) — o que o sistema faz hoje, um item por recurso entregue (atualize a cada épico publicado).
+- API pública de leitura `GET <BASE_PATH>/api/placares`: no máximo dez placares, por pontos decrescentes e, em
+  empate, pelo envio mais antigo (RN-0001). Sem placares, retorna `{ "scores": [] }`.
+- Servidor Fastify com `/api/health`, `/api/ready` e migrações Postgres, sempre sob `BASE_PATH`.
 
 ## Instalação
 
@@ -51,7 +54,10 @@ label `fundacao`.
 
 ## Como usar
 
-(a preencher) — o caminho principal passo a passo; detalhes em `docs/guia/`.
+Para consultar o ranking local depois de configurar o banco, aplicar as migrações e iniciar o servidor, faça
+`GET <BASE_PATH>/api/placares`. A resposta contém só `nickname` e `points`; datas e IDs ficam no servidor.
+A rota não aceita parâmetros de consulta: campos desconhecidos recebem 400. O contrato está em
+[docs/api/openapi.yaml](docs/api/openapi.yaml). A interface jogável ainda não está disponível.
 
 ## Para desenvolvedores
 

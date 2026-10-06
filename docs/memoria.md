@@ -2,6 +2,13 @@
 
 Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data e o PR de origem.
 
+- 2026-10-06 (#17): `GET <BASE_PATH>/api/placares` retorna `{ scores: [{ nickname, points }] }`, limitado a dez,
+  por pontos decrescentes e data crescente (RN-0001). A consulta usa o índice existente; nenhuma migração nova.
+- 2026-10-06 (#17): a listagem não recebe parâmetros; campos extras de consulta recebem 400 antes do banco
+  (SEG-07). O Fastify usa `removeAdditional: false` para rejeitar extras em vez de apagá-los silenciosamente.
+- 2026-10-06 (#17): nesta máquina, Node 24.18.1 está em `~/.local/share/mise/installs/node/24.18.1/bin`;
+  use esse diretório no PATH para validar com o runtime da stack.
+
 - 2026-10-06 (#10, PR #22): a marca de pendente é `test.fails` (Vitest). O `testes.padrao_teste` precisa reconhecê-la,
   senão a rastreabilidade do `regras` não enxerga os testes de aceite pendentes.
 - 2026-10-06 (#15): no Fastify, o `setErrorHandler` vale só para os plugins registrados **depois** dele. Registre-o
