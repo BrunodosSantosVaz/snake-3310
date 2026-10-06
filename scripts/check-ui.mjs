@@ -41,8 +41,8 @@ try {
   assert.equal(layout.overflow, false);
   assert.ok(layout.keys.every(({ width, height }) => width >= 44 && height >= 44));
   const focus = await page.locator('[data-screen="play"]').evaluate((button) => ({
-    shadow: getComputedStyle(button).boxShadow,
-    background: getComputedStyle(globalThis.document.querySelector('.screen')).backgroundColor,
+    shadow: globalThis.getComputedStyle(button).boxShadow,
+    background: globalThis.getComputedStyle(globalThis.document.querySelector('.screen')).backgroundColor,
   }));
   assert.ok(contrast(focus.shadow, focus.background) >= 3, 'focus edge must contrast with the green screen');
   await mkdir('docs/imagens', { recursive: true });
@@ -62,7 +62,7 @@ try {
   const enlarged = await page.locator('#ranking-list span').evaluateAll((cells) => cells.every((cell) => {
     const rect = cell.getBoundingClientRect();
     const screen = globalThis.document.querySelector('.screen').getBoundingClientRect();
-    return rect.bottom <= screen.bottom && cell.scrollWidth <= cell.clientWidth && getComputedStyle(cell).textOverflow !== 'ellipsis';
+    return rect.bottom <= screen.bottom && cell.scrollWidth <= cell.clientWidth && globalThis.getComputedStyle(cell).textOverflow !== 'ellipsis';
   }));
   assert.equal(enlarged, true, 'all names and points must remain readable at 200% text size');
   await page.keyboard.press('Escape');

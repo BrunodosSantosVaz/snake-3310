@@ -7,6 +7,7 @@ body {
   display: flex; flex-direction: column; align-items: center; gap: var(--espaco-5); padding: var(--espaco-4);
 }
 :focus-visible { outline: calc(var(--espaco-1) * 0.75) solid var(--cor-foco); outline-offset: calc(var(--espaco-1) / 2); }
+.screen :focus-visible { outline-offset: 0; box-shadow: 0 0 0 calc(var(--espaco-1) * 1.5) var(--cor-pixel); }
 .header { display: flex; align-items: center; gap: var(--espaco-3); }
 .header img { width: calc(var(--espaco-5) + var(--espaco-4)); height: calc(var(--espaco-5) + var(--espaco-4)); }
 .header h1 { font-size: var(--tamanho-titulo); margin: 0; }
@@ -18,17 +19,19 @@ body {
 }
 .brand { font: var(--peso-forte) var(--tamanho-pequeno) var(--fonte-tela); }
 .screen {
-  width: 100%; aspect-ratio: 84 / 56; background: var(--cor-tela); border-radius: var(--raio-padrao);
+  width: 100%; min-height: calc(var(--toque-minimo) * 3 + var(--tamanho-corpo) * var(--altura-linha) + var(--espaco-6));
+  background: var(--cor-tela); border-radius: var(--raio-padrao);
   border: calc(var(--espaco-1) * 1.5) solid var(--cor-aparelho-borda); position: relative; overflow: hidden;
   color: var(--cor-pixel); font-family: var(--fonte-tela);
 }
-.layer { position: absolute; inset: 0; padding: var(--espaco-2) var(--espaco-3); display: flex; flex-direction: column; }
+.layer { padding: var(--espaco-2) var(--espaco-3); display: flex; flex-direction: column; }
 .layer[hidden] { display: none; }
 .screen h2 { margin: 0 0 var(--espaco-1); font-size: var(--tamanho-corpo); text-transform: uppercase; border-bottom: calc(var(--espaco-1) / 2) solid var(--cor-pixel); }
 .screen ol, .screen ul { margin: 0; padding: 0; list-style: none; font-size: var(--tamanho-pequeno); line-height: var(--altura-linha); }
 .screen li { display: flex; justify-content: space-between; gap: var(--espaco-1); }
-#ranking-list span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#ranking-list span:last-child { flex-shrink: 0; }
+#ranking-list li { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#ranking-list span { overflow-wrap: anywhere; }
+#ranking-list span:last-child { text-align: right; }
 .menu button { border: 0; padding: 0 var(--espaco-1); width: 100%; min-height: var(--toque-minimo); text-align: left; background: var(--cor-tela); color: var(--cor-pixel); font: inherit; cursor: pointer; }
 .menu button[data-selected='true'] { background: var(--cor-pixel); color: var(--cor-tela); }
 .notice { margin: auto; text-align: center; font-size: var(--tamanho-pequeno); }

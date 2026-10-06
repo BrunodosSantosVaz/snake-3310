@@ -14,4 +14,6 @@ Durante a consulta aparece “Carregando…”. Sem placares, “Ninguém ainda.
 formato da resposta falharem, “Sem conexão. OK tenta de novo”. Pressione OK para repetir a consulta ou C para voltar.
 
 O teclado numérico é clicável em computadores e celulares. A interface foi verificada com 360 px de largura,
-sem rolagem horizontal; as teclas têm área de toque mínima de 44 × 44 px e o foco é visível.
+sem rolagem horizontal; as teclas têm área de toque mínima de 44 × 44 px e o foco é visível. A tela cresce quando
+o texto é ampliado em 200%, mantendo apelidos e pontos completos com quebra de linha, sem reticências. O contorno
+amarelo recebe uma borda escura sobre a tela verde para manter contraste perceptível.

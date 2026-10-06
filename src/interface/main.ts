@@ -8,7 +8,7 @@ let log: { error(details: object, message: string): void } = {
   error: (details, message) => console.error(message, details),
 };
 const db = createPool(config.databaseUrl, (error) => log.error({ banco: error }, 'erro numa conexão parada do banco'));
-const app = await buildApp({ basePath: config.basePath, db, webDir: config.webDir, logger: true });
+const app = await buildApp({ basePath: config.basePath, db, webDir: config.webDir, logger: true, production: config.production });
 log = app.log;
 
 let stopping = false;

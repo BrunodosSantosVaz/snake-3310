@@ -20,7 +20,7 @@
     "test:coverage": "vitest run src --coverage",
     "test:migracoes": "vitest run tests/migracoes",
     "dev": "vite",
-    "test:ui": "node scripts/check-ui.mjs"
+    "test:ui": "npm run build && node scripts/check-ui.mjs"
   },
   "dependencies": {
     "@fastify/static": "^10.1.0",

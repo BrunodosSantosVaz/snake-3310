@@ -76,13 +76,16 @@ C/Esc para voltar. No ranking, OK repete a consulta. A partida ainda não está 
   `npm run test:migracoes` e `npm run build`. Depois do build: `npm run migrar` (aplica as migrações) e `npm start`.
 - `npm run dev` abre o Vite para a interface e encaminha `/api` para o servidor local na porta 8080;
   `npm run build` compila servidor e front em `dist/server` e `dist/web`, com caminhos relativos no front.
-- `npm run test:ui` valida teclado, cinco linhas, contraste/acessibilidade com axe e layout em 360 px no Chromium.
+- `npm run test:ui` serve o build real sob a CSP do Fastify e valida teclado, cinco linhas, contraste/acessibilidade
+  com axe, layout em 360 px e texto ampliado em 200% no Chromium.
   Instale o navegador de teste com `npx playwright install chromium` antes de executar esse comando. Os testes DOM
   e de semântica com axe também rodam em `npm test` na CI.
 - Os testes usam um Postgres em memória (PGlite, ADR-0002); não é preciso instalar banco para desenvolver.
 - Variáveis de ambiente do servidor (os valores ficam só no servidor): `BASE_PATH` (endereço do jogo, por exemplo
   `/snake-3310`), `DATABASE_URL`, `PORT` (padrão 8080), `WEB_DIR` (padrão `dist/web`) e, para `npm run migrar`, `MIGRATIONS_DIR` (padrão
   `migrations`).
+- `NODE_ENV=production` ativa HSTS por um ano. CSP restrita ao próprio site, proteção contra frames, nosniff,
+  política de referrer e bloqueio de câmera/microfone/localização são enviados em todas as respostas.
 
 (a preencher) — estrutura do repositório, como rodar a partir do código, testes e build (comandos de
 `bigbang.toml` `[comandos]`), variáveis de ambiente sem valores.
