@@ -45,7 +45,7 @@ async function withCleanup(scenario: (defer: (cleanup: () => unknown) => void) =
 }
 
 describe('Esqueleto andante (#13)', () => {
-  test.fails('CA-1 RN-0003: health responde 200 com status ok sob o BASE_PATH, mesmo com o banco fora', () => // pendente da tarefa #15
+  test('CA-1 RN-0003: health responde 200 com status ok sob o BASE_PATH, mesmo com o banco fora', () =>
     withCleanup(async (defer) => {
       const { buildApp } = await load('../../../src/interface/http/app');
       const app = await buildApp({ basePath: BASE_PATH, db: databaseDown });
@@ -130,7 +130,7 @@ describe('Esqueleto andante (#13)', () => {
       expect(response.json()).toEqual({ scores: [] });
     }));
 
-  test.fails('CA-5 RN-0002: a página do jogo abre no BASE_PATH e um caminho só parecido recebe 404', () => // pendente da tarefa #15
+  test('CA-5 RN-0002: a página do jogo abre no BASE_PATH e um caminho só parecido recebe 404', () =>
     withCleanup(async (defer) => {
       const { buildApp } = await load('../../../src/interface/http/app');
       const webDir = mkdtempSync(join(tmpdir(), 'snake-web-'));

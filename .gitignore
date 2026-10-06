@@ -8,3 +8,5 @@ dist/
 build/
 *.tar.gz
 .DS_Store
+node_modules/
+coverage/

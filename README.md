@@ -57,6 +57,12 @@ label `fundacao`.
 
 - Instruções para IAs: `AGENTS.md`. O que o sistema é: `PRODUTO.md`. A stack: `STACK.md`. O design: `DESIGN.md`.
 - O processo de trabalho: `.bigbang/processo/`. Pegadinhas: `docs/memoria.md`.
+- Requisitos: Node.js 22 ou mais novo (a imagem de produção usa o Node 24) e npm.
+- Comandos: `npm ci` (instala), `npm run lint`, `npm run typecheck`, `npm test` (unidade),
+  `npm run test:acceptance` (aceite), `npm run test:architecture` (camadas), `npm run test:coverage` e
+  `npm run build`.
+- Variáveis de ambiente do servidor (os valores ficam só no servidor): `BASE_PATH` (endereço do jogo, por exemplo
+  `/snake-3310`), `DATABASE_URL`, `PORT` (padrão 8080) e `WEB_DIR` (padrão `dist/web`).
 
 (a preencher) — estrutura do repositório, como rodar a partir do código, testes e build (comandos de
 `bigbang.toml` `[comandos]`), variáveis de ambiente sem valores.
