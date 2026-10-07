@@ -125,3 +125,44 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
   processo; logs Fastify/proxy podem conter IP/metadados. Não prometa anonimato nem ausência de logs.
 - 2026-10-07 (#34): documentação/CI local não são recibos de candidata/deploy/persistência/restauração remotos.
   A primeira entrega é conjunta #13+#28. Backup age local com 14 dias de retenção precisa de cópia/custódia externa para desastre.
+
+## Registro histórico do bootstrap da Fundação
+
+
+## Bootstrap Flash/Tsuru — épico #55, teste #56
+
+A tarefa #57 seleciona Flash/Tsuru/readiness usando o Big Bang oficial 1.5.2 e preserva os sete caminhos
+originais do artefato e os comandos originais. Nenhum runtime do jogo entra em develop/main neste épico sem release.
+
+O CA nativo fica em `tests/aceite/55-bootstrap-flash-tsuru/bootstrap.acceptance.mjs`, fora do glob Vitest da app,
+e usa o parser oficial do framework. Rodar com Node 24: `node --test tests/aceite/55-bootstrap-flash-tsuru/bootstrap.acceptance.mjs`.
+Antes da implementação, `BB_BOOTSTRAP_ENFORCE=1` demonstra a falha sem a marca estrita de pendente. Configuração
+inválida falha antes de registrar o teste; a marca pendente aceita somente AssertionError e rejeita XPASS.
+
+A CI oficial reconhece Fundação sem artefato e não executa comandos npm ausentes (F5). A prova nativa é executada
+explicitamente e acompanha o PR; não declarar testes da app executados nesse estado. Não alterar comandos da
+Fundação para copiar scripts ainda pertencentes à release. `testes-producao.sh` carrega o SHA imutável da release
+antes de instalar e testar, usando a configuração da própria release.
+
+## Evidência de configuração #57
+
+O aceite #56 foi mesclado pelo PR #59 antes da implementação. `bb aceite liberar 57` retirou apenas a marca
+da tarefa. `bb gerar --simular` previu cinco arquivos gerados; `bb gerar` alterou esses cinco: candidata,
+publicação em produção, rollback, AGENTS e bloco de STACK. O framework permanece intacto; nenhuma chamada
+à infraestrutura ocorre na geração. A tarefa mantém os comandos originais e a lista de caminhos do artefato.
+
+Os gerados agora fornecem as variáveis e o token Tsuru dos ambientes protegidos, sem valores no repositório.
+Este estado apenas prepara a Fundação; a produção do jogo continua aguardando bootstrap e portões da release.
+
+## Documentação #58 e publicação do bootstrap
+
+O [runbook do épico #55](operacao/bootstrap-sem-release-55.md) mapeia CA-1, RN-0002/RN-0003, PR #59 antes do
+código e PR #61, com procedimento Integrar/Publicar sem release. Aprovação independente e CI no SHA exato
+continuam obrigatórias. O bootstrap preserva comandos, caminhos e artefato; a produção deve carregar a release.
+A documentação não exige nova suíte da app em uma Fundação sem runtime. O teste nativo já passou na #57 e a
+CI canônica exata é reutilizada; não executar novamente a suíte interna do framework no consumidor.
+
+O CA #55 verifica a etapa histórica F5 sem artefato, nos commits dos PRs #59/#61. Após a integração do jogo,
+os caminhos adicionais e o runtime passam a existir por decisão já aprovada #36/#19; as provas da app continuam
+nos 13 CA Vitest. Para reproduzir a prova nativa da Fundação, use o SHA histórico `d53c0a2f54a946daa0f2c1db725b9865ba20689e`
+em checkout isolado, preservando a suíte congelada. Não apresentar essa prova histórica como execução da app.

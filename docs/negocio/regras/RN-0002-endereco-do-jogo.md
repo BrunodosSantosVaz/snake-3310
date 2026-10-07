@@ -24,3 +24,5 @@ Nenhuma.
 ## Testes que cobrem
 
 - tests/aceite/13-esqueleto-andante/esqueleto.test.ts (CA-5)
+
+- [CA-1 do bootstrap](../../../tests/aceite/55-bootstrap-flash-tsuru/bootstrap.acceptance.mjs): preservação de URLs na etapa F5 sem artefato; prova histórica dos PRs #59/#61, complementar às respostas HTTP da app.

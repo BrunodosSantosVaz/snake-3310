@@ -44,3 +44,15 @@ Há menos testes executados para mudanças locais comprovadas pelo grafo. A cobe
 comando estrutural; os mapas dos aceites dinâmicos devem ser atualizados se seu contrato mudar. Enquanto houver
 incerteza, a seleção conservadora usa a suíte completa. Tsuru usa o mesmo digest OCI promovido e o volume
 durável por ambiente já definido no ADR-0003; startup e migração são implementados pela tarefa #19.
+
+## Aplicação prévia na Fundação — épico #55
+
+
+O épico #55 conserva exatamente os sete caminhos originais do artefato e os comandos originais da Fundação.
+Sua publicação sem release leva apenas configuração, gerados e documentação à main. O artefato do jogo, seus
+caminhos adicionais, banco e instalador Node24 já aprovados pertencem à release homologada dos épicos #13/#28.
+Não há dependência nova nem alteração de runtime neste bootstrap.
+
+`testes-producao.sh` resolve e faz checkout do SHA imutável de `origin/release/<versão>` antes de instalar e testar.
+A promoção usa, portanto, a configuração e os comandos da release. O CA nativo #56 comprova a configuração da
+Fundação; os testes HTTP e do navegador pertencem à release.
