@@ -31,3 +31,11 @@ recebem CI completa pelo Big Bang. Antes de produção, o framework também exig
 O mapa de aceite complementa o grafo estático para imports por variável: servidor executa os testes do
 esqueleto e envio/listagem de placares; front executa jogo, DOM e navegador. Chromium/build só são preparados
 na seleção local que inclui o cenário de navegador. Os detalhes estão no [ADR-0004](../decisoes/ADR-0004-flash-tsuru-ci.md).
+
+## Evidência desta entrega
+
+Os 13 CA são conferidos no [mapa #34](documentacao-34.md). A CI do SHA de implementação já testado é reutilizada
+como evidência; documentação tem revisão/checks próprios sem teste espelhando frases nem repetição local da
+suíte por hábito. Primeira candidata/produção exigem os portões completos. A verificação adicional
+`node scripts/check-game-ui.mjs`, após build/Chromium, usa SQLite isolado real, confirma POST/GET e gera a
+captura da partida; nunca usa dados do ranking de produção para uma imagem de documentação.

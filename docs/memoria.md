@@ -113,4 +113,15 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
   preservando a captura do menu; isso é evidência local, não anúncio de produção publicada.
 - 2026-10-07 (#33): main.ts precisa repassar o segundo argumento de fetch; descartar options transforma
   POST em GET e perde o sinal de cancelamento. src/web/main.test.ts reproduziu a falha antes da correção.
-- #20 confere a documentação do esqueleto13. Runbooks e README descrevem código/runtime/infra preparada; a primeira produção só será registrada após candidata conjunta13+28, com recibos reais. Backup local não equivale a recuperação de desastre externa.
+- #20 confere a documentação do esqueleto #13. Runbooks e README descrevem código/runtime/infra preparada; a primeira produção só será registrada após candidata conjunta #13+#28, com recibos reais. Backup local não equivale a recuperação de desastre externa.
+
+- 2026-10-07 (#34): os 13 CA passaram no SHA a0b9324 do PR49; CI 37581589449 registrou 135 unidade/integração,
+  13 aceites e 128 na cobertura. Mapa e checklist em docs/operacao/documentacao-34.md; runtime/aceite não mudam
+  no PR documental. Capturas reais de menu e partida foram preservadas.
+- 2026-10-07 (#34): a imagem usa padrão /data/scores.sqlite, mas as apps Tsuru preparadas têm
+  SQLITE_PATH=/data/snake.sqlite para coincidir com backup-snake-tsuru.py. Confirme configuração efetiva antes
+  de backup/restauração; não proteja um arquivo que o processo não está usando.
+- 2026-10-07 (#34): IP do limite vive no mapa por janela de 60 s, removido sob demanda, máximo de 4.096 entradas e reset no
+  processo; logs Fastify/proxy podem conter IP/metadados. Não prometa anonimato nem ausência de logs.
+- 2026-10-07 (#34): documentação/CI local não são recibos de candidata/deploy/persistência/restauração remotos.
+  A primeira entrega é conjunta #13+#28. Backup age local com 14 dias de retenção precisa de cópia/custódia externa para desastre.

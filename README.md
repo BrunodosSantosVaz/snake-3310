@@ -13,13 +13,14 @@ A esteira usa a distribuição oficial Big Bang v1.5.1, com modo Flash e alvo Ts
 
 ## Estado atual
 
-O épico [#13](https://github.com/BrunodosSantosVaz/snake-3310/issues/13) está em implementação. O código já tem
-servidor sob `BASE_PATH`, saúde, prontidão, migrações e listagem do ranking. A imagem leve ARM64 usa SQLite no
-volume e migra antes de abrir HTTP. A tela do aparelho já permite navegar no menu e consultar os cinco maiores
-placares. O épico #28 acrescenta a partida jogável com motor, controles, pausa e reinício (#31). Ainda não há release
-publicada. A API valida e grava os envios, filtra apelidos e limita tentativas por IP (#32). O modal de fim envia o
-placar, mostra o resultado e permite reiniciar (#33); a entrega do ambiente continua pendente.
-Os oito critérios da partida completa (#28) têm testes de aceite escritos antes da implementação (#30).
+Os épicos [#13](https://github.com/BrunodosSantosVaz/snake-3310/issues/13) e
+[#28](https://github.com/BrunodosSantosVaz/snake-3310/issues/28) têm o código revisado: partida em canvas,
+controles por teclado/toque, pausa, reinício, modal de envio e ranking público persistente. A API valida apelidos
+Unicode e pontos, filtra vocabulário e limita tentativas por IP. SQLite migra antes de HTTP na imagem ARM64.
+
+A primeira candidata conjunta, homologação e produção ainda aguardam a integração. Os 13 testes de aceite
+passaram no SHA de implementação; isso comprova o código testado, não a disponibilidade remota.
+Veja [critérios e evidências](docs/operacao/documentacao-34.md).
 
 ![Partida do Snake 3310 com cobra, comida, pontuação e controles no aparelho azul](docs/imagens/partida-3310.png)
 
@@ -32,6 +33,13 @@ aplicativo nem criar conta. O objetivo inclui demonstrar uma entrega completa pe
 
 ## Recursos
 
+- Partida em pixels na grade 21×13: três segmentos iniciais, passo de 180 ms, crescimento e sete pontos por comida,
+  colisões, pausa manual ou ao perder foco e diálogo de fim com reinício. Inversões de 180 graus são ignoradas,
+  inclusive quando há vários comandos antes do próximo passo. A grade cheia termina com 1.890 pontos.
+- Aparelho 3310 responsivo com menu, instruções e ranking conectado à API, operado por teclado ou pelas teclas
+  clicáveis. Trata carregando, vazio, erro e nova tentativa.
+- Modal de fim com foco no apelido, pontos finais, estado Enviando…, confirmação e erros controlados.
+  Um placar confirmado só é enviado uma vez por partida; reinício/saída cancelam a espera e ignoram respostas antigas.
 - API pública de leitura `GET <BASE_PATH>/api/placares`: no máximo dez placares, por pontos decrescentes e, em
   empate, pelo envio mais antigo (RN-0001). Sem placares, retorna `{ "scores": [] }`.
 - API pública de envio `POST <BASE_PATH>/api/placares`: apelido de 3 a 12 letras Unicode/números e pontos inteiros
@@ -40,11 +48,6 @@ aplicativo nem criar conta. O objetivo inclui demonstrar uma entrega completa pe
 - No máximo cinco tentativas de envio em 60 segundos por IP, inclusive inválidas. O sexto recebe 429 com
   `Retry-After` de 1 a 60 segundos. Os contadores expiram, ocupam no máximo 4.096 entradas e reiniciam com o processo.
 - Servidor Fastify com `/api/health`, `/api/ready` e migrações SQLite, sempre sob `BASE_PATH`.
-- Aparelho 3310 responsivo com menu, instruções e ranking conectado à API, operado por teclado ou pelas teclas
-  clicáveis. Trata carregando, vazio, erro e nova tentativa.
-- Partida em pixels na grade 21×13: três segmentos iniciais, passo de 180 ms, crescimento e sete pontos por comida,
-  colisões, pausa manual ou ao perder foco e diálogo de fim com reinício. Inversões de 180 graus são ignoradas,
-  inclusive quando há vários comandos antes do próximo passo. A grade cheia termina com 1.890 pontos.
 
 ## Instalação
 
@@ -106,7 +109,8 @@ data ou privilégios enviados pelo cliente. A chamada bem-sucedida aparece na pr
   falta de navegador ou erro de build falha fora das marcas de pendente. Os testes DOM
   e de semântica com axe também rodam em `npm test` na CI.
 - Depois do build, `node scripts/check-game-ui.mjs` verifica o movimento real do canvas, pausa, reinício,
-  POST 201 único, consulta do placar persistido em SQLite isolado, foco, área de toque e layout de 360 px/texto200% e axe em Chromium com a CSP do servidor. A cobertura inclui
+  POST 201 único, consulta do placar persistido em SQLite isolado, foco, área de toque, layout de 360 px e texto
+  a 200%, com axe em Chromium sob a CSP do servidor. A cobertura inclui
   o motor puro do navegador, além das camadas de domínio e aplicação. O script gera
   `docs/imagens/partida-3310.png`.
 - Os testes usam SQLite nativo real, isolado em memória e em arquivo temporário (ADR-0003); não é preciso instalar banco nem fornecer credenciais.
@@ -142,7 +146,7 @@ data ou privilégios enviados pelo cliente. A chamada bem-sucedida aparece na pr
 | `npm run test:acceptance` | Aceites do épico |
 | `npm run test:architecture` | Dependências entre camadas |
 | `npm run test:coverage` | Cobertura mínima de 80% de domínio/aplicação |
-| `npm run test:ui` | Build real com CSP, Chromium, axe, teclado, 360px e texto a 200% |
+| `npm run test:ui` | Build real com CSP, Chromium, axe, teclado, 360 px e texto a 200% |
 | `npm run build` | `dist/server/` e `dist/web/` |
 | `npm start` | Migra o mesmo arquivo/conexão e inicia o servidor |
 | `npm run migrar` | Migração opcional explícita no checkout local |
@@ -167,11 +171,13 @@ Variáveis do servidor, sem valores de ambiente ou segredos:
 | `WEB_DIR` | Diretório absoluto do front compilado |
 | `SQLITE_PATH` | Arquivo durável fora de `dist`; banco/WAL/SHM devem compartilhar o volume |
 | `MIGRATIONS_DIR` | Diretório de migrações usado pelo startup e pela CLI |
+| `TRUSTED_PROXY_IPS` | Lista estrita de IPs individuais do último peer, separada por vírgulas; vazia por padrão |
 
 A imagem executa como UID/GID 1000, `umask 077`, sem npm/npx/yarn no runtime. A CLI embarcada é
 `node /app/dist/server/interface/migrate.js`. Cada ambiente precisa de volume gravável próprio e uma réplica.
 No Tsuru, `TSURU_MIGRACAO=inicializacao` migra dentro da app, com seu volume; um job separado não monta esse PVC.
-Configuração e dados são descritos em [Operação](docs/operacao/README.md).
+A imagem tem padrão `/data/scores.sqlite`; as apps Tsuru preparadas usam `/data/snake.sqlite` por configuração,
+alinhada ao script de backup. Configuração e dados são descritos em [Operação](docs/operacao/README.md).
 
 ## Versões e releases
 
@@ -184,7 +190,9 @@ nunca por push direto na branch principal.
 
 O ranking é público; a resposta de leitura expõe apenas apelido e pontos. Não há conta, senha, e-mail, analytics
 ou câmera. Não use nome real ou dados pessoais como apelido. O navegador acessa só a API, nunca o banco.
-SQLite, WAL e backups não são servidos em HTTP. Confira [inventário de dados](docs/dados/inventario.md).
+SQLite, WAL e backups não são servidos em HTTP. O IP temporário do limite fica em memória; logs da aplicação
+e do proxy podem conter IP/metadados e precisam de acesso/retenção operacional. Apelido público não garante
+anonimato. Confira [inventário de dados](docs/dados/inventario.md).
 
 A API aplica CSP da própria origem, bloqueio de frames, nosniff, política de referrer e permissões restritas;
 HSTS é ativado em produção. Falhas retornam Problem Details sem mensagens internas. Siga [SECURITY](SECURITY.md)
