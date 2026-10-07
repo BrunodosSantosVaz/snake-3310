@@ -6,7 +6,7 @@
   "license": "MIT",
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=24.18.1 <25"
   },
   "scripts": {
     "build": "tsc -p src/tsconfig.build.json && vite build",
@@ -14,26 +14,26 @@
     "migrar": "node dist/server/interface/migrate.js",
     "lint": "eslint . && node scripts/check-design.mjs",
     "typecheck": "tsc --noEmit && tsc --noEmit -p src/web",
-    "test": "vitest run src tests/migracoes",
-    "pretest:acceptance": "node scripts/prepare-acceptance.mjs",
+    "test": "npm run test:tooling && vitest run src tests/migracoes tests/empacotamento",
+    "test:tooling": "node --test tests/scripts/*.native.mjs",
+    "test:affected": "node scripts/affected-tests.mjs",
     "test:acceptance": "vitest run tests/aceite",
     "test:architecture": "depcruise src --config .dependency-cruiser.cjs",
     "test:coverage": "vitest run src --coverage",
     "test:migracoes": "vitest run tests/migracoes",
     "dev": "vite",
-    "test:ui": "npm run build && node scripts/check-ui.mjs"
+    "test:ui": "npm run build && node scripts/check-ui.mjs",
+    "test:smoke": "node scripts/smoke.mjs",
+    "pretest:acceptance": "node scripts/prepare-acceptance.mjs"
   },
   "dependencies": {
     "@fastify/static": "^10.1.0",
-    "fastify": "^5.12.0",
-    "pg": "^8.23.0"
+    "fastify": "^5.12.0"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "^0.5.8",
     "@eslint/js": "^10.0.1",
     "@types/jsdom": "^28.0.3",
     "@types/node": "^24.19.1",
-    "@types/pg": "^8.23.1",
     "@vitest/coverage-v8": "^5.0.3",
     "axe-core": "^4.14.0",
     "dependency-cruiser": "^18.5.0",

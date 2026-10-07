@@ -2,6 +2,13 @@
 
 Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data e o PR de origem.
 
+- 2026-10-07 (#36): `BB_ARQUIVOS_ALTERADOS` aponta para arquivo JSON, nunca array inline. Seleção usa o grafo
+  estático Vitest e mapa de CA dinâmicos; desconhecido/deletado/grafo incerto executa completo. Cobertura Flash
+  inclui somente módulos domínio/aplicação afetados e dependências transitivas, com os mesmos quatro limites80.
+- 2026-10-07 (#36): Node24.18.1 é instalado antes de npmci com hash oficial fixado e GITHUB_PATH. Chromium
+  pertence ao preparo de aceite, não ao instalador. `npm test` inclui `test:tooling` com node:test; esses arquivos
+  usam sufixo `.native.mjs` para não serem coletados novamente pelo Vitest.
+
 - 2026-10-06 (#18): front em `src/web`, build separado do servidor, Vite com `base: './'`. A API é relativa à URL
   da página; não fixe `/api` no front, ou o `BASE_PATH` deixará de funcionar.
 - 2026-10-06 (#18): a API retorna dez placares, mas a tela desenhada comporta os cinco primeiros (DESIGN.md).
@@ -57,3 +64,17 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
 - 2026-10-07 (#30, revisão): o prehook `prepare-acceptance.mjs` valida Chromium e compila antes do aceite.
   Falta de tooling/build não pode ser mascarada por `test.fails`. CA-3 verifica direção passada ao motor em
   todos os aliases físicos/toque e foco no reinício; CA-7 também verifica Enviando e GET/ranking depois do POST.
+
+- 2026-10-06 (#27): ADR-0003 substitui PostgreSQL/pg/PGlite por SQLite nativo, Node 24.18.1 (API Release Candidate).
+  Runtime e testes usam o mesmo adaptador. `SQLITE_PATH` é durável, padrão `data/snake-3310.sqlite`; não use `dist`, URI ou memória na configuração de execução.
+- 2026-10-06 (#27): `$n` é binding nativo, sem interpolação; transações serializam todas as operações da conexão.
+  WAL + FULL + timeout 5000 ms + BEGIN IMMEDIATE protegem migrações idempotentes e sobreposição de processos.
+- 2026-10-06 (#27): ordene o instante UTC com `julianday(created_at)`, usando o índice correspondente; comparar texto mistura datas com/sem milissegundos e muda o empate. Datas são UTC com Z; ID desempata instantes iguais.
+- 2026-10-06 (#27): a migração inicial foi adaptada antes da primeira release publicada. Nunca altere uma migração publicada; próximas alterações são expansivas e compatíveis com a versão anterior.
+- 2026-10-06 (#27): #19 precisa migrar a mesma conexão/arquivo antes de listen no Tsuru. Job independente não compartilha PVC. Exceções ARQ-07/DAD-03 aprovadas estão em docs/padroes/excecoes.md; uma réplica e volume separado por ambiente.
+- 2026-10-07 (#27, revisão PR #29): migrações usam `tx.exec(sql)` explicitamente, nunca inferem lote pelo primeiro resultado. `query` prepara uma instrução só e recusa cauda SQL antes de executar; literais com ponto e vírgula e comentários continuam válidos.
+- 2026-10-07 (#27, revisão PR #29): ao verificar caminho fora de `dist`, distinga o segmento `..` de nomes como `..cache`; testes cobrem o arquivo persistido e reaberto e o rollback de lote iniciado por SELECT.
+- 2026-10-07 (#19): `startServer` migra a mesma conexão/arquivo antes de buildApp/listen; erro fecha recursos e não abre HTTP. main/CLI usam `umask 077`; imagem USER node, UID 1000, /data700, SQLITE_PATH=/data/scores.sqlite e PORT8888.
+- 2026-10-07 (#19): Dockerfile copia docs/design/tokens.css (whitelist em .dockerignore). Dependências puramente JS são instaladas no builder; o guard recusa .node para não copiar ABI/arquitetura errada ao alvo ARM64.
+- 2026-10-07 (#19): smoke é só Node/fetch, aceita BB_URL ou SMOKE_URL, não precisa npm ci nem Playwright. Compose opcional tem app+migrar com mesmo volume, sem Postgres. Tsuru precisa startup na própria app com PVC de UID/GID1000, nunca job independente para o arquivo SQLite.
+- 2026-10-07 (#19): scan da base oficial encontrou OpenSSL antigo e dependências npm HIGH/CRITICAL. Docker atualiza libcrypto3/libssl3 para 3.5.9-r0 e remove npm/yarn no runtime, sem ignorar vulnerabilidades. Migração no contêiner via `node /app/dist/server/interface/migrate.js`, não npm.

@@ -1,10 +1,9 @@
--- RN-0001: scores shown in the public ranking. Rules about the nickname (length, characters, filter) belong to the
--- next epic, with their own RN and migration.
 create table scores (
-  id bigint generated always as identity primary key,
+  id integer primary key,
   nickname text not null,
-  points integer not null check (points >= 0),
-  created_at timestamptz not null default now()
-);
+  points integer not null check (points between 0 and 2147483647),
+  created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+    check (julianday(created_at) is not null and substr(created_at, -1) = 'Z')
+) strict;
 
-create index scores_ranking_idx on scores (points desc, created_at asc);
+create index scores_ranking_idx on scores (points desc, julianday(created_at) asc, id asc);

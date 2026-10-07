@@ -1,22 +1,23 @@
-import pg from 'pg';
+import { mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
+import { DatabaseSync, type SQLInputValue } from 'node:sqlite';
 
-// The smallest database surface the app needs. Implemented by node-postgres in production and by PGlite in tests.
+// Shared port: production and integration tests use the same native SQLite adapter.
 export interface Db {
   query<T = Record<string, unknown>>(sql: string, params?: unknown[]): Promise<{ rows: T[] }>;
 }
-
-// A database that can run several statements on one connection, all or nothing (migrations, DAD-01).
-export interface TransactionalDb extends Db {
-  transaction<T>(work: (tx: Db) => Promise<T>): Promise<T>;
+// Trusted migration batches are explicit; query prepares exactly one statement with bound values.
+export interface BatchDb extends Db {
+  exec(sql: string): Promise<void>;
 }
-
+export interface TransactionalDb extends BatchDb {
+  transaction<T>(work: (tx: BatchDb) => Promise<T>): Promise<T>;
+}
 export interface ClosableDb extends TransactionalDb {
   close(): Promise<void>;
 }
 
-// Only the code and message are ever logged: the pool object carries the connection string (SEG-IA-04).
-export type DbErrorReporter = (error: { code?: string; message: string }) => void;
-
+// Never include connection objects or query parameters in logs (SEG-IA-04).
 export function describeError(error: unknown): { code?: string; message: string } {
   const { code, message } = (error ?? {}) as { code?: unknown; message?: unknown };
   return {
@@ -25,54 +26,56 @@ export function describeError(error: unknown): { code?: string; message: string 
   };
 }
 
-// An idle connection that drops (database restart, network) is emitted as 'error' by pg-pool; without a listener the
-// process dies instead of answering 503 on /api/ready (RN-0003).
-export function listenForErrors(pool: { on(event: 'error', listener: (error: Error) => void): unknown }, report: DbErrorReporter): void {
-  pool.on('error', (error) => report(describeError(error)));
+function sqlValue(value: unknown): SQLInputValue {
+  if (value instanceof Date) return value.toISOString();
+  if (value === null || typeof value === 'string' || typeof value === 'number' || typeof value === 'bigint' || ArrayBuffer.isView(value)) {
+    return value as SQLInputValue;
+  }
+  throw new TypeError('unsupported SQL parameter');
 }
 
-export function createPool(databaseUrl: string, report: DbErrorReporter): ClosableDb {
-  const pool = new pg.Pool({
-    connectionString: databaseUrl,
-    max: 5,
-    connectionTimeoutMillis: 3000,
-    query_timeout: 5000,
-  });
-  listenForErrors(pool, report);
-  let closed = false;
-  return {
+export function createSqliteDatabase(path: string): ClosableDb {
+  if (path !== ':memory:') mkdirSync(dirname(path), { recursive: true, mode: 0o700 });
+  const database = new DatabaseSync(path, { timeout: 5000, defensive: true, allowExtension: false });
+  try {
+    database.exec('PRAGMA journal_mode = WAL; PRAGMA synchronous = FULL;');
+  } catch (error) {
+    database.close();
+    throw error;
+  }
+  // Queue all operations, including close, so an async transaction owns this connection until commit/rollback.
+  // Other processes coordinate via BEGIN IMMEDIATE and SQLite busy_timeout, including transient rollout overlap.
+  let queue: Promise<unknown> = Promise.resolve();
+  function serialize<T>(work: () => T | Promise<T>): Promise<T> {
+    const pending = queue.then(work);
+    queue = pending.catch(() => undefined);
+    return pending;
+  }
+  const tx: BatchDb = {
+    exec: async (sql: string) => { database.exec(sql); },
     query: async <T>(sql: string, params?: unknown[]) => {
-      const result = await pool.query(sql, params);
-      return { rows: result.rows as T[] };
+      const statement = database.prepare(sql);
+      const tail = sql.slice(statement.sourceSQL.length).replace(/--[^\r\n]*(?:\r?\n|$)|\/\*[\s\S]*?\*\//g, '').trim();
+      if (tail) throw new Error('query requires a single SQL statement; use exec for trusted batches');
+      statement.setAllowBareNamedParameters(false);
+      const bindings = Object.fromEntries((params ?? []).map((value, index) => [`$${index + 1}`, sqlValue(value)]));
+      return { rows: statement.all(bindings) as T[] };
     },
-    transaction: async <T>(work: (tx: Db) => Promise<T>) => {
-      const client = await pool.connect();
-      // While checked out, a dropped connection is emitted on the client, not on the pool.
-      const onError = (error: Error) => report(describeError(error));
-      client.on('error', onError);
-      let broken: Error | undefined;
-      const tx: Db = {
-        query: async <R>(sql: string, params?: unknown[]) => ({ rows: (await client.query(sql, params)).rows as R[] }),
-      };
+  };
+  return {
+    exec: (sql: string) => serialize(() => tx.exec(sql)),
+    query: <T>(sql: string, params?: unknown[]) => serialize(() => tx.query<T>(sql, params)),
+    transaction: <T>(work: (tx: BatchDb) => Promise<T>) => serialize(async () => {
+      database.exec('BEGIN IMMEDIATE');
       try {
-        await client.query('begin');
         const result = await work(tx);
-        await client.query('commit');
+        database.exec('COMMIT');
         return result;
       } catch (error) {
-        await client.query('rollback').catch((rollbackError: Error) => {
-          broken = rollbackError; // a connection that cannot roll back is discarded, never reused
-        });
+        database.exec('ROLLBACK');
         throw error;
-      } finally {
-        client.off('error', onError);
-        client.release(broken);
       }
-    },
-    close: async () => {
-      if (closed) return;
-      closed = true;
-      await pool.end();
-    },
+    }),
+    close: () => serialize(() => { if (database.isOpen) database.close(); }),
   };
 }
