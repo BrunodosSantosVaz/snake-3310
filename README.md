@@ -9,6 +9,8 @@
 Jogo da cobrinha para navegador, com visual do Nokia 3310 e ranking público. Construído com o
 [Big Bang](https://github.com/BrunodosSantosVaz/big-bang), no modo Flash.
 
+A esteira usa a distribuição oficial Big Bang v1.5.1, com modo Flash e alvo Tsuru.
+
 ## Estado atual
 
 A base do épico [#13](https://github.com/BrunodosSantosVaz/snake-3310/issues/13) implementa menu, consulta ao ranking,
