@@ -11,3 +11,8 @@
 | Envio válido | `validSubmission`, `ScoreSubmission` | Apelido de 3–12 letras/números Unicode, sem termo bloqueado, e pontos plausíveis. |
 | Limite de envios | `ScoreLimit` | Cinco tentativas por IP em 60 segundos; novos IPs também são bloqueados se a capacidade local estiver cheia. |
 | IP do jogador | `scoreClientIp` | Peer real, ou IP único no cabeçalho dedicado de um peer explicitamente confiado. |
+| Prontidão | `CheckReadiness` | Banco respondendo;503 impede considerar a app pronta. |
+| Prefixo do ambiente | `basePath`, `BASE_PATH` | Caminho exato da página/API, separado por ambiente. |
+| Migração | `migrate`, `schema_migrations` | Lote SQL transacional/idempotente antes de HTTP. |
+| Arquivo do ranking | `SQLITE_PATH` | SQLite durável, junto deWAL/SHM; nunca artefato do front. |
+| Candidata | RC | Imagem testada/homologada antes da promoção pelo mesmo digest. |

@@ -113,3 +113,4 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
   preservando a captura do menu; isso é evidência local, não anúncio de produção publicada.
 - 2026-10-07 (#33): main.ts precisa repassar o segundo argumento de fetch; descartar options transforma
   POST em GET e perde o sinal de cancelamento. src/web/main.test.ts reproduziu a falha antes da correção.
+- #20 confere a documentação do esqueleto13. Runbooks e README descrevem código/runtime/infra preparada; a primeira produção só será registrada após candidata conjunta13+28, com recibos reais. Backup local não equivale a recuperação de desastre externa.
