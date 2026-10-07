@@ -31,7 +31,7 @@ const originalArtifactPaths = [
   'vite.config.ts', 'tsconfig.json',
 ];
 
-test.fails('CA-1 RN-0002 RN-0003 Fundação seleciona Flash/Tsuru sem antecipar artefato #57', () => {
+test('CA-1 RN-0002 RN-0003 Fundação seleciona Flash/Tsuru sem antecipar artefato #57', () => {
   assert.equal(config['projeto.modo'], 'flash');
   assert.equal(config['entrega.perfil'], 'deploy');
   assert.equal(config['entrega.alvo'], 'tsuru');
