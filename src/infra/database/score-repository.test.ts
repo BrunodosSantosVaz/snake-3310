@@ -24,6 +24,14 @@ describe('SqlScoreRepository (integration, SQLite)', () => {
     expect(top[0]?.createdAt.toISOString()).toBe('2026-10-01T09:00:00.000Z');
   });
 
+  test('save binds nickname, points and backend timestamp without treating the nickname as SQL', async () => {
+    const nickname = "ANA'); drop table scores; --";
+    await new SqlScoreRepository(db).save({ nickname, points: 70, createdAt: new Date('2026-10-07T12:34:56.789Z') });
+    expect((await db.query('select nickname, points, created_at from scores')).rows).toEqual([
+      { nickname, points: 70, created_at: '2026-10-07T12:34:56.789Z' },
+    ]);
+  });
+
   test('orders UTC instants with mixed fractional precision and enforces integer bounds', async () => {
     await db.query('insert into scores (nickname, points, created_at) values ($1, $2, $3)', ['later', 21, '2026-10-01T09:00:00.001Z']);
     await db.query('insert into scores (nickname, points, created_at) values ($1, $2, $3)', ['earlier', 21, '2026-10-01T09:00:00Z']);

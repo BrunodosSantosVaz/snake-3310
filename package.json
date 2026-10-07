@@ -23,7 +23,8 @@
     "test:migracoes": "vitest run tests/migracoes",
     "dev": "vite",
     "test:ui": "npm run build && node scripts/check-ui.mjs",
-    "test:smoke": "node scripts/smoke.mjs"
+    "test:smoke": "node scripts/smoke.mjs",
+    "pretest:acceptance": "node scripts/prepare-acceptance.mjs"
   },
   "dependencies": {
     "@fastify/static": "^10.1.0",

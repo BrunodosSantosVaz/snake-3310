@@ -21,7 +21,9 @@
       </section>
       <section class="layer" id="play" aria-labelledby="play-heading" hidden>
         <h2 id="play-heading" tabindex="-1">Jogar</h2>
-        <p class="notice">Em breve!<br>A partida será entregue no próximo épico.<br>C volta</p>
+        <p class="game-score" id="game-score">Pontos: 0</p>
+        <canvas id="game-canvas" width="84" height="56" role="img" aria-label="Arena da cobrinha: cobra e comida na grade"></canvas>
+        <p class="notice" id="game-status" role="status"></p>
       </section>
       <section class="layer" id="ranking" aria-labelledby="ranking-heading" aria-busy="false" hidden>
         <h2 id="ranking-heading" tabindex="-1">Ranking</h2>
@@ -33,6 +35,8 @@
         <ul class="instructions">
           <li>2/8, setas ou W/S: menu</li>
           <li>OK ou Enter: escolher</li>
+          <li>2/4/6/8, setas ou WASD: mover</li>
+          <li>5 ou espaço: pausar</li>
           <li>C ou Esc: voltar</li>
         </ul>
       </section>
@@ -46,13 +50,29 @@
       <button class="key" type="button" data-key="2" aria-label="2 abc ▲, para cima">2 <small>abc ▲</small></button>
       <button class="key" type="button" data-key="3">3 <small>def</small></button>
       <button class="key" type="button" data-key="4" aria-label="4 ◀ ghi, para a esquerda">4 <small>◀ ghi</small></button>
-      <button class="key" type="button" data-key="5" aria-label="5 jkl, selecionar">5 <small>jkl</small></button>
+      <button class="key" type="button" data-key="5" aria-label="5 jkl, selecionar ou pausar">5 <small>jkl</small></button>
       <button class="key" type="button" data-key="6" aria-label="6 mno ▶, para a direita">6 <small>mno ▶</small></button>
       <button class="key" type="button" data-key="7">7 <small>pqrs</small></button>
       <button class="key" type="button" data-key="8" aria-label="8 tuv ▼, para baixo">8 <small>tuv ▼</small></button>
       <button class="key" type="button" data-key="9">9 <small>wxyz</small></button>
     </div>
   </main>
+  <dialog id="game-end" aria-labelledby="game-end-heading" aria-describedby="end-score">
+    <h2 id="game-end-heading">Fim de jogo</h2>
+    <p id="end-score"></p>
+    <form id="score-form" aria-busy="false" novalidate>
+      <label for="game-nickname">Apelido</label>
+      <input id="game-nickname" name="nickname" type="text" required autocomplete="nickname" spellcheck="false"
+        aria-describedby="nickname-help score-message">
+      <p class="field-help" id="nickname-help">3 a 12 letras ou números. Apelido público no ranking.</p>
+      <p class="submission-message" id="score-message" role="status" aria-live="polite"></p>
+      <div class="dialog-actions">
+        <button class="button-primary" id="score-submit" type="submit">Enviar placar</button>
+        <button class="button-secondary" id="game-restart" type="button">Jogar de novo</button>
+        <button class="button-secondary" id="game-menu" type="button">Voltar ao menu</button>
+      </div>
+    </form>
+  </dialog>
   <script type="module" src="./main.ts"></script>
 </body>
 </html>

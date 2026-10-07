@@ -8,6 +8,16 @@ develop para o épico #13 preserva Flash, alvo Tsuru, inicialização SQLite e a
 
 Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data e o PR de origem.
 
+- 2026-10-07 (#32): POST usa Ajv com `coerceTypes: false` e `removeAdditional: false` (SEG-07), mais regra de
+  domínio. Strings numéricas, campos extras/data do cliente e caracteres proibidos recebem 400 sem gravar.
+  Timestamp vem de `SubmitScore` e INSERT usa bindings (SEG-08); limite de corpo de 1024 bytes.
+- 2026-10-07 (#32): `TRUSTED_PROXY_IPS` é lista explícita de IPs individuais, default vazia. Só o socket confiado
+  pode fornecer `X-Snake-Client-IP` único e válido; NPM deve sobrescrevê-lo. Não usar XFF nem `trustProxy: true`.
+  IPv4 mapeado e IPv6 canônico são normalizados; peer e fallback de cabeçalho inválido compartilham contador seguro.
+- 2026-10-07 (#32): `ScoreLimit` usa janela fixa de 60 s e cinco tentativas (inclui inválidas), máximo de 4.096 entradas;
+  saturação recusa novos IPs sem expulsar os bloqueados. Expira sob demanda e reset após reinício; uma réplica.
+  O filtro é local sem caixa/acentos, pode ter falsos positivos; pontos plausíveis forjados continuam limitação.
+
 - 2026-10-07 (#36): `BB_ARQUIVOS_ALTERADOS` aponta para arquivo JSON, nunca array inline. Seleção usa o grafo
   estático Vitest e mapa de CA dinâmicos; desconhecido/deletado/grafo incerto executa completo. Cobertura Flash
   inclui somente módulos domínio/aplicação afetados e dependências transitivas, com os mesmos quatro limites80.
@@ -56,6 +66,28 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
   (`schema_migrations`). Nunca altere uma migração já publicada: crie outra (DAD-02, expandir e contrair).
 - 2026-10-06 (#16): o "não pronto" do `/api/ready` usa `UNAVAILABLE` (503). O `problemFor` transforma tudo que não
   é 4xx em 500, de propósito, para erros inesperados.
+- 2026-10-06 (#16): o pool do `pg` precisa de ouvinte no evento `error` (`listenForErrors`), senão uma conexão parada
+  que cai derruba o processo. Nunca logue o pool: ele carrega a connection string com a senha.
+- 2026-10-06 (#16): transação no `pg` só com cliente dedicado (`pool.connect()`); `pool.query` pode trocar de conexão a
+  cada comando. Use `db.transaction(...)`.
+
+- 2026-10-07 (#30): aceite #28 usa motor puro `src/web/game.ts` (`newGame`, `stepGame`, `turnGame`) e estado
+  `{snake, food, direction, points, status}`; web não importa camadas do servidor. RN-0004/5/6 originam-se do
+  produto/protótipo e refinamento autorizado. O POST precisa rejeitar pontos string: não permita coerção JSON.
+- 2026-10-07 (#30): CA-8 testa Chromium/build real, não JSDOM; execute build e instale Chromium antes do aceite.
+  Identificadores acessíveis do jogo: `game-score`, `game-status`, canvas com nome/role img, modal dialog e formulário
+  de apelido com label. Pendências referenciam apenas #31/#32/#33; libere com `bb aceite liberar`.
+- 2026-10-07 (#30, revisão): o prehook `prepare-acceptance.mjs` valida Chromium e compila antes do aceite.
+  Falta de tooling/build não pode ser mascarada por `test.fails`. CA-3 verifica direção passada ao motor em
+  todos os aliases físicos/toque e foco no reinício; CA-7 também verifica Enviando e GET/ranking depois do POST.
+
+- 2026-10-07 (#31): motor puro em `src/web/game.ts`; cabeça/pescoço guardam a direção do último passo e impedem
+  reversão por dois comandos rápidos antes do tick. Comida é sorteada numa lista finita de células livres;
+  grade cheia não chama RNG. Colisão inclui a cauda, seguindo o protótipo aprovado.
+- 2026-10-07 (#31): o canvas copia os pixels 4×4 e a comida do protótipo; cores vêm de `getComputedStyle` dos
+  tokens. O placar fica em HTML. Saída, pausa, blur e destroy cancelam o timer; retomada cria um período completo
+  de 180 ms. O diálogo básico `game-end` tem reinício/menu; a tarefa #33 amplia este diálogo com envio.
+
 - 2026-10-06 (#27): ADR-0003 substitui PostgreSQL/pg/PGlite por SQLite nativo, Node 24.18.1 (API Release Candidate).
   Runtime e testes usam o mesmo adaptador. `SQLITE_PATH` é durável, padrão `data/snake-3310.sqlite`; não use `dist`, URI ou memória na configuração de execução.
 - 2026-10-06 (#27): `$n` é binding nativo, sem interpolação; transações serializam todas as operações da conexão.
@@ -70,4 +102,26 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
 - 2026-10-07 (#19): smoke é só Node/fetch, aceita BB_URL ou SMOKE_URL, não precisa npm ci nem Playwright. Compose opcional tem app+migrar com mesmo volume, sem Postgres. Tsuru precisa startup na própria app com PVC de UID/GID1000, nunca job independente para o arquivo SQLite.
 - 2026-10-07 (#19): scan da base oficial encontrou OpenSSL antigo e dependências npm HIGH/CRITICAL. Docker atualiza libcrypto3/libssl3 para 3.5.9-r0 e remove npm/yarn no runtime, sem ignorar vulnerabilidades. Migração no contêiner via `node /app/dist/server/interface/migrate.js`, não npm.
 
-- #20 confere a documentação do esqueleto13. Runbooks e README descrevem código/runtime/infra preparada; a primeira produção só será registrada após candidata conjunta13+28, com recibos reais. Backup local não equivale a recuperação de desastre externa.
+- 2026-10-07 (#33): o modal valida apelido com regex Unicode L/N de 3–12 pontos de código; não use maxlength
+  HTML para contar letras fora do BMP, pois ele conta unidades UTF-16. POST exige 201 para sucesso, sem
+  renderizar detalhes de erro do servidor; submit pendente/sucesso fica bloqueado.
+- 2026-10-07 (#33): restart/menu/cancel/destroy abortam o fetch e incrementam a geração; respostas antigas
+  não mudam uma partida nova. AbortController não reverte uma gravação do servidor: sem chave de idempotência,
+  repetir após falha de rede pode duplicar. Enter no campo usa submit nativo; Space em botão usa ativação nativa.
+- 2026-10-07 (#33): check-game-ui usa SQLite real isolado, verifica POST201 único e GET posterior, foco no campo
+  e reinício, 360 px, texto200%, toque44px, axe/CSP. Captura docs/imagens/partida-3310.png com canvas em execução,
+  preservando a captura do menu; isso é evidência local, não anúncio de produção publicada.
+- 2026-10-07 (#33): main.ts precisa repassar o segundo argumento de fetch; descartar options transforma
+  POST em GET e perde o sinal de cancelamento. src/web/main.test.ts reproduziu a falha antes da correção.
+- #20 confere a documentação do esqueleto #13. Runbooks e README descrevem código/runtime/infra preparada; a primeira produção só será registrada após candidata conjunta #13+#28, com recibos reais. Backup local não equivale a recuperação de desastre externa.
+
+- 2026-10-07 (#34): os 13 CA passaram no SHA a0b9324 do PR49; CI 37581589449 registrou 135 unidade/integração,
+  13 aceites e 128 na cobertura. Mapa e checklist em docs/operacao/documentacao-34.md; runtime/aceite não mudam
+  no PR documental. Capturas reais de menu e partida foram preservadas.
+- 2026-10-07 (#34): a imagem usa padrão /data/scores.sqlite, mas as apps Tsuru preparadas têm
+  SQLITE_PATH=/data/snake.sqlite para coincidir com backup-snake-tsuru.py. Confirme configuração efetiva antes
+  de backup/restauração; não proteja um arquivo que o processo não está usando.
+- 2026-10-07 (#34): IP do limite vive no mapa por janela de 60 s, removido sob demanda, máximo de 4.096 entradas e reset no
+  processo; logs Fastify/proxy podem conter IP/metadados. Não prometa anonimato nem ausência de logs.
+- 2026-10-07 (#34): documentação/CI local não são recibos de candidata/deploy/persistência/restauração remotos.
+  A primeira entrega é conjunta #13+#28. Backup age local com 14 dias de retenção precisa de cópia/custódia externa para desastre.

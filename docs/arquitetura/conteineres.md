@@ -1,7 +1,8 @@
 # Snake 3310 — Contêineres (C4, nível 2)
 
 O jogo fala só com a API da própria aplicação (ARQ-06, SEG-IA-01). O diagrama mostra o sistema do produto;
-a base do épico #13 implementa menu e leitura. Partida e envio são implementações do épico #28.
+os épicos #13/#28 implementam menu, partida, POST e ranking. A publicação da primeira candidata ainda
+precisa dos portões e recibos remotos.
 
 ```mermaid
 C4Container
@@ -24,3 +25,7 @@ C4Container
 | Banco de dados | SQLite nativo | Placares (apelido, pontos, data UTC) | Arquivo `SQLITE_PATH` no volume persistente da API; uma réplica por ambiente, ADR-0003 |
 
 SQLite substitui o servidor PostgreSQL por decisão explícita do dono (ADR-0003). Não é um contêiner separado: o mesmo processo da API acessa o arquivo. A tarefa #19 valida a imagem e o startup local; PVC, permissões, backup e restauração das apps precisam de comprovação na entrega real.
+
+O limitador mantém um mapa temporário na memória da API; não é um serviço externo nem uma tabela de IPs.
+NPM sobrescreve `X-Snake-Client-IP`, e só o último peer configurado em `TRUSTED_PROXY_IPS` pode informar essa
+origem. A API mantém `trustProxy: false` e nunca usa X-Forwarded-For para decidir o limite.

@@ -16,3 +16,11 @@ Como o Snake 3310 verifica cada item antes de *Publicar em produção* (`bb chec
 
 O portão de testes completos de produção executa as migrações reais incluídas em `npm test` (banco vazio,
 idempotência, evolução e rollback transacional). Reutiliza a evidência desse SHA, sem repetir a mesma suíte por hábito.
+
+O POST limitado e o modal são cobertos por CA-4/5/6/7; CA-8 verifica Chromium/CSP/acessibilidade. O
+[mapa completo](documentacao-34.md) registra os 13 CA sem alterar os cenários congelados. `TRUSTED_PROXY_IPS`
+precisa coincidir com o último peer real, e NPM precisa sobrescrever o cabeçalho dedicado antes da aplicação.
+
+Na primeira entrega, registrar após cada execução: SHA/digest, run de candidata, importação Tsuru, smoke sob cada
+prefixo, PVC/UID e réplica, gravação/consulta após reinício, backup e restauração verificados. Os itens acima
+continuam como verificações dos portões; ainda não são declaração de produção pronta.
