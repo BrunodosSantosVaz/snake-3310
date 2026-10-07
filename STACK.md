@@ -30,7 +30,7 @@ SQLite do próprio Node 24.18.1, via `node:sqlite`, sem pacote npm de execução
 
 WAL, `synchronous=FULL`, timeout de 5000 ms e transações `BEGIN IMMEDIATE` coordenam gravações e migrações.
 As migrações SQL numeradas continuam em `migrations/`, com CLI `npm run migrar` e registro idempotente.
-Na entrega #19, a app migrará a mesma conexão/arquivo antes de listen. Produção terá uma réplica, PVC por ambiente,
+A tarefa #19 implementa migração na mesma conexão/arquivo antes de listen. Produção requer uma réplica, PVC por ambiente,
 backup consistente e restauração. As exceções ARQ-07/DAD-03 estão no ADR-0003 e em
 [docs/padroes/excecoes.md](docs/padroes/excecoes.md); não se aceita disco efêmero como persistência.
 
@@ -76,7 +76,7 @@ C4Container
 | Testes | Vitest 5 | `npm test` |
 | Testes afetados (Flash) | Grafo Vitest/Vite, aceite mapeado e cobertura de módulos afetados | `npm run test:affected` |
 | Testes de aceite | Vitest 5, com a API via `fastify.inject` e SQLite real em memória e arquivo temporário ([ADR-0003](docs/decisoes/ADR-0003-sqlite-embutido.md)) | `npm run test:acceptance` |
-| Fumaça (smoke) | Playwright 1.63, contra a URL do ambiente | `npm run test:smoke` |
+| Fumaça (smoke) | Node/fetch nativo, contra a URL do ambiente | `npm run test:smoke` |
 | Lint e formatação | ESLint 10 com typescript-eslint 8 | `npm run lint` |
 | Tipos | `tsc --noEmit` | `npm run typecheck` |
 | Arquitetura | dependency-cruiser 18 | `npm run test:architecture` |

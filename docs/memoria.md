@@ -63,3 +63,5 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
 - 2026-10-07 (#19): Dockerfile copia docs/design/tokens.css (whitelist em .dockerignore). Dependências puramente JS são instaladas no builder; o guard recusa .node para não copiar ABI/arquitetura errada ao alvo ARM64.
 - 2026-10-07 (#19): smoke é só Node/fetch, aceita BB_URL ou SMOKE_URL, não precisa npm ci nem Playwright. Compose opcional tem app+migrar com mesmo volume, sem Postgres. Tsuru precisa startup na própria app com PVC de UID/GID1000, nunca job independente para o arquivo SQLite.
 - 2026-10-07 (#19): scan da base oficial encontrou OpenSSL antigo e dependências npm HIGH/CRITICAL. Docker atualiza libcrypto3/libssl3 para 3.5.9-r0 e remove npm/yarn no runtime, sem ignorar vulnerabilidades. Migração no contêiner via `node /app/dist/server/interface/migrate.js`, não npm.
+
+- #20 confere a documentação do esqueleto13. Runbooks e README descrevem código/runtime/infra preparada; a primeira produção só será registrada após candidata conjunta13+28, com recibos reais. Backup local não equivale a recuperação de desastre externa.
