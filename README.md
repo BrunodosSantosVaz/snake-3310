@@ -13,6 +13,8 @@
 Sistema em construção com o [Big Bang](.bigbang/README.md), um framework para uma pessoa e suas IAs planejarem,
 construírem e manterem sistemas profissionais.
 
+A esteira usa a distribuição oficial Big Bang v1.5.1, com modo Flash e alvo Tsuru.
+
 <!-- Logo da primeira release: uma imagem real do sistema (print da tela principal, em docs/imagens/), com texto
      alternativo que descreve o que ela mostra. -->
 
