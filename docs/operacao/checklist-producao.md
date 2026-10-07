@@ -2,6 +2,10 @@
 
 Como o Snake 3310 verifica cada item antes de *Publicar em produção* (`bb checklist producao`).
 
+O [bootstrap #55](bootstrap-sem-release-55.md) publica somente a configuração da Fundação, pelo fluxo sem
+release e seus portões próprios. Ele não satisfaz nem marca os itens abaixo como executados. Na promoção do
+jogo, o framework carrega o SHA e a configuração da release antes da instalação e dos testes completos.
+
 - [ ] O backend sobe sem erro — verificação: `portao: staging`
 - [ ] O front compila — verificação: `portao: ci`
 - [ ] As migrações rodam do zero e a partir da versão anterior — verificação: `portao: testes`
