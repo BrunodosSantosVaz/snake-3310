@@ -24,12 +24,22 @@ describe('readConfig', () => {
       sqlitePath: resolve('data/snake-3310.sqlite'),
       webDir: resolve('dist/web'),
       production: false,
+      trustedProxyIps: [],
     });
   });
 
   test('enables production transport policy only for NODE_ENV=production', () => {
     expect(readConfig({ NODE_ENV: 'production' }).production).toBe(true);
     expect(readConfig({ NODE_ENV: 'development' }).production).toBe(false);
+  });
+
+  test('accepts only an explicit comma-separated list of individual proxy IPs', () => {
+    expect(readConfig({ TRUSTED_PROXY_IPS: '10.42.0.1, ::ffff:127.0.0.1, 2001:0DB8:0:0:0:0:0:1' }).trustedProxyIps)
+      .toEqual(['10.42.0.1', '127.0.0.1', '2001:db8::1']);
+    expect(readConfig({ TRUSTED_PROXY_IPS: '' }).trustedProxyIps).toEqual([]);
+    for (const TRUSTED_PROXY_IPS of ['true', '*', '10.0.0.0/8', 'localhost', '10.42.0.1,', ',10.42.0.1', '127.0.0.1:8080', 'fe80::1%eth0']) {
+      expect(() => readConfig({ TRUSTED_PROXY_IPS })).toThrow('TRUSTED_PROXY_IPS');
+    }
   });
 
   test('uses an explicit durable path and rejects memory, empty, URI or dist storage', () => {

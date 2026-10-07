@@ -38,7 +38,8 @@ O épico [#13](https://github.com/BrunodosSantosVaz/snake-3310/issues/13) está 
 servidor sob `BASE_PATH`, saúde, prontidão, migrações e listagem do ranking. A imagem leve ARM64 usa SQLite no
 volume e migra antes de abrir HTTP. A tela do aparelho já permite navegar no menu e consultar os cinco maiores
 placares. O épico #28 acrescenta a partida jogável com motor, controles, pausa e reinício (#31). Ainda não há release
-publicada; validação/limite de envios (#32), envio pelo modal (#33) e entrega do ambiente continuam pendentes.
+publicada. A API já valida e grava os envios, filtra apelidos e limita tentativas por IP (#32); envio pelo modal (#33)
+e entrega do ambiente continuam pendentes.
 Os oito critérios da partida completa (#28) têm testes de aceite escritos antes da implementação (#30).
 
 ![Menu do Snake 3310 na tela de um aparelho azul, com teclas numéricas clicáveis](docs/imagens/menu-3310.png)
@@ -53,6 +54,11 @@ Os oito critérios da partida completa (#28) têm testes de aceite escritos ante
 
 - API pública de leitura `GET <BASE_PATH>/api/placares`: no máximo dez placares, por pontos decrescentes e, em
   empate, pelo envio mais antigo (RN-0001). Sem placares, retorna `{ "scores": [] }`.
+- API pública de envio `POST <BASE_PATH>/api/placares`: apelido de 3 a 12 letras Unicode/números e pontos inteiros
+  de 0 a 1.890, múltiplos de sete. Filtra vocabulário ofensivo sem distinguir caixa/acentos, grava UTC no servidor
+  e responde 201. Tipos ou campos inválidos recebem 400 sem gravação; corpo limitado a 1 KiB.
+- No máximo cinco tentativas de envio em 60 segundos por IP, inclusive inválidas. O sexto recebe 429 com
+  `Retry-After` de 1 a 60 segundos. Os contadores expiram, ocupam no máximo 4.096 entradas e reiniciam com o processo.
 - Servidor Fastify com `/api/health`, `/api/ready` e migrações SQLite, sempre sob `BASE_PATH`.
 - Aparelho 3310 responsivo com menu, instruções e ranking conectado à API, operado por teclado ou pelas teclas
   clicáveis. Trata carregando, vazio, erro e nova tentativa.
@@ -74,6 +80,11 @@ C/Esc para voltar. No ranking, OK repete a consulta. Em Jogar, use setas, WASD o
 para pausar e retomar. Perder o foco pausa; C/Esc volta ao menu. Após a partida, Jogar de novo começa com zero
 pontos e devolve o foco à arena. O envio de placar ainda está pendente da tarefa #33; veja o
 [guia da interface](docs/guias/interface.md).
+
+Para usar a API de envio diretamente, envie JSON com somente `nickname` e `points`, por exemplo
+`{"nickname":"ANA","points":70}`. O sucesso retorna os mesmos campos públicos. 400 indica entrada recusada;
+429 pede aguardar o `Retry-After`; 413 indica corpo grande demais. O servidor define a data de envio e não aceita
+data ou privilégios enviados pelo cliente. A chamada bem-sucedida aparece na próxima leitura do ranking.
 
 ## Para desenvolvedores
 
@@ -103,6 +114,10 @@ pontos e devolve o foco à arena. O envio de placar ainda está pendente da tare
 - Variáveis de ambiente do servidor (os valores ficam só no servidor): `BASE_PATH` (endereço do jogo, por exemplo
   `/snake-3310`), `SQLITE_PATH` (arquivo persistente, padrão `data/snake-3310.sqlite`, fora de `dist`), `PORT` (padrão 8080), `WEB_DIR` (padrão `dist/web`) e `MIGRATIONS_DIR` (startup e CLI; padrão
   `migrations`).
+- `TRUSTED_PROXY_IPS` é uma lista separada por vírgulas de IPs individuais do último salto; vazia por padrão.
+  Só essas conexões podem informar um único IP válido em `X-Snake-Client-IP`, sobrescrito/saneado pelo proxy.
+  IPv4 e IPv6 mapeado são equivalentes. `X-Forwarded-For`, faixas de rede e cabeçalhos de peers não confiados
+  não mudam a identidade do limite. Cabeçalho ausente ou inválido usa o próprio peer.
 - Para rodar localmente: `npm ci`, `npm run build`, `npm start`. O ranking persiste no arquivo mesmo após reiniciar o processo; o diretório `data/` é ignorado pelo Git.
 - Produção precisa de volume persistente por ambiente e uma réplica; arquivo efêmero perde placares. A imagem inicia como usuário `node` (UID/GID 1000), com `umask 077`, e aplica migrações na mesma conexão antes de listen. Falha impede abrir HTTP. Nunca copie só o arquivo principal para backup enquanto WAL estiver ativo. Veja [ADR-0003](docs/decisoes/ADR-0003-sqlite-embutido.md).
 - Migrações executam o lote SQL completo em transação, inclusive se começar com SELECT; consultas preparadas aceitam uma única instrução. Caminhos como `dist/..cache/scores.sqlite` também são recusados.
@@ -124,7 +139,11 @@ pontos e devolve o foco à arena. O envio de placar ainda está pendente da tare
 
 ## Limitações conhecidas
 
-(a preencher) — o que o sistema não faz ou faz com ressalvas (de `PRODUTO.md`, fora do escopo).
+Não há autenticação nem prova criptográfica da partida: um cliente pode forjar pontos que respeitem os limites
+plausíveis de 0 a 1.890 e múltiplos de sete. O filtro local usa uma lista de termos e pode recusar apelidos que
+contenham um trecho bloqueado ou deixar passar outras ofensas. O limite é por processo, com uma réplica; reiniciar
+zera os contadores. Se todas as 4.096 entradas estiverem ativas, novos IPs recebem 429 até uma delas expirar.
+Jogadores que compartilham um IP também compartilham o limite. O envio pelo modal ainda está na tarefa #33.
 
 ## Contribuindo
 

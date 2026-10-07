@@ -15,6 +15,12 @@ retome. C ou Esc encerra a partida atual e volta ao menu. O placar e o estado ap
 O diálogo de fim mostra os pontos e permite Jogar de novo, começando do zero com foco devolvido à tela do jogo,
 ou Voltar ao menu. Esc fecha o diálogo e volta ao menu. O envio do placar pelo modal chega na tarefa #33.
 
+A API de envio já recebe somente `nickname` e `points` em JSON: apelido público de 3 a 12 letras Unicode/números,
+sem espaços/símbolos nem termo bloqueado, e pontos inteiros de 0 a 1.890, múltiplos de sete. Apelido ou pontos
+recusados não gravam placar. Há cinco tentativas por minuto por IP, contando entradas inválidas; depois disso,
+aguarde o tempo informado em `Retry-After` antes de repetir. Sucesso recebe 201 e entra no ranking.
+O servidor determina a data; pontos plausíveis podem ser forjados, pois a partida não tem prova criptográfica.
+
 O ranking busca os placares na API do próprio servidor, no prefixo configurado em `BASE_PATH`. Exibe os cinco
 primeiros, por pontos decrescentes e desempate pelo envio mais antigo, enquanto a API disponibiliza os dez primeiros.
 Apelidos aparecem como texto e pontos usam formato brasileiro, por exemplo `1.234`.
