@@ -24,3 +24,11 @@ publicação em produção, rollback, AGENTS e bloco de STACK. O framework perma
 
 Os gerados agora fornecem as variáveis e o token Tsuru dos ambientes protegidos, sem valores no repositório.
 Este estado apenas prepara a Fundação; a produção do jogo continua aguardando bootstrap e portões da release.
+
+## Documentação #58 e publicação do bootstrap
+
+O [runbook do épico #55](operacao/bootstrap-sem-release-55.md) mapeia CA-1, RN-0002/RN-0003, PR #59 antes do
+código e PR #61, com procedimento Integrar/Publicar sem release. Aprovação independente e CI no SHA exato
+continuam obrigatórias. O bootstrap preserva comandos, caminhos e artefato; a produção deve carregar a release.
+A documentação não exige nova suíte da app em uma Fundação sem runtime. O teste nativo já passou na #57 e a
+CI canônica exata é reutilizada; não executar novamente a suíte interna do framework no consumidor.
