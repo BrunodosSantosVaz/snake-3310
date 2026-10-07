@@ -87,6 +87,15 @@ C4Container
 80% nas camadas de domínio e aplicação. No Flash, os mesmos quatro limites se aplicam aos módulos afetados
 e suas dependências dessas camadas; estrutura, produção, major/minor e seleção incerta exigem suíte completa.
 
+## IP do jogador atrás do proxy
+
+`TRUSTED_PROXY_IPS` configura até 64 IPs individuais do último salto, separados por vírgulas; por padrão não
+há proxy confiado. A inicialização recusa valores que não sejam IPs (incluindo hostnames, portas e CIDR).
+O backend mantém `trustProxy: false`. Apenas o socket de um peer explicitamente configurado pode apresentar
+o único IP válido de `X-Snake-Client-IP`, saneado e sobrescrito no NPM. Valores inválidos ou múltiplos usam o
+peer; `X-Forwarded-For` nunca é consultado. IPv4 mapeado em IPv6 é normalizado antes de conferir confiança
+e contar tentativas. O limite usa no máximo 4.096 contadores locais e expira em 60 segundos; reinício os zera.
+
 ## Configuração da esteira
 
 <!-- bb:config:inicio -->

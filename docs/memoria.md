@@ -2,6 +2,16 @@
 
 Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data e o PR de origem.
 
+- 2026-10-07 (#32): POST usa Ajv com `coerceTypes: false` e `removeAdditional: false` (SEG-07), mais regra de
+  domínio. Strings numéricas, campos extras/data do cliente e caracteres proibidos recebem 400 sem gravar.
+  Timestamp vem de `SubmitScore` e INSERT usa bindings (SEG-08); limite de corpo de 1024 bytes.
+- 2026-10-07 (#32): `TRUSTED_PROXY_IPS` é lista explícita de IPs individuais, default vazia. Só o socket confiado
+  pode fornecer `X-Snake-Client-IP` único e válido; NPM deve sobrescrevê-lo. Não usar XFF nem `trustProxy: true`.
+  IPv4 mapeado e IPv6 canônico são normalizados; peer e fallback de cabeçalho inválido compartilham contador seguro.
+- 2026-10-07 (#32): `ScoreLimit` usa janela fixa de 60 s e cinco tentativas (inclui inválidas), máximo de 4.096 entradas;
+  saturação recusa novos IPs sem expulsar os bloqueados. Expira sob demanda e reset após reinício; uma réplica.
+  O filtro é local sem caixa/acentos, pode ter falsos positivos; pontos plausíveis forjados continuam limitação.
+
 - 2026-10-07 (#36): `BB_ARQUIVOS_ALTERADOS` aponta para arquivo JSON, nunca array inline. Seleção usa o grafo
   estático Vitest e mapa de CA dinâmicos; desconhecido/deletado/grafo incerto executa completo. Cobertura Flash
   inclui somente módulos domínio/aplicação afetados e dependências transitivas, com os mesmos quatro limites80.

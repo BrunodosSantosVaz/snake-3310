@@ -48,6 +48,19 @@ test('a second startup is idempotent and preserves scores after close and reopen
   expect((await second.db.query('select count(*) as total from schema_migrations')).rows).toEqual([{ total: 1 }]);
 });
 
+test('startup passes the configured proxy allowlist to the API limiter', async () => {
+  const { config } = fixture();
+  const server = await startServer({ ...config, trustedProxyIps: ['127.0.0.1'] });
+  cleanup.push(() => server.close());
+  const send = (client: string) => fetch(`${origin(server)}/api/placares`, {
+    method: 'POST', headers: { 'content-type': 'application/json', 'x-snake-client-ip': client },
+    body: JSON.stringify({ nickname: 'ANA', points: 7 }),
+  });
+  for (let index = 0; index < 5; index++) expect((await send('203.0.113.1')).status).toBe(201);
+  expect((await send('203.0.113.1')).status).toBe(429);
+  expect((await send('203.0.113.2')).status).toBe(201);
+});
+
 test('migration failure rolls back the file, closes storage and never opens the HTTP port', async () => {
   const { config, directory } = fixture();
   const reservation = createServer();
