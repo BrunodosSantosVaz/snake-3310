@@ -1,5 +1,11 @@
 # Memória do projeto
 
+## Atualização oficial para Big Bang v1.5.1
+
+O PR #45 atualizou a distribuição por `bb atualizar`, conferindo hash e atestação. A sincronização da
+develop para o épico #13 preserva Flash, alvo Tsuru, inicialização SQLite e as tarefas já revisadas.
+`bb gerar` confirmou que a camada gerada está em dia. A versão corrige revisão de PRs com mais de 300 arquivos.
+
 Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data e o PR de origem.
 
 - 2026-10-07 (#32): POST usa Ajv com `coerceTypes: false` e `removeAdditional: false` (SEG-07), mais regra de
