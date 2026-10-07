@@ -6,7 +6,7 @@ export default defineConfig({
     testTimeout: 20000,
     coverage: {
       provider: 'v8',
-      include: ['src/dominio/**', 'src/aplicacao/**'],
+      include: ['src/dominio/**', 'src/aplicacao/**', 'src/web/game.ts'],
       exclude: ['**/*.test.ts'],
       thresholds: { lines: 80, functions: 80, branches: 80, statements: 80 },
     },

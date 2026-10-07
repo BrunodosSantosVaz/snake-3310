@@ -43,11 +43,11 @@ describe('snake engine', () => {
     expect(ended.status).toBe('ended');
     expect(ended.snake).toEqual(game.snake);
   });
-  test('allows entering a vacating tail but ends on an occupied body segment', () => {
+  test('ends on every occupied body segment, including the tail, as in the prototype', () => {
     const game: GameState = { ...newGame(() => 0), snake: [
       { x: 6, y: 6 }, { x: 6, y: 7 }, { x: 7, y: 7 }, { x: 7, y: 6 },
     ] };
-    expect(stepGame(game, () => 0).status).toBe('playing');
+    expect(stepGame(game, () => 0).status).toBe('ended');
     expect(stepGame({ ...game, snake: [...game.snake, { x: 8, y: 6 }] }, () => 0).status).toBe('ended');
   });
   test('a full board finishes without calling random or entering a retry loop', () => {

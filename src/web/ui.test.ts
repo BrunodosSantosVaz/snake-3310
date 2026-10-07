@@ -10,6 +10,7 @@ afterEach(() => { for (const step of cleanup.reverse()) step(); cleanup = []; })
 function page(fetcher: RankingFetcher = async () => ({ ok: true, json: async () => ({ scores: [] }) })) {
   const html = readFileSync(new URL('./index.html', import.meta.url), 'utf8');
   const dom = new JSDOM(html, { url: 'https://example.test/snake-3310-hom/', runScripts: 'outside-only' });
+  dom.window.HTMLCanvasElement.prototype.getContext = () => null;
   const ui = mountUi(dom.window.document, fetcher);
   cleanup.push(() => dom.window.close(), ui.destroy);
   return { dom, doc: dom.window.document };
@@ -40,7 +41,8 @@ describe('3310 menu and ranking', () => {
     click(doc, '[data-key="c"]');
     click(doc, '[data-screen="play"]');
     expect(doc.querySelector<HTMLElement>('#play')!.hidden).toBe(false);
-    expect(doc.querySelector('#play')!.textContent).toContain('Em breve');
+    expect(doc.querySelector('#game-score')!.textContent).toBe('Pontos: 0');
+    expect(doc.querySelector('#play canvas[role="img"][aria-label]')).not.toBeNull();
   });
   test('shows loading, then at most five scores as text without interpreting HTML', async () => {
     let finish!: (value: Awaited<ReturnType<RankingFetcher>>) => void;

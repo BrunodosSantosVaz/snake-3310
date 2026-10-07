@@ -57,3 +57,10 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
 - 2026-10-07 (#30, revisão): o prehook `prepare-acceptance.mjs` valida Chromium e compila antes do aceite.
   Falta de tooling/build não pode ser mascarada por `test.fails`. CA-3 verifica direção passada ao motor em
   todos os aliases físicos/toque e foco no reinício; CA-7 também verifica Enviando e GET/ranking depois do POST.
+
+- 2026-10-07 (#31): motor puro em `src/web/game.ts`; cabeça/pescoço guardam a direção do último passo e impedem
+  reversão por dois comandos rápidos antes do tick. Comida é sorteada numa lista finita de células livres;
+  grade cheia não chama RNG. Colisão inclui a cauda, seguindo o protótipo aprovado.
+- 2026-10-07 (#31): o canvas copia os pixels 4×4 e a comida do protótipo; cores vêm de `getComputedStyle` dos
+  tokens. O placar fica em HTML. Saída, pausa, blur e destroy cancelam o timer; retomada cria um período completo
+  de 180 ms. O diálogo básico `game-end` tem reinício/menu; a tarefa #33 amplia este diálogo com envio.

@@ -7,7 +7,7 @@ import { describe, expect, test } from 'vitest';
 async function engine(): Promise<any> { const path = '../../../src/web/game'; return import(path); }
 
 describe('Partida completa (#28)', () => {
-  test.fails('CA-1 RN-0004: mover e comer cresce a cobra, soma sete e sorteia comida livre #31', async () => {
+  test('CA-1 RN-0004: mover e comer cresce a cobra, soma sete e sorteia comida livre #31', async () => {
     const { newGame, stepGame } = await engine();
     const initial = newGame(() => 0);
     expect(initial.snake).toHaveLength(3);
@@ -25,7 +25,7 @@ describe('Partida completa (#28)', () => {
     expect(initial.snake).toHaveLength(3);
   });
 
-  test.fails('CA-2 RN-0004: ignora reversão, termina colisão e vitória sem sortear em grade cheia #31', async () => {
+  test('CA-2 RN-0004: ignora reversão, termina colisão e vitória sem sortear em grade cheia #31', async () => {
     const { newGame, stepGame, turnGame } = await engine();
     const initial = newGame(() => 0);
     expect(turnGame({ ...initial, direction: 'right' }, 'left').direction).toBe('right');
