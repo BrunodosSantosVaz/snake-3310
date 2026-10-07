@@ -65,6 +65,13 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
   Falta de tooling/build não pode ser mascarada por `test.fails`. CA-3 verifica direção passada ao motor em
   todos os aliases físicos/toque e foco no reinício; CA-7 também verifica Enviando e GET/ranking depois do POST.
 
+- 2026-10-07 (#31): motor puro em `src/web/game.ts`; cabeça/pescoço guardam a direção do último passo e impedem
+  reversão por dois comandos rápidos antes do tick. Comida é sorteada numa lista finita de células livres;
+  grade cheia não chama RNG. Colisão inclui a cauda, seguindo o protótipo aprovado.
+- 2026-10-07 (#31): o canvas copia os pixels 4×4 e a comida do protótipo; cores vêm de `getComputedStyle` dos
+  tokens. O placar fica em HTML. Saída, pausa, blur e destroy cancelam o timer; retomada cria um período completo
+  de 180 ms. O diálogo básico `game-end` tem reinício/menu; a tarefa #33 amplia este diálogo com envio.
+
 - 2026-10-06 (#27): ADR-0003 substitui PostgreSQL/pg/PGlite por SQLite nativo, Node 24.18.1 (API Release Candidate).
   Runtime e testes usam o mesmo adaptador. `SQLITE_PATH` é durável, padrão `data/snake-3310.sqlite`; não use `dist`, URI ou memória na configuração de execução.
 - 2026-10-06 (#27): `$n` é binding nativo, sem interpolação; transações serializam todas as operações da conexão.

@@ -40,7 +40,7 @@ function send(doc: Document) {
 }
 
 describe('Partida e envio no aparelho (#28)', () => {
-  test.fails('CA-3 RN-0004: teclado e toque jogam, pausa congela, blur pausa e reinício cria partida nova #31', async () => {
+  test('CA-3 RN-0004: teclado e toque jogam, pausa congela, blur pausa e reinício cria partida nova #31', async () => {
     const { doc, dom, draw, step } = await page();
     click(doc, '[data-screen="play"]');
     expect(doc.querySelector('#play canvas[role="img"][aria-label]')).not.toBeNull();
