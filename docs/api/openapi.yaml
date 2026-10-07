@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
-  title: Snake 3310 — Ranking público
+  title: Snake 3310 — API pública
   version: 0.0.0
-  description: Contrato da listagem implementada na tarefa #17; não inclui envio de placares.
+  description: Saúde, prontidão e listagem implementadas no esqueleto; envio pertence ao épico28.
 servers:
   - url: '{basePath}'
     variables:
@@ -10,6 +10,36 @@ servers:
         default: /snake-3310
         description: Prefixo BASE_PATH configurado no servidor; pode ser vazio na raiz.
 paths:
+  /api/health:
+    get:
+      operationId: checkLiveness
+      summary: Processo HTTP está vivo, independente do banco (RN-0003)
+      security: []
+      responses:
+        '200':
+          description: Processo respondendo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /api/ready:
+    get:
+      operationId: checkReadiness
+      summary: Banco responde à verificação (RN-0003)
+      security: []
+      responses:
+        '200':
+          description: Pronto para receber pedidos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        '503':
+          description: Banco indisponível, sem mensagem interna.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /api/placares:
     get:
       operationId: listRanking
@@ -53,6 +83,14 @@ paths:
                 $ref: '#/components/schemas/Problem'
 components:
   schemas:
+    Health:
+      type: object
+      required: [status]
+      additionalProperties: false
+      properties:
+        status:
+          type: string
+          const: ok
     Problem:
       type: object
       required: [type, title, status]
@@ -65,4 +103,4 @@ components:
           type: string
         status:
           type: integer
-          enum: [400, 500]
+          enum: [400, 404, 500, 503]
