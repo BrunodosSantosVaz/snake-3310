@@ -3,7 +3,12 @@ import { texts } from './texts.js';
 import { newGame, stepGame, turnGame, tickMilliseconds, type Direction, type GameState } from './game.js';
 import { drawGame } from './canvas.js';
 
-export type RankingFetcher = (url: string) => Promise<{ ok: boolean; json(): Promise<unknown> }>;
+export type RankingFetcher = (url: string, options?: {
+  method?: string;
+  headers?: Record<string, string>;
+  body?: string;
+  signal?: AbortSignal;
+}) => Promise<{ ok: boolean; status?: number; json(): Promise<unknown> }>;
 type Screen = 'menu' | 'play' | 'ranking' | 'instructions';
 const screens: Screen[] = ['menu', 'play', 'ranking', 'instructions'];
 const menuTargets: Screen[] = ['play', 'ranking', 'instructions'];
@@ -23,6 +28,9 @@ class MenuUi {
   private requestId = 0;
   private game: GameState | null = null;
   private timer: ReturnType<typeof setInterval> | null = null;
+  private sendState: 'idle' | 'sending' | 'sent' = 'idle';
+  private sendRequestId = 0;
+  private sendController: AbortController | null = null;
 
   constructor(private readonly doc: Document, private readonly fetcher: RankingFetcher) {
     this.menu = [...doc.querySelectorAll<HTMLButtonElement>('[data-screen]')];
@@ -30,6 +38,7 @@ class MenuUi {
   start(): void {
     this.doc.addEventListener('click', this.onClick);
     this.doc.addEventListener('keydown', this.onKey);
+    this.doc.addEventListener('submit', this.onSubmit);
     this.doc.defaultView!.addEventListener('blur', this.onBlur);
     this.dialog.addEventListener('cancel', this.onCancel);
     this.show('menu');
@@ -38,12 +47,84 @@ class MenuUi {
     this.requestId++;
     this.doc.removeEventListener('click', this.onClick);
     this.doc.removeEventListener('keydown', this.onKey);
+    this.doc.removeEventListener('submit', this.onSubmit);
     this.doc.defaultView!.removeEventListener('blur', this.onBlur);
     this.dialog.removeEventListener('cancel', this.onCancel);
     this.stopTimer();
+    this.cancelSubmission();
     if (this.dialog.open) this.dialog.close();
   }
   private get dialog(): HTMLDialogElement { return this.element('game-end') as HTMLDialogElement; }
+  private get form(): HTMLFormElement { return this.element('score-form') as HTMLFormElement; }
+  private get nickname(): HTMLInputElement { return this.element('game-nickname') as HTMLInputElement; }
+  private get sendButton(): HTMLButtonElement { return this.element('score-submit') as HTMLButtonElement; }
+  private sendMessage(message: string, tone = ''): void {
+    this.element('score-message').textContent = message;
+    this.element('score-message').dataset.tone = tone;
+  }
+  private cancelSubmission(): void {
+    this.sendRequestId++;
+    this.sendController?.abort();
+    this.sendController = null;
+    this.sendState = 'idle';
+    this.form.setAttribute('aria-busy', 'false');
+    this.form.reset();
+    this.nickname.readOnly = false;
+    this.nickname.removeAttribute('aria-invalid');
+    this.sendButton.disabled = false;
+    this.sendMessage('');
+  }
+  private async sendScore(): Promise<void> {
+    if (!this.dialog.open || this.game?.status !== 'ended' || this.sendState !== 'idle') return;
+    const nickname = this.nickname.value;
+    if (!/^[\p{L}\p{N}]{3,12}$/u.test(nickname)) {
+      this.nickname.setAttribute('aria-invalid', 'true');
+      this.sendMessage(texts.nicknameHelp, 'error');
+      this.nickname.focus();
+      return;
+    }
+    this.nickname.removeAttribute('aria-invalid');
+    this.sendState = 'sending';
+    this.sendButton.disabled = true;
+    this.nickname.readOnly = true;
+    this.form.setAttribute('aria-busy', 'true');
+    this.sendMessage(texts.sending);
+    const ownRequest = ++this.sendRequestId;
+    const controller = new this.doc.defaultView!.AbortController();
+    this.sendController = controller;
+    try {
+      const response = await this.fetcher(apiUrl('placares', this.doc.baseURI), {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nickname, points: this.game.points }), signal: controller.signal,
+      });
+      if (ownRequest !== this.sendRequestId) return;
+      if (response.ok && response.status === 201) {
+        this.sendState = 'sent';
+        this.sendMessage(texts.sent, 'success');
+      } else {
+        this.sendMessage(response.status === 400 ? texts.nicknameRejected : response.status === 429 ? texts.sendLimited : texts.sendError,
+          response.status === 429 ? 'warning' : 'error');
+        if (response.status === 400) this.nickname.setAttribute('aria-invalid', 'true');
+      }
+    } catch {
+      if (ownRequest === this.sendRequestId) this.sendMessage(texts.sendError, 'error');
+    } finally {
+      if (ownRequest === this.sendRequestId) {
+        this.sendController = null;
+        this.form.setAttribute('aria-busy', 'false');
+        if (this.sendState !== 'sent') {
+          this.sendState = 'idle';
+          this.sendButton.disabled = false;
+          this.nickname.readOnly = false;
+        }
+      }
+    }
+  }
+  private onSubmit = (event: Event): void => {
+    if (event.target !== this.form) return;
+    event.preventDefault();
+    void this.sendScore();
+  };
   private stopTimer(): void {
     if (this.timer !== null) clearInterval(this.timer);
     this.timer = null;
@@ -84,9 +165,10 @@ class MenuUi {
     this.renderGame();
     if (this.game.status === 'ended') {
       this.stopTimer();
+      this.cancelSubmission();
       this.element('end-score').textContent = texts.finalPoints(this.game.points);
       this.dialog.showModal();
-      this.element('game-restart').focus();
+      this.nickname.focus();
     }
   };
   private onBlur = (): void => { if (this.current === 'play') this.pauseGame(); };
@@ -107,6 +189,7 @@ class MenuUi {
   }
   private show(screen: Screen): void {
     this.stopTimer();
+    this.cancelSubmission();
     if (this.dialog.open) this.dialog.close();
     this.current = screen;
     this.requestId++;

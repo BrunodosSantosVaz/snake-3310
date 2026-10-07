@@ -1,14 +1,18 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
 import { chromium } from 'playwright';
 import { buildApp } from '../dist/server/interface/http/app.js';
+import { createSqliteDatabase } from '../dist/server/infra/database/db.js';
+import { migrate } from '../dist/server/infra/database/migrations.js';
 
 const require = createRequire(import.meta.url);
+const db = createSqliteDatabase(':memory:');
+await migrate(db);
 const server = await buildApp({
   basePath: '/snake-3310-hom', production: true, webDir: resolve('dist/web'),
-  db: { query: async () => ({ rows: [] }) },
+  db,
 });
 let browser;
 try {
@@ -16,6 +20,10 @@ try {
   browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 360, height: 800 } });
   const errors = [];
+  const sends = [];
+  page.on('request', (request) => {
+    if (request.method() === 'POST' && request.url().endsWith('/api/placares')) sends.push(request.postDataJSON());
+  });
   page.on('pageerror', (error) => errors.push(error.message));
   await page.clock.install();
   await page.addInitScript(() => { Math.random = () => 0.99; });
@@ -33,6 +41,8 @@ try {
   assert.equal(initial.head[3], 255);
   await page.clock.runFor(180);
   assert.deepEqual((await pixels()).ahead, initial.head, 'the snake must move to the next cell');
+  await mkdir('docs/imagens', { recursive: true });
+  await page.screenshot({ path: 'docs/imagens/partida-3310.png', fullPage: true });
   await page.keyboard.press('Space');
   const paused = await pixels();
   await page.clock.runFor(180 * 30);
@@ -56,6 +66,16 @@ try {
   await page.clock.runFor(180 * 30);
   assert.equal(await page.locator('dialog[open]').count(), 1);
   await accessible();
+  assert.equal(await page.evaluate(() => globalThis.document.activeElement.id), 'game-nickname');
+  await page.getByLabel('Apelido', { exact: true }).fill('ÁNA');
+  const posted = page.waitForResponse((result) => result.request().method() === 'POST' && result.url().endsWith('/api/placares'));
+  await page.keyboard.press('Enter');
+  assert.equal((await posted).status(), 201);
+  await page.getByText('Placar enviado!', { exact: true }).waitFor();
+  assert.equal(await page.getByRole('button', { name: 'Enviar placar', exact: true }).isDisabled(), true);
+  await page.locator('#score-form').evaluate((form) => form.requestSubmit());
+  assert.deepEqual(sends, [{ nickname: 'ÁNA', points: 0 }]);
+  await accessible();
   await page.getByRole('button', { name: 'Jogar de novo', exact: true }).click();
   assert.equal(await page.locator('dialog[open]').count(), 0);
   assert.equal(await page.locator('#game-score').textContent(), 'Pontos: 0');
@@ -64,9 +84,13 @@ try {
   await page.keyboard.press('Escape');
   await page.clock.runFor(180 * 30);
   assert.equal(await page.locator('dialog[open]').count(), 0);
+  await page.getByRole('button', { name: 'Ranking', exact: true }).click();
+  await page.locator('#ranking-list').getByText('1. ÁNA', { exact: true }).waitFor();
+  assert.equal((await db.query('select nickname, points from scores')).rows.length, 1);
   assert.deepEqual(errors, []);
-  console.log('Game UI: real canvas movement, pause, restart, CSP, 360 px, text200%, touch44px, focus and axe passed.');
+  console.log('Game UI: canvas screenshot, movement, pause, POST201 once, persisted ranking, restart, CSP, 360 px, text200%, touch44px, focus and axe passed.');
 } finally {
   await browser?.close();
   await server.close();
+  await db.close();
 }

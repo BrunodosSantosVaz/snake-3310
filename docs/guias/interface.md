@@ -12,8 +12,16 @@ corpo termina a partida. Completar a grade de 21×13 termina com 1.890 pontos.
 
 Espaço ou 5 pausa e retoma; OK também retoma. Quando a janela perde o foco, o jogo pausa e espera que você
 retome. C ou Esc encerra a partida atual e volta ao menu. O placar e o estado aparecem em texto acessível.
-O diálogo de fim mostra os pontos e permite Jogar de novo, começando do zero com foco devolvido à tela do jogo,
-ou Voltar ao menu. Esc fecha o diálogo e volta ao menu. O envio do placar pelo modal chega na tarefa #33.
+O diálogo de fim mostra os pontos e coloca o foco em Apelido. Use de 3 a 12 letras Unicode ou números, sem
+espaços ou símbolos; o apelido será público. Escolha Enviar placar ou pressione Enter no campo. Enquanto
+“Enviando…” aparece, o envio fica bloqueado. “Placar enviado!” confirma o resultado e impede novo envio nessa
+partida. Voltar ao menu e abrir Ranking consulta os dados atualizados.
+
+“Esse apelido não pode. Escolha outro.” permite corrigir o nome. “Muitos envios seguidos. Tente de novo em
+1 minuto.” pede uma pausa; “Não deu para enviar. Tente de novo.” permite repetir após falha de rede/servidor.
+Jogar de novo começa do zero e devolve o foco à tela do jogo. Voltar ao menu ou Esc encerra o diálogo. Reiniciar
+ou sair cancela a espera e ignora respostas antigas, mas não desfaz uma gravação que o servidor já concluiu.
+Se a conexão cair após gravar, uma repetição pode duplicar o placar; não há chave de idempotência na API.
 
 A API de envio já recebe somente `nickname` e `points` em JSON: apelido público de 3 a 12 letras Unicode/números,
 sem espaços/símbolos nem termo bloqueado, e pontos inteiros de 0 a 1.890, múltiplos de sete. Apelido ou pontos
@@ -32,3 +40,5 @@ O teclado numérico é clicável em computadores e celulares. A interface foi ve
 sem rolagem horizontal; as teclas têm área de toque mínima de 44 × 44 px e o foco é visível. A tela cresce quando
 o texto é ampliado em 200%, mantendo apelidos e pontos completos com quebra de linha, sem reticências. O contorno
 amarelo recebe uma borda escura sobre a tela verde para manter contraste perceptível.
+
+![Partida real no Chromium, com canvas, placar e teclas clicáveis](../imagens/partida-3310.png)

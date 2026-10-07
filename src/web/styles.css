@@ -50,6 +50,7 @@ dialog {
   width: min(420px, calc(100% - var(--espaco-6))); padding: var(--espaco-5);
   background: var(--cor-fundo); color: var(--cor-texto); border: 0; border-radius: var(--raio-padrao);
   box-shadow: var(--sombra-padrao); font: inherit;
+  max-height: calc(100% - var(--espaco-6)); overflow-y: auto;
 }
 dialog::backdrop { background: var(--cor-fundo); opacity: 0.8; }
 dialog h2 { margin: 0 0 var(--espaco-3); font-size: var(--tamanho-titulo); }
@@ -60,3 +61,16 @@ dialog h2 { margin: 0 0 var(--espaco-3); font-size: var(--tamanho-titulo); }
 }
 .button-primary { background: var(--cor-primaria); color: var(--cor-primaria-texto); border: 0; }
 .button-secondary { background: var(--cor-fundo); color: var(--cor-texto); border: calc(var(--espaco-1) / 2) solid var(--cor-texto-suave); }
+#score-form { display: flex; flex-direction: column; gap: var(--espaco-2); }
+#game-nickname {
+  width: 100%; min-width: 0; min-height: var(--toque-minimo); padding: var(--espaco-2);
+  background: var(--cor-fundo); color: var(--cor-texto); font: inherit;
+  border: calc(var(--espaco-1) / 2) solid var(--cor-texto-suave); border-radius: var(--raio-padrao);
+}
+.field-help { font-size: var(--tamanho-pequeno); color: var(--cor-texto-suave); margin: 0; }
+.submission-message { margin: 0; overflow-wrap: anywhere; }
+.submission-message:empty { display: none; }
+.submission-message[data-tone='error'] { color: var(--cor-erro); }
+.submission-message[data-tone='warning'] { color: var(--cor-alerta); }
+.submission-message[data-tone='success'] { color: var(--cor-sucesso); }
+button:disabled { cursor: default; }
