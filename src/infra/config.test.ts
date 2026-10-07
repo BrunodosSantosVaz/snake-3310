@@ -18,22 +18,27 @@ describe('normalizeBasePath', () => {
 
 describe('readConfig', () => {
   test('reads the environment with defaults', () => {
-    expect(readConfig({ DATABASE_URL: 'postgres://x', BASE_PATH: '/snake-3310' })).toEqual({
+    expect(readConfig({ BASE_PATH: '/snake-3310' })).toEqual({
       port: 8080,
       basePath: '/snake-3310',
-      databaseUrl: 'postgres://x',
+      sqlitePath: resolve('data/snake-3310.sqlite'),
       webDir: resolve('dist/web'),
       production: false,
     });
   });
 
   test('enables production transport policy only for NODE_ENV=production', () => {
-    expect(readConfig({ DATABASE_URL: 'postgres://x', NODE_ENV: 'production' }).production).toBe(true);
-    expect(readConfig({ DATABASE_URL: 'postgres://x', NODE_ENV: 'development' }).production).toBe(false);
+    expect(readConfig({ NODE_ENV: 'production' }).production).toBe(true);
+    expect(readConfig({ NODE_ENV: 'development' }).production).toBe(false);
   });
 
-  test('requires DATABASE_URL and a valid port', () => {
-    expect(() => readConfig({})).toThrow('DATABASE_URL');
-    expect(() => readConfig({ DATABASE_URL: 'postgres://x', PORT: 'abc' })).toThrow('PORT');
+  test('uses an explicit durable path and rejects memory, empty, URI or dist storage', () => {
+    expect(readConfig({ SQLITE_PATH: '/var/lib/snake/scores.sqlite', PORT: '8888' }).sqlitePath).toBe('/var/lib/snake/scores.sqlite');
+    for (const SQLITE_PATH of [':memory:', '', 'file:temporary?mode=memory', 'dist/scores.sqlite', 'dist/server/data.sqlite', 'dist/..cache/scores.sqlite', 'dist/..hidden/scores.sqlite', resolve('dist/..cache/scores.sqlite')]) {
+      expect(() => readConfig({ SQLITE_PATH })).toThrow('SQLITE_PATH');
+    }
+    expect(readConfig({ SQLITE_PATH: '../scores.sqlite' }).sqlitePath).toBe(resolve('../scores.sqlite'));
+    expect(readConfig({ SQLITE_PATH: '..cache/scores.sqlite' }).sqlitePath).toBe(resolve('..cache/scores.sqlite'));
+    expect(() => readConfig({ PORT: 'abc' })).toThrow('PORT');
   });
 });

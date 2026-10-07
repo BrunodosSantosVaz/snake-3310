@@ -6,27 +6,33 @@
 ## Resumo da decisão
 
 TypeScript ponta a ponta. O front é um jogo em Canvas feito com Vite. A API usa Fastify em Node 24 e guarda o
-ranking em Postgres. Uma imagem `linux/arm64` serve as duas partes sob um prefixo de caminho configurável
+ranking em SQLite embutido (`node:sqlite`), sem servidor de banco. Uma imagem `linux/arm64` serve as duas partes sob um prefixo de caminho configurável
 (`/snake-3310`). A entrega começa pelo alvo `vps-docker` no `vm-oracle`, na URL final, e passa para o Tsuru
 quando o framework tiver esse alvo.
 
-Decisão registrada em [ADR-0001](docs/decisoes/ADR-0001-stack.md).
+Decisões registradas em [ADR-0001](docs/decisoes/ADR-0001-stack.md) e [ADR-0003](docs/decisoes/ADR-0003-sqlite-embutido.md), que substitui a escolha do banco.
 
 ## Linguagens, frameworks e versões
 
 | Item | Escolha | Versão |
 | --- | --- | --- |
 | Linguagem | TypeScript | `~6.0.3`, fixa: o typescript-eslint 8.71 aceita só `<6.1.0` |
-| Runtime | Node.js LTS | 24.x (imagem `node:24-alpine`) |
+| Runtime | Node.js LTS | 24.18.1 (imagem fixada na tarefa #19) |
 | Framework (API) | Fastify | 5.x |
 | Front-end | Canvas 2D com Vite, sem framework de UI | Vite 8.x |
 | Gerenciador de pacotes | npm (com `package-lock.json`) | o do Node 24 |
 
 ## Banco de dados
 
-Postgres 18 no servidor que já existe, com banco e usuário próprios do Snake 3310 em cada ambiente. O driver é o
-`pg`. As migrações são arquivos SQL numerados em `migrations/`, aplicados por um comando próprio
-(`npm run migrar`), que é o serviço `migrar` do deploy. Só a API acessa o banco (SEG-IA-01).
+SQLite do próprio Node 24.18.1, via `node:sqlite`, sem pacote npm de execução. A API está em **Release Candidate
+(Stability 1.2)**. `SQLITE_PATH` configura o arquivo durável fora de `dist`, com padrão local
+`data/snake-3310.sqlite`. Só a API acessa o banco (SEG-IA-01); o front continua chamando apenas a API.
+
+WAL, `synchronous=FULL`, timeout de 5000 ms e transações `BEGIN IMMEDIATE` coordenam gravações e migrações.
+As migrações SQL numeradas continuam em `migrations/`, com CLI `npm run migrar` e registro idempotente.
+Na entrega #19, a app migrará a mesma conexão/arquivo antes de listen. Produção terá uma réplica, PVC por ambiente,
+backup consistente e restauração. As exceções ARQ-07/DAD-03 estão no ADR-0003 e em
+[docs/padroes/excecoes.md](docs/padroes/excecoes.md); não se aceita disco efêmero como persistência.
 
 ## Tipo de entrega e alvo
 
@@ -48,7 +54,7 @@ C4Container
   System_Boundary(sistema, "Snake 3310") {
     Container(web, "Jogo", "TypeScript, Canvas, Vite", "Desenha o 3310, roda a partida e chama a API")
     Container(api, "API", "TypeScript, Fastify, Node 24", "Valida e guarda placares, lista o ranking e serve o jogo")
-    ContainerDb(banco, "Banco", "Postgres 18", "Placares do ranking")
+    ContainerDb(banco, "Banco", "SQLite embutido no Node", "Placares do ranking")
   }
   Rel(jogador, web, "Joga", "HTTPS")
   Rel(web, api, "Envia placar e lê ranking", "HTTPS/JSON em <BASE_PATH>/api")
@@ -67,7 +73,7 @@ C4Container
 | Para quê | Ferramenta | Comando (`[comandos]` no `bigbang.toml`) |
 | --- | --- | --- |
 | Testes | Vitest 5 | `npm test` |
-| Testes de aceite | Vitest 5, com a API via `fastify.inject` e Postgres em memória (PGlite; proposta no [ADR-0002](docs/decisoes/ADR-0002-testes-com-pglite.md), aguardando o dono) | `npm run test:acceptance` |
+| Testes de aceite | Vitest 5, com a API via `fastify.inject` e SQLite real em memória e arquivo temporário ([ADR-0003](docs/decisoes/ADR-0003-sqlite-embutido.md)) | `npm run test:acceptance` |
 | Fumaça (smoke) | Playwright 1.63, contra a URL do ambiente | `npm run test:smoke` |
 | Lint e formatação | ESLint 10 com typescript-eslint 8 | `npm run lint` |
 | Tipos | `tsc --noEmit` | `npm run typecheck` |
@@ -115,7 +121,6 @@ Dependências de desenvolvimento são livres. Linha nova só com ADR e pelo port
 | `fastify` | npm | `^5.12.0` | Servidor HTTP da API e do jogo | ADR-0001 |
 | `@fastify/rate-limit` | npm | `^11.2.0` | Limite de envios de placar (SEG-IA-05) | ADR-0001 |
 | `@fastify/static` | npm | `^10.1.0` | Servir o jogo compilado sob `BASE_PATH` | ADR-0001 |
-| `pg` | npm | `^8.23.0` | Acesso ao Postgres e migrações | ADR-0001 |
 <!-- bb:dependencias:fim -->
 
 ## Histórico de mudanças
@@ -124,3 +129,4 @@ Dependências de desenvolvimento são livres. Linha nova só com ADR e pelo port
 | --- | --- | --- |
 | 06/10/2026 | Versão inicial (Fundação F2) | ADR-0001 |
 | 06/10/2026 | Testes de aceite e de integração com PGlite no lugar de contêiner (proposta) | ADR-0002 |
+| 06/10/2026 | SQLite nativo Node 24.18.1 substitui pg e PGlite; arquivo persistente e testes no mesmo motor | ADR-0003 |

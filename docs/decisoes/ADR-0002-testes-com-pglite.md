@@ -1,6 +1,6 @@
 # ADR-0002: Testes de aceite e de integração com PGlite
 
-- **Situação:** proposta (aguarda a decisão do dono, registrada com `bb decisao`)
+- **Situação:** substituída pelo [ADR-0003](ADR-0003-sqlite-embutido.md). O uso de PGlite havia sido autorizado na decisão registrada no PR #24; não é mais a tecnologia dos testes.
 - **Data:** 2026-10-06
 - **Decisores:** Claude (proposta); o dono decide
 
