@@ -5,7 +5,7 @@ import { expect, test } from 'vitest';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function load(path: string): Promise<any> { return import(path); }
-test.fails('CA-8 RN-0004 RN-0005: build real joga por teclado em 360px, texto200%, foco, toque44px e axe #33', async () => {
+test('CA-8 RN-0004 RN-0005: build real joga por teclado em 360px, texto200%, foco, toque44px e axe #33', async () => {
   const { buildApp } = await load('../../../src/interface/http/app');
   const app = await buildApp({ basePath: '/snake-3310-hom', webDir: resolve('dist/web'), production: true, db: { query: async () => ({ rows: [] }) } });
   let browser;

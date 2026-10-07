@@ -60,10 +60,18 @@
   <dialog id="game-end" aria-labelledby="game-end-heading" aria-describedby="end-score">
     <h2 id="game-end-heading">Fim de jogo</h2>
     <p id="end-score"></p>
-    <div class="dialog-actions">
-      <button class="button-primary" id="game-restart" type="button">Jogar de novo</button>
-      <button class="button-secondary" id="game-menu" type="button">Voltar ao menu</button>
-    </div>
+    <form id="score-form" aria-busy="false" novalidate>
+      <label for="game-nickname">Apelido</label>
+      <input id="game-nickname" name="nickname" type="text" required autocomplete="nickname" spellcheck="false"
+        aria-describedby="nickname-help score-message">
+      <p class="field-help" id="nickname-help">3 a 12 letras ou números. Apelido público no ranking.</p>
+      <p class="submission-message" id="score-message" role="status" aria-live="polite"></p>
+      <div class="dialog-actions">
+        <button class="button-primary" id="score-submit" type="submit">Enviar placar</button>
+        <button class="button-secondary" id="game-restart" type="button">Jogar de novo</button>
+        <button class="button-secondary" id="game-menu" type="button">Voltar ao menu</button>
+      </div>
+    </form>
   </dialog>
   <script type="module" src="./main.ts"></script>
 </body>

@@ -25,4 +25,7 @@ controladas. A gravação é parametrizada e armazena ISO 8601 UTC. Os testes de
 SQLite e `src/interface/http/submit-score.test.ts` cobrem tipos, Unicode, UTC e falha sem detalhes internos.
 O filtro compara fragmentos `puta`, `puto`, `porra`, `caralho`, `merda`, `buceta`, `cacete`, `foder` e `fodase`,
 mais os nomes `cu` e `fdp` após retirar números, sem caixa/acentos. Esta lista local pode ter falsos positivos
-e não identifica todas as ofensas. O modal e suas proteções de envio são implementados na tarefa #33.
+e não identifica todas as ofensas. O modal valida a forma do apelido por pontos de código Unicode, bloqueia envio pendente e após 201, e usa
+AbortController com geração da partida para ignorar respostas antigas. Unidade em
+`src/web/submission-ui.test.ts`, CA-7/8 e `scripts/check-game-ui.mjs` verificam esses estados, foco e POST/GET real.
+A API não oferece idempotência: abortar a espera não desfaz uma gravação já concluída.

@@ -90,7 +90,7 @@ describe('Partida e envio no aparelho (#28)', () => {
     }
   });
 
-  test.fails('CA-7 RN-0005 RN-0006: modal envia uma vez, trata sucesso, erro e 429 e ignora resposta de partida antiga #33', async () => {
+  test('CA-7 RN-0005 RN-0006: modal envia uma vez, trata sucesso, erro e 429 e ignora resposta de partida antiga #33', async () => {
     for (const status of [201, 400, 429, 500, 0]) {
       let finish!: (value: { ok: boolean; status: number; json(): Promise<unknown> }) => void;
       let fail!: (error: Error) => void;

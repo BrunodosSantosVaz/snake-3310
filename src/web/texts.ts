@@ -7,4 +7,10 @@ export const texts = {
   ended: 'Fim de jogo',
   points: (value: number) => `Pontos: ${new Intl.NumberFormat('pt-BR').format(value)}`,
   finalPoints: (value: number) => `${new Intl.NumberFormat('pt-BR').format(value)} pontos`,
+  nicknameHelp: 'Use de 3 a 12 letras ou números.',
+  sending: 'Enviando…',
+  sent: 'Placar enviado!',
+  nicknameRejected: 'Esse apelido não pode. Escolha outro.',
+  sendLimited: 'Muitos envios seguidos. Tente de novo em 1 minuto.',
+  sendError: 'Não deu para enviar. Tente de novo.',
 } as const;
