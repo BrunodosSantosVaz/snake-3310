@@ -19,7 +19,7 @@ export async function migrate(db: TransactionalDb, directory = 'migrations'): Pr
     try {
       const changed = await db.transaction(async (tx) => {
         if ((await tx.query('select 1 from schema_migrations where name = $1', [name])).rows.length) return false;
-        await tx.query(sql);
+        await tx.exec(sql);
         await tx.query('insert into schema_migrations (name) values ($1)', [name]);
         return true;
       });

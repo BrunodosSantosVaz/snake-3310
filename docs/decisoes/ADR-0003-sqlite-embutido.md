@@ -41,6 +41,7 @@ Consultar a [pesquisa](../pesquisa/2026-10-06-sqlite.md) antes de atualizar o ru
   Extensões estão desativadas e o modo defensivo fica ativo.
 - WAL, `synchronous=FULL`, espera de bloqueio de 5000 ms e transação `BEGIN IMMEDIATE` coordenam gravações.
   Uma fila por conexão evita que consultas fora de uma transação participem dela por acidente.
+- Migrações executam lotes por `exec` explícito; consultas com parâmetros aceitam uma instrução só e recusam cauda SQL antes de executar.
 - Migrações SQL numeradas são aplicadas em ordem, em transação com o registro `schema_migrations`. Repetir não
   altera o banco; falha desfaz tanto o esquema quanto a marca. O escritor da versão anterior pode completar sua
   transação durante a espera de um processo novo, com teste de sobreposição entre processos.

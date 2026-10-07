@@ -6,8 +6,12 @@ import { DatabaseSync, type SQLInputValue } from 'node:sqlite';
 export interface Db {
   query<T = Record<string, unknown>>(sql: string, params?: unknown[]): Promise<{ rows: T[] }>;
 }
-export interface TransactionalDb extends Db {
-  transaction<T>(work: (tx: Db) => Promise<T>): Promise<T>;
+// Trusted migration batches are explicit; query prepares exactly one statement with bound values.
+export interface BatchDb extends Db {
+  exec(sql: string): Promise<void>;
+}
+export interface TransactionalDb extends BatchDb {
+  transaction<T>(work: (tx: BatchDb) => Promise<T>): Promise<T>;
 }
 export interface ClosableDb extends TransactionalDb {
   close(): Promise<void>;
@@ -47,22 +51,21 @@ export function createSqliteDatabase(path: string): ClosableDb {
     queue = pending.catch(() => undefined);
     return pending;
   }
-  const tx: Db = {
+  const tx: BatchDb = {
+    exec: async (sql: string) => { database.exec(sql); },
     query: async <T>(sql: string, params?: unknown[]) => {
       const statement = database.prepare(sql);
+      const tail = sql.slice(statement.sourceSQL.length).replace(/--[^\r\n]*(?:\r?\n|$)|\/\*[\s\S]*?\*\//g, '').trim();
+      if (tail) throw new Error('query requires a single SQL statement; use exec for trusted batches');
       statement.setAllowBareNamedParameters(false);
       const bindings = Object.fromEntries((params ?? []).map((value, index) => [`$${index + 1}`, sqlValue(value)]));
-      if (!params?.length && statement.columns().length === 0) {
-        // Numbered migrations contain a trusted SQL batch; user values always use prepared bindings.
-        database.exec(sql);
-        return { rows: [] as T[] };
-      }
       return { rows: statement.all(bindings) as T[] };
     },
   };
   return {
+    exec: (sql: string) => serialize(() => tx.exec(sql)),
     query: <T>(sql: string, params?: unknown[]) => serialize(() => tx.query<T>(sql, params)),
-    transaction: <T>(work: (tx: Db) => Promise<T>) => serialize(async () => {
+    transaction: <T>(work: (tx: BatchDb) => Promise<T>) => serialize(async () => {
       database.exec('BEGIN IMMEDIATE');
       try {
         const result = await work(tx);

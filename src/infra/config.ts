@@ -1,4 +1,4 @@
-import { isAbsolute, relative, resolve } from 'node:path';
+import { isAbsolute, relative, resolve, sep } from 'node:path';
 
 // Runtime configuration read from the environment (ARQ-07): the same image runs in staging and production.
 export interface Config {
@@ -24,7 +24,7 @@ export function readConfig(env: NodeJS.ProcessEnv): Config {
   const sqlitePath = resolve(rawPath);
   const fromDist = relative(resolve('dist'), sqlitePath);
   if (!rawPath.trim() || rawPath === ':memory:' || rawPath.startsWith('file:') ||
-      (!fromDist.startsWith('..') && !isAbsolute(fromDist))) {
+      (fromDist !== '..' && !fromDist.startsWith(`..${sep}`) && !isAbsolute(fromDist))) {
     throw new Error('SQLITE_PATH deve apontar para arquivo durável fora de dist');
   }
   const port = Number(env.PORT ?? 8080);

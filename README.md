@@ -86,6 +86,7 @@ C/Esc para voltar. No ranking, OK repete a consulta. A partida ainda não está 
   `migrations`).
 - Para rodar localmente: `npm ci`, `npm run build`, `npm run migrar` e `npm start`. O ranking persiste no arquivo mesmo após reiniciar o processo; o diretório `data/` é ignorado pelo Git.
 - Produção precisa de volume persistente por ambiente e uma réplica; arquivo efêmero perde placares. A imagem e o startup com migração antes de listen serão entregues pela tarefa #19. Nunca copie só o arquivo principal para backup enquanto WAL estiver ativo. Veja [ADR-0003](docs/decisoes/ADR-0003-sqlite-embutido.md).
+- Migrações executam o lote SQL completo em transação, inclusive se começar com SELECT; consultas preparadas aceitam uma única instrução. Caminhos como `dist/..cache/scores.sqlite` também são recusados.
 - `NODE_ENV=production` ativa HSTS por um ano. CSP restrita ao próprio site, proteção contra frames, nosniff,
   política de referrer e bloqueio de câmera/microfone/localização são enviados em todas as respostas.
 
