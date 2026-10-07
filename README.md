@@ -33,11 +33,11 @@ construírem e manterem sistemas profissionais.
 ## Estado atual
 
 O épico [#13](https://github.com/BrunodosSantosVaz/snake-3310/issues/13) está em implementação. O código já tem
-servidor sob `BASE_PATH`, saúde, prontidão, migrações e listagem do ranking. A tela do aparelho já permite navegar
-no menu e consultar os cinco maiores placares. O épico #28 acrescenta a partida jogável com motor, controles,
-pausa e reinício (#31). Ainda não há release publicada; validação/limite de envios (#32), envio pelo modal (#33)
-e entrega do ambiente continuam pendentes. Os oito critérios da partida completa (#28) têm testes de aceite
-escritos antes da implementação (#30).
+servidor sob `BASE_PATH`, saúde, prontidão, migrações e listagem do ranking. A imagem leve ARM64 usa SQLite no
+volume e migra antes de abrir HTTP. A tela do aparelho já permite navegar no menu e consultar os cinco maiores
+placares. O épico #28 acrescenta a partida jogável com motor, controles, pausa e reinício (#31). Ainda não há release
+publicada; validação/limite de envios (#32), envio pelo modal (#33) e entrega do ambiente continuam pendentes.
+Os oito critérios da partida completa (#28) têm testes de aceite escritos antes da implementação (#30).
 
 ![Menu do Snake 3310 na tela de um aparelho azul, com teclas numéricas clicáveis](docs/imagens/menu-3310.png)
 
@@ -51,7 +51,7 @@ escritos antes da implementação (#30).
 
 - API pública de leitura `GET <BASE_PATH>/api/placares`: no máximo dez placares, por pontos decrescentes e, em
   empate, pelo envio mais antigo (RN-0001). Sem placares, retorna `{ "scores": [] }`.
-- Servidor Fastify com `/api/health`, `/api/ready` e migrações Postgres, sempre sob `BASE_PATH`.
+- Servidor Fastify com `/api/health`, `/api/ready` e migrações SQLite, sempre sob `BASE_PATH`.
 - Aparelho 3310 responsivo com menu, instruções e ranking conectado à API, operado por teclado ou pelas teclas
   clicáveis. Trata carregando, vazio, erro e nova tentativa.
 - Partida em pixels na grade 21×13: três segmentos iniciais, passo de 180 ms, crescimento e sete pontos por comida,
@@ -77,10 +77,15 @@ pontos e devolve o foco à arena. O envio de placar ainda está pendente da tare
 
 - Instruções para IAs: `AGENTS.md`. O que o sistema é: `PRODUTO.md`. A stack: `STACK.md`. O design: `DESIGN.md`.
 - O processo de trabalho: `.bigbang/processo/`. Pegadinhas: `docs/memoria.md`.
-- Requisitos: Node.js 24 e npm, conforme a stack e o runtime da imagem.
+- Requisitos: Node.js 24.18.1 e npm, conforme a stack e o runtime da imagem.
+- CI: `bash scripts/install-ci.sh` verifica o download oficial de Node 24.18.1 por SHA-256 antes de `npm ci`;
+  localmente exige essa versão. No modo Flash, `npm run test:affected` lê o arquivo JSON apontado por
+  `BB_ARQUIVOS_ALTERADOS`, seleciona unidade/integração/aceite por dependência e conserva cobertura de 80%
+  nos módulos afetados de domínio/aplicação. Configuração estrutural, produção ou grafo incerto recebem a suíte
+  completa. Veja [CI e testes afetados](docs/operacao/ci.md) e [ADR-0004](docs/decisoes/ADR-0004-flash-tsuru-ci.md).
 - Comandos: `npm ci` (instala), `npm run lint`, `npm run typecheck`, `npm test` (unidade),
   `npm run test:acceptance` (aceite), `npm run test:architecture` (camadas), `npm run test:coverage`,
-  `npm run test:migracoes` e `npm run build`. Depois do build: `npm run migrar` (aplica as migrações) e `npm start`.
+  `npm run test:migracoes` e `npm run build`. Depois do build: `npm start` aplica migrações antes de abrir HTTP; `npm run migrar` é a CLI opcional para o mesmo arquivo.
 - `npm run dev` abre o Vite para a interface e encaminha `/api` para o servidor local na porta 8080;
   `npm run build` compila servidor e front em `dist/server` e `dist/web`, com caminhos relativos no front.
 - `npm run test:ui` serve o build real sob a CSP do Fastify e valida teclado, cinco linhas, contraste/acessibilidade
@@ -92,10 +97,15 @@ pontos e devolve o foco à arena. O envio de placar ainda está pendente da tare
 - Depois do build, `node scripts/check-game-ui.mjs` verifica o movimento real do canvas, pausa, reinício,
   foco, área de toque, layout de 360 px/texto200% e axe em Chromium com a CSP do servidor. A cobertura inclui
   o motor puro do navegador, além das camadas de domínio e aplicação.
-- Os testes usam um Postgres em memória (PGlite, ADR-0002); não é preciso instalar banco para desenvolver.
+- Os testes usam SQLite nativo real, isolado em memória e em arquivo temporário (ADR-0003); não é preciso instalar banco nem fornecer credenciais.
 - Variáveis de ambiente do servidor (os valores ficam só no servidor): `BASE_PATH` (endereço do jogo, por exemplo
-  `/snake-3310`), `DATABASE_URL`, `PORT` (padrão 8080), `WEB_DIR` (padrão `dist/web`) e, para `npm run migrar`, `MIGRATIONS_DIR` (padrão
+  `/snake-3310`), `SQLITE_PATH` (arquivo persistente, padrão `data/snake-3310.sqlite`, fora de `dist`), `PORT` (padrão 8080), `WEB_DIR` (padrão `dist/web`) e `MIGRATIONS_DIR` (startup e CLI; padrão
   `migrations`).
+- Para rodar localmente: `npm ci`, `npm run build`, `npm start`. O ranking persiste no arquivo mesmo após reiniciar o processo; o diretório `data/` é ignorado pelo Git.
+- Produção precisa de volume persistente por ambiente e uma réplica; arquivo efêmero perde placares. A imagem inicia como usuário `node` (UID/GID 1000), com `umask 077`, e aplica migrações na mesma conexão antes de listen. Falha impede abrir HTTP. Nunca copie só o arquivo principal para backup enquanto WAL estiver ativo. Veja [ADR-0003](docs/decisoes/ADR-0003-sqlite-embutido.md).
+- Migrações executam o lote SQL completo em transação, inclusive se começar com SELECT; consultas preparadas aceitam uma única instrução. Caminhos como `dist/..cache/scores.sqlite` também são recusados.
+- A imagem expõe a porta 8888, guarda SQLite em `/data/scores.sqlite` e inclui os tokens do design no build. O helper `deploy/compose.yaml` compartilha volume e não instala banco externo. Veja [empacotamento](docs/operacao/empacotamento.md) para build, permissões do volume e inicialização no Tsuru.
+- `npm run test:smoke` usa fetch nativo contra `BB_URL` ou `SMOKE_URL`, sem instalar dependências de teste; verifica saúde, prontidão, página, CSP e ranking.
 - `NODE_ENV=production` ativa HSTS por um ano. CSP restrita ao próprio site, proteção contra frames, nosniff,
   política de referrer e bloqueio de câmera/microfone/localização são enviados em todas as respostas.
 
