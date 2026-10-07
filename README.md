@@ -35,7 +35,8 @@ construírem e manterem sistemas profissionais.
 O épico [#13](https://github.com/BrunodosSantosVaz/snake-3310/issues/13) está em implementação. O código já tem
 servidor sob `BASE_PATH`, saúde, prontidão, migrações e listagem do ranking. A tela do aparelho já permite navegar
 no menu e consultar os cinco maiores placares. Ainda não há release publicada; a partida e a entrega do ambiente
-continuam pendentes.
+continuam pendentes. Os oito critérios da partida completa (#28) já têm testes de aceite escritos antes
+da implementação (#30): motor/controles (#31), validação e limite de envios (#32), modal e navegador real (#33).
 
 ![Menu do Snake 3310 na tela de um aparelho azul, com teclas numéricas clicáveis](docs/imagens/menu-3310.png)
 

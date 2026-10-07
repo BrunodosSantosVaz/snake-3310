@@ -47,3 +47,10 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
   que cai derruba o processo. Nunca logue o pool: ele carrega a connection string com a senha.
 - 2026-10-06 (#16): transação no `pg` só com cliente dedicado (`pool.connect()`); `pool.query` pode trocar de conexão a
   cada comando. Use `db.transaction(...)`.
+
+- 2026-10-07 (#30): aceite #28 usa motor puro `src/web/game.ts` (`newGame`, `stepGame`, `turnGame`) e estado
+  `{snake, food, direction, points, status}`; web não importa camadas do servidor. RN-0004/5/6 originam-se do
+  produto/protótipo e refinamento autorizado. O POST precisa rejeitar pontos string: não permita coerção JSON.
+- 2026-10-07 (#30): CA-8 testa Chromium/build real, não JSDOM; execute build e instale Chromium antes do aceite.
+  Identificadores acessíveis do jogo: `game-score`, `game-status`, canvas com nome/role img, modal dialog e formulário
+  de apelido com label. Pendências referenciam apenas #31/#32/#33; libere com `bb aceite liberar`.
