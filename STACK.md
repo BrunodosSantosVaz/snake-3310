@@ -7,10 +7,11 @@
 
 TypeScript ponta a ponta. O front é um jogo em Canvas feito com Vite. A API usa Fastify em Node 24 e guarda o
 ranking em Postgres. Uma imagem `linux/arm64` serve as duas partes sob um prefixo de caminho configurável
-(`/snake-3310`). A entrega começa pelo alvo `vps-docker` no `vm-oracle`, na URL final, e passa para o Tsuru
-quando o framework tiver esse alvo.
+(`/snake-3310`). A esteira usa o alvo oficial `tsuru` no `vm-oracle`, na URL final, com modo Flash. O bootstrap #55 prepara
+a configuração da Fundação; o artefato e seus comandos completos entram pela release homologada.
 
-Decisão registrada em [ADR-0001](docs/decisoes/ADR-0001-stack.md).
+Decisões registradas em [ADR-0001](docs/decisoes/ADR-0001-stack.md) e
+[ADR-0004](docs/decisoes/ADR-0004-flash-tsuru-ci.md), por autorização já registrada em #36.
 
 ## Linguagens, frameworks e versões
 
@@ -31,13 +32,16 @@ Postgres 18 no servidor que já existe, com banco e usuário próprios do Snake 
 ## Tipo de entrega e alvo
 
 - **Perfil:** `deploy`.
-- **Alvo:** `vps-docker` no `vm-oracle` (ARM64), com imagem `linux/arm64` no GHCR, publicada pelo digest.
+- **Alvo:** `tsuru` no `vm-oracle` (ARM64), com imagem `linux/arm64` no GHCR, publicada pelo digest.
 - **URLs:** produção em `https://tsuru.frontzap.com.br/snake-3310` e staging em
-  `https://tsuru.frontzap.com.br/snake-3310-hom`. O NPM manda cada caminho para o contêiner do ambiente
-  (*custom location*).
+  `https://tsuru.frontzap.com.br/snake-3310-hom`. O NPM encaminha cada caminho para o aplicativo Tsuru
+  correspondente; readiness usa `/api/ready`.
 - **Prefixo de caminho:** a variável `BASE_PATH` é lida na execução, e o Vite usa `base: './'`. A mesma imagem
   roda em qualquer caminho (ARQ-07).
-- **Próximo alvo:** Tsuru, por um épico no framework `big-bang`. A URL e a imagem não mudam. Ver o ADR-0001.
+- **Execução:** modo Flash mantém testes antes da tarefa, revisão independente e scanners. Mudanças estruturais
+  e produção exigem suíte completa. O bootstrap conserva os comandos originais e os sete caminhos do artefato.
+- **Fundação sem artefato:** o CA nativo de configuração é executado explicitamente. Na promoção,
+  `testes-producao.sh` faz checkout do SHA da release antes de instalar e testar, usando os comandos da release.
 
 ## Arquitetura
 
@@ -83,7 +87,7 @@ C4Container
 <!-- bb:config:inicio -->
 <!-- Gerado pelo Big Bang v1.5.2 a partir de bigbang.toml. Não edite: personalize em bigbang.toml. -->
 
-**Perfil de entrega:** `deploy` · **Alvo:** `vps-docker`
+**Perfil de entrega:** `deploy` · **Alvo:** `tsuru`
 
 **Caminhos do artefato** (mudança aqui exige release):
 
@@ -123,3 +127,4 @@ Dependências de desenvolvimento são livres. Linha nova só com ADR e pelo port
 | Data | O que mudou | ADR |
 | --- | --- | --- |
 | 06/10/2026 | Versão inicial (Fundação F2) | ADR-0001 |
+| 07/10/2026 | Bootstrap da esteira Flash/Tsuru na Fundação, sem artefato (#55/#57) | ADR-0004 |
