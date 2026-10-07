@@ -1,0 +1,29 @@
+# Local/legacy deployment helper; production Tsuru mounts its own PVC into the same /data directory.
+services:
+  app:
+    image: ${BB_IMAGEM_APP:?provide the immutable image digest}
+    restart: unless-stopped
+    init: true
+    env_file: [app.env]
+    ports: ["127.0.0.1:${SNAKE_PORT:-8888}:8888"]
+    volumes: ["scores:/data"]
+    read_only: true
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=16m"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 256m
+    pids_limit: 128
+
+  # Optional CLI only for Compose; it shares the app's volume. Tsuru uses startup, never an independent job.
+  migrar:
+    image: ${BB_IMAGEM_APP:?provide the immutable image digest}
+    env_file: [app.env]
+    command: ["node", "dist/server/interface/migrate.js"]
+    profiles: [migrar]
+    volumes: ["scores:/data"]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+volumes:
+  scores:

@@ -1,6 +1,6 @@
 # ADR-0001: Stack TypeScript com Fastify e Postgres, e entrega pela ponte vps-docker até o alvo Tsuru
 
-- **Situação:** proposta
+- **Situação:** decisão de banco substituída pelo [ADR-0003](ADR-0003-sqlite-embutido.md); demais escolhas preservadas
 - **Data:** 2026-10-06
 - **Decisores:** Bruno dos Santos Vaz (dono); Claude (pesquisa e proposta)
 

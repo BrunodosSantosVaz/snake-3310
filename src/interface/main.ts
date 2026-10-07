@@ -1,15 +1,12 @@
 import { readConfig } from '../infra/config.js';
-import { createPool, describeError } from '../infra/database/db.js';
-import { buildApp } from './http/app.js';
+import { describeError } from '../infra/database/db.js';
+import { startServer } from './startup.js';
 
-// Composition root (ARQ-05): configuration, database pool and HTTP server.
+// Composition root (ARQ-05): configuration, database and HTTP server.
+process.umask(0o077);
 const config = readConfig(process.env);
-let log: { error(details: object, message: string): void } = {
-  error: (details, message) => console.error(message, details),
-};
-const db = createPool(config.databaseUrl, (error) => log.error({ banco: error }, 'erro numa conexão parada do banco'));
-const app = await buildApp({ basePath: config.basePath, db, webDir: config.webDir, logger: true, production: config.production });
-log = app.log;
+const server = await startServer(config, process.env.MIGRATIONS_DIR ?? 'migrations');
+const { app } = server;
 
 let stopping = false;
 async function shutdown(reason: string, code: number): Promise<void> {
@@ -19,8 +16,7 @@ async function shutdown(reason: string, code: number): Promise<void> {
   const deadline = setTimeout(() => process.exit(code || 1), 10_000);
   deadline.unref();
   try {
-    await app.close();
-    await db.close();
+    await server.close();
   } catch (error) {
     app.log.error({ erro: describeError(error) }, 'falha ao encerrar');
     code = code || 1;
@@ -38,5 +34,3 @@ process.on('uncaughtException', (error) => {
   app.log.fatal({ erro: describeError(error) }, 'exceção sem tratamento');
   void shutdown('uncaughtException', 1);
 });
-
-await app.listen({ host: '0.0.0.0', port: config.port });
