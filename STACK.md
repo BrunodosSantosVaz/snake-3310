@@ -99,7 +99,7 @@ e contar tentativas. O limite usa no máximo 4.096 contadores locais e expira em
 ## Configuração da esteira
 
 <!-- bb:config:inicio -->
-<!-- Gerado pelo Big Bang v1.5.1 a partir de bigbang.toml. Não edite: personalize em bigbang.toml. -->
+<!-- Gerado pelo Big Bang v1.5.2 a partir de bigbang.toml. Não edite: personalize em bigbang.toml. -->
 
 **Perfil de entrega:** `deploy` · **Alvo:** `tsuru`
 
