@@ -38,9 +38,11 @@ O épico [#13](https://github.com/BrunodosSantosVaz/snake-3310/issues/13) está 
 servidor sob `BASE_PATH`, saúde, prontidão, migrações e listagem do ranking. A imagem leve ARM64 usa SQLite no
 volume e migra antes de abrir HTTP. A tela do aparelho já permite navegar no menu e consultar os cinco maiores
 placares. O épico #28 acrescenta a partida jogável com motor, controles, pausa e reinício (#31). Ainda não há release
-publicada. A API já valida e grava os envios, filtra apelidos e limita tentativas por IP (#32); envio pelo modal (#33)
-e entrega do ambiente continuam pendentes.
+publicada. A API valida e grava os envios, filtra apelidos e limita tentativas por IP (#32). O modal de fim envia o
+placar, mostra o resultado e permite reiniciar (#33); a entrega do ambiente continua pendente.
 Os oito critérios da partida completa (#28) têm testes de aceite escritos antes da implementação (#30).
+
+![Partida do Snake 3310 com cobra, comida, pontuação e controles no aparelho azul](docs/imagens/partida-3310.png)
 
 ![Menu do Snake 3310 na tela de um aparelho azul, com teclas numéricas clicáveis](docs/imagens/menu-3310.png)
 
@@ -78,7 +80,9 @@ A rota não aceita parâmetros de consulta: campos desconhecidos recebem 400. O 
 [docs/api/openapi.yaml](docs/api/openapi.yaml). Na tela, use 2/8, setas ou W/S para selecionar, OK/Enter para abrir e
 C/Esc para voltar. No ranking, OK repete a consulta. Em Jogar, use setas, WASD ou 2/4/6/8 para mover e espaço/5
 para pausar e retomar. Perder o foco pausa; C/Esc volta ao menu. Após a partida, Jogar de novo começa com zero
-pontos e devolve o foco à arena. O envio de placar ainda está pendente da tarefa #33; veja o
+pontos e devolve o foco à arena. No diálogo de fim, preencha um apelido público de 3 a 12 letras/números e escolha
+Enviar placar. Durante Enviando… aguarde; após Placar enviado!, volte ao menu e abra Ranking. Apelido recusado,
+limite de envios e falha de rede têm mensagens próprias e permitem nova tentativa. Veja o
 [guia da interface](docs/guias/interface.md).
 
 Para usar a API de envio diretamente, envie JSON com somente `nickname` e `points`, por exemplo
@@ -108,8 +112,9 @@ data ou privilégios enviados pelo cliente. A chamada bem-sucedida aparece na pr
   falta de navegador ou erro de build falha fora das marcas de pendente. Os testes DOM
   e de semântica com axe também rodam em `npm test` na CI.
 - Depois do build, `node scripts/check-game-ui.mjs` verifica o movimento real do canvas, pausa, reinício,
-  foco, área de toque, layout de 360 px/texto200% e axe em Chromium com a CSP do servidor. A cobertura inclui
-  o motor puro do navegador, além das camadas de domínio e aplicação.
+  POST 201 único, consulta do placar persistido em SQLite isolado, foco, área de toque e layout de 360 px/texto200% e axe em Chromium com a CSP do servidor. A cobertura inclui
+  o motor puro do navegador, além das camadas de domínio e aplicação. O script gera
+  `docs/imagens/partida-3310.png`.
 - Os testes usam SQLite nativo real, isolado em memória e em arquivo temporário (ADR-0003); não é preciso instalar banco nem fornecer credenciais.
 - Variáveis de ambiente do servidor (os valores ficam só no servidor): `BASE_PATH` (endereço do jogo, por exemplo
   `/snake-3310`), `SQLITE_PATH` (arquivo persistente, padrão `data/snake-3310.sqlite`, fora de `dist`), `PORT` (padrão 8080), `WEB_DIR` (padrão `dist/web`) e `MIGRATIONS_DIR` (startup e CLI; padrão
@@ -143,7 +148,9 @@ Não há autenticação nem prova criptográfica da partida: um cliente pode for
 plausíveis de 0 a 1.890 e múltiplos de sete. O filtro local usa uma lista de termos e pode recusar apelidos que
 contenham um trecho bloqueado ou deixar passar outras ofensas. O limite é por processo, com uma réplica; reiniciar
 zera os contadores. Se todas as 4.096 entradas estiverem ativas, novos IPs recebem 429 até uma delas expirar.
-Jogadores que compartilham um IP também compartilham o limite. O envio pelo modal ainda está na tarefa #33.
+Jogadores que compartilham um IP também compartilham o limite. Reiniciar ou sair cancela a espera pelo envio e
+ignora respostas antigas; isso não desfaz uma gravação que o servidor já concluiu. Uma falha de rede pode ocorrer
+após a gravação, portanto uma nova tentativa pode criar outro placar; a API não possui chave de idempotência.
 
 ## Contribuindo
 

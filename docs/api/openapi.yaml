@@ -62,6 +62,8 @@ paths:
         novos IPs até expirar uma entrada. Somente o último proxy explicitamente confiado pode apresentar
         o cabeçalho saneado X-Snake-Client-IP; X-Forwarded-For nunca define a identidade.
         Não há autenticação nem prova criptográfica da partida; pontos plausíveis podem ser forjados.
+        A interface bloqueia envios pendentes e novos envios após 201 na mesma partida. Não há chave de
+        idempotência na API: cancelar a espera no navegador não desfaz uma gravação já concluída.
       security: []
       requestBody:
         required: true
