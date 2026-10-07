@@ -29,6 +29,34 @@ describe('migrações', () => {
     expect(results.flat().sort()).toEqual(readdirSync('migrations').filter((f) => f.endsWith('.sql')).sort());
   });
 
+  test('um lote iniciado com SELECT executa todo o esquema antes de registrar e persiste após reabrir', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'mig-preflight-'));
+    cleanup.push(() => rmSync(dir, { recursive: true, force: true }));
+    const path = join(dir, 'scores.sqlite');
+    const db = createSqliteDatabase(path);
+    cleanup.push(() => db.close());
+    writeFileSync(join(dir, '0001_preflight.sql'), 'select 1 as preflight; create table after_preflight (n integer) strict; insert into after_preflight values (7);');
+    expect(await migrate(db, dir)).toEqual(['0001_preflight.sql']);
+    expect((await db.query('select n from after_preflight')).rows).toEqual([{ n: 7 }]);
+    expect((await db.query('select name from schema_migrations')).rows).toEqual([{ name: '0001_preflight.sql' }]);
+    await db.close();
+    const reopened = createSqliteDatabase(path);
+    cleanup.push(() => reopened.close());
+    expect(await migrate(reopened, dir)).toEqual([]);
+    expect((await reopened.query('select n from after_preflight')).rows).toEqual([{ n: 7 }]);
+  });
+
+  test('um lote iniciado com SELECT que falha depois do DDL desfaz esquema e marca', async () => {
+    const db = createSqliteDatabase(':memory:');
+    cleanup.push(() => db.close());
+    const dir = mkdtempSync(join(tmpdir(), 'mig-preflight-failure-'));
+    cleanup.push(() => rmSync(dir, { recursive: true, force: true }));
+    writeFileSync(join(dir, '0001_preflight.sql'), 'select 1; create table after_preflight (n integer); select * from missing_table;');
+    await expect(migrate(db, dir)).rejects.toThrow('0001_preflight.sql');
+    expect((await db.query('select name from schema_migrations')).rows).toEqual([]);
+    expect((await db.query("select name from sqlite_schema where name = 'after_preflight'")).rows).toEqual([]);
+  });
+
   test('uma migração que falha no meio desfaz o que já tinha feito e não fica marcada', async () => {
     const db = createSqliteDatabase(':memory:');
     cleanup.push(() => db.close());

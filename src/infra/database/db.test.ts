@@ -30,6 +30,15 @@ describe('SQLite adapter', () => {
     expect((await db.query('select $2 as second, $1 as first', ['a', 'b'])).rows).toEqual([{ second: 'b', first: 'a' }]);
   });
 
+  test('rejects SQL batches in query without partially executing them, with or without bindings', async () => {
+    const db = open();
+    await expect(db.query('select 1; create table skipped (n integer);')).rejects.toThrow('single');
+    await expect(db.query('select $1; create table skipped (n integer);', [7])).rejects.toThrow('single');
+    await expect(db.query('create table skipped (n integer); select 1;')).rejects.toThrow('single');
+    expect((await db.query("select name from sqlite_schema where name = 'skipped'")).rows).toEqual([]);
+    expect((await db.query("select 'value; -- text' as value; /* trailing comment */ -- end")).rows).toEqual([{ value: 'value; -- text' }]);
+  });
+
   test('rolls back failures and serializes transactions with unrelated queries', async () => {
     const db = open();
     await db.query('create table samples (n integer) strict');
@@ -53,7 +62,7 @@ describe('SQLite adapter', () => {
     cleanup.push(() => rmSync(dir, { recursive: true, force: true }));
     const path = join(dir, 'data', 'scores.sqlite');
     const db = open(path);
-    await db.query('create table samples (n integer) strict; insert into samples values (7);');
+    await db.exec('create table samples (n integer) strict; insert into samples values (7);');
     expect((await db.query('pragma journal_mode')).rows).toEqual([{ journal_mode: 'wal' }]);
     expect((await db.query('pragma busy_timeout')).rows).toEqual([{ timeout: 5000 }]);
     await db.close();

@@ -34,9 +34,11 @@ describe('readConfig', () => {
 
   test('uses an explicit durable path and rejects memory, empty, URI or dist storage', () => {
     expect(readConfig({ SQLITE_PATH: '/var/lib/snake/scores.sqlite', PORT: '8888' }).sqlitePath).toBe('/var/lib/snake/scores.sqlite');
-    for (const SQLITE_PATH of [':memory:', '', 'file:temporary?mode=memory', 'dist/scores.sqlite', 'dist/server/data.sqlite']) {
+    for (const SQLITE_PATH of [':memory:', '', 'file:temporary?mode=memory', 'dist/scores.sqlite', 'dist/server/data.sqlite', 'dist/..cache/scores.sqlite', 'dist/..hidden/scores.sqlite', resolve('dist/..cache/scores.sqlite')]) {
       expect(() => readConfig({ SQLITE_PATH })).toThrow('SQLITE_PATH');
     }
+    expect(readConfig({ SQLITE_PATH: '../scores.sqlite' }).sqlitePath).toBe(resolve('../scores.sqlite'));
+    expect(readConfig({ SQLITE_PATH: '..cache/scores.sqlite' }).sqlitePath).toBe(resolve('..cache/scores.sqlite'));
     expect(() => readConfig({ PORT: 'abc' })).toThrow('PORT');
   });
 });
