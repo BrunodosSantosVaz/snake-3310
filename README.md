@@ -71,6 +71,11 @@ C/Esc para voltar. No ranking, OK repete a consulta. A partida ainda não está 
 - Instruções para IAs: `AGENTS.md`. O que o sistema é: `PRODUTO.md`. A stack: `STACK.md`. O design: `DESIGN.md`.
 - O processo de trabalho: `.bigbang/processo/`. Pegadinhas: `docs/memoria.md`.
 - Requisitos: Node.js 24.18.1 e npm, conforme a stack e o runtime da imagem.
+- CI: `bash scripts/install-ci.sh` verifica o download oficial de Node 24.18.1 por SHA-256 antes de `npm ci`;
+  localmente exige essa versão. No modo Flash, `npm run test:affected` lê o arquivo JSON apontado por
+  `BB_ARQUIVOS_ALTERADOS`, seleciona unidade/integração/aceite por dependência e conserva cobertura de 80%
+  nos módulos afetados de domínio/aplicação. Configuração estrutural, produção ou grafo incerto recebem a suíte
+  completa. Veja [CI e testes afetados](docs/operacao/ci.md) e [ADR-0004](docs/decisoes/ADR-0004-flash-tsuru-ci.md).
 - Comandos: `npm ci` (instala), `npm run lint`, `npm run typecheck`, `npm test` (unidade),
   `npm run test:acceptance` (aceite), `npm run test:architecture` (camadas), `npm run test:coverage`,
   `npm run test:migracoes` e `npm run build`. Depois do build: `npm run migrar` (aplica as migrações) e `npm start`.

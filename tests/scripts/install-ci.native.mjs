@@ -18,7 +18,7 @@ function shellFixture(t, options = {}) {
     uname: 'if [ "$1" = -m ]; then echo "${TEST_ARCH:-x86_64}"; else echo Linux; fi',
     curl: 'echo curl >> "$TRACE"; while [ "$1" != --output ]; do shift; done; printf archive > "$2"',
     sha256sum: `cat > "$CHECKSUM_INPUT"; echo verify >> "$TRACE"; exit ${options.corrupt ? 1 : 0}`,
-    tar: 'echo extract >> "$TRACE"; while [ "$1" != --directory ]; do shift; done; mkdir -p "$2/bin"; cp "$FAKE_BIN/node" "$2/bin/node"; cp "$FAKE_BIN/npm" "$2/bin/npm"',
+    tar: 'echo extract >> "$TRACE"; while [ "$1" != --directory ]; do shift; done; mkdir -p "$2/bin"; printf "#!/bin/bash\\necho v24.18.1\\n" > "$2/bin/node"; chmod +x "$2/bin/node"; cp "$FAKE_BIN/npm" "$2/bin/npm"',
   };
   for (const [name, body] of Object.entries(commands)) {
     writeFileSync(join(bin, name), `#!/bin/bash\n${body}\n`, { mode: 0o755 });
