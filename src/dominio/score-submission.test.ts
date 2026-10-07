@@ -12,6 +12,7 @@ test.each([
   null, [], 'ANA', {}, { nickname: 'AB', points: 7 }, { nickname: 'ABCDEFGHIJKLM', points: 7 },
   { nickname: ' ANA', points: 7 }, { nickname: 'A_NA', points: 7 }, { nickname: '<ANA>', points: 7 },
   { nickname: '😀ANA', points: 7 }, { nickname: 'pUtÁ', points: 7 }, { nickname: 'PORRA123', points: 7 },
+  { nickname: 'cu1', points: 7 }, { nickname: 'FdP', points: 7 },
   { nickname: 'ÁNA', points: '7' }, { nickname: 'ÁNA', points: true }, { nickname: 123, points: 7 },
   { nickname: 'ÁNA', points: -7 }, { nickname: 'ÁNA', points: 7.5 }, { nickname: 'ÁNA', points: 1897 },
   { nickname: 'ÁNA', points: 1 }, { nickname: 'ÁNA', points: NaN }, { nickname: 'ÁNA', points: Infinity },

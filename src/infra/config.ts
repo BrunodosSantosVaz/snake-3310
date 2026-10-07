@@ -1,4 +1,5 @@
 import { isAbsolute, relative, resolve, sep } from 'node:path';
+import { parseTrustedProxyIps } from './ip.js';
 
 // Runtime configuration read from the environment (ARQ-07): the same image runs in staging and production.
 export interface Config {
@@ -7,6 +8,7 @@ export interface Config {
   sqlitePath: string;
   webDir: string;
   production: boolean;
+  trustedProxyIps: string[];
 }
 
 const BASE_PATH = /^(\/[a-z0-9][a-z0-9-]*)*$/;
@@ -35,5 +37,6 @@ export function readConfig(env: NodeJS.ProcessEnv): Config {
     sqlitePath,
     webDir: resolve(env.WEB_DIR ?? 'dist/web'), // @fastify/static needs an absolute path
     production: env.NODE_ENV === 'production',
+    trustedProxyIps: parseTrustedProxyIps(env.TRUSTED_PROXY_IPS),
   };
 }

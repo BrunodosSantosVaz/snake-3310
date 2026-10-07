@@ -2,12 +2,16 @@ import fastifyStatic from '@fastify/static';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { CheckReadiness } from '../../aplicacao/health.js';
 import { ListRanking } from '../../aplicacao/ranking.js';
+import { SubmitScore } from '../../aplicacao/submit-score.js';
 import { normalizeBasePath } from '../../infra/config.js';
+import { parseTrustedProxyIps } from '../../infra/ip.js';
 import { describeError, type Db } from '../../infra/database/db.js';
 import { SqlDatabaseProbe } from '../../infra/database/probe.js';
 import { SqlScoreRepository } from '../../infra/database/score-repository.js';
 import { problemFor, sendProblem, UNAVAILABLE } from './problem.js';
 import { registerSecurityHeaders } from './seguranca/headers.js';
+import { scoreClientIp } from './seguranca/client-ip.js';
+import { ScoreLimit } from './seguranca/score-limit.js';
 
 export interface AppOptions {
   basePath: string;
@@ -15,17 +19,22 @@ export interface AppOptions {
   webDir?: string;
   logger?: boolean;
   production?: boolean;
+  trustedProxyIps?: readonly string[];
 }
 
 // Everything lives under basePath (RN-0002): <basePath>/ serves the game, <basePath>/api/* the API.
 export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
   const basePath = normalizeBasePath(options.basePath);
-  const app = Fastify({ logger: options.logger ?? false, trustProxy: false, ajv: { customOptions: { removeAdditional: false } } });
+  const app = Fastify({ logger: options.logger ?? false, trustProxy: false, ajv: { customOptions: { removeAdditional: false, coerceTypes: false } } });
   registerSecurityHeaders(app, options.production ?? false);
   const readiness = new CheckReadiness(new SqlDatabaseProbe(options.db), (error) =>
     app.log.warn({ banco: describeError(error) }, 'banco indisponível'),
   );
-  const ranking = new ListRanking(new SqlScoreRepository(options.db));
+  const scores = new SqlScoreRepository(options.db);
+  const ranking = new ListRanking(scores);
+  const submit = new SubmitScore(scores);
+  const limit = new ScoreLimit();
+  const trustedPeers = new Set(parseTrustedProxyIps(options.trustedProxyIps?.join(',')));
 
   // Set before the routes so every plugin inherits them (Fastify encapsulation).
   app.setErrorHandler(async (error: { statusCode?: number }, request, reply) => {
@@ -44,6 +53,27 @@ export async function buildApp(options: AppOptions): Promise<FastifyInstance> {
       api.get('/placares', {
         schema: { querystring: { type: 'object', properties: {}, additionalProperties: false } },
       }, async () => ({ scores: await ranking.execute() }));
+      api.post<{ Body: { nickname: string; points: number } }>('/placares', {
+        bodyLimit: 1024,
+        schema: {
+          querystring: { type: 'object', properties: {}, additionalProperties: false },
+          body: { type: 'object', required: ['nickname', 'points'], additionalProperties: false, properties: {
+            nickname: { type: 'string', minLength: 3, maxLength: 12, pattern: '^[\\p{L}\\p{N}]{3,12}$' },
+            points: { type: 'integer', minimum: 0, maximum: 1890, multipleOf: 7 },
+          } },
+        },
+        onRequest: async (request, reply) => {
+          const retryAfter = limit.take(scoreClientIp(request, trustedPeers));
+          if (retryAfter !== null) {
+            request.log.warn({ event: 'score_rate_limited' }, 'envio limitado');
+            reply.header('Retry-After', retryAfter);
+            return sendProblem(reply, problemFor(429));
+          }
+        },
+      }, async (request, reply) => {
+        if (!await submit.execute(request.body)) return sendProblem(reply, problemFor(400));
+        return reply.code(201).send({ nickname: request.body.nickname, points: request.body.points });
+      });
     },
     { prefix: `${basePath}/api` },
   );

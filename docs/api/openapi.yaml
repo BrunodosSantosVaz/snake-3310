@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Snake 3310 — Ranking público
   version: 0.0.0
-  description: Contrato da listagem implementada na tarefa #17; não inclui envio de placares.
+  description: Contrato do ranking e do envio público (RN-0001, RN-0005 e RN-0006).
 servers:
   - url: '{basePath}'
     variables:
@@ -51,8 +51,86 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+    post:
+      operationId: submitScore
+      summary: Valida e registra um placar público (RN-0005)
+      description: >-
+        Somente nickname e points, sem coerção de tipos ou campos extras; consulta sem parâmetros.
+        O servidor atribui a data UTC, filtra vocabulário ofensivo sem caixa/acentos e registra uma linha.
+        Corpo máximo de 1024 bytes. Cinco tentativas por IP em uma janela fixa de 60 segundos, inclusive
+        inválidas; contador local ao processo, até 4096 IPs, reiniciado com o processo. Saturação recusa
+        novos IPs até expirar uma entrada. Somente o último proxy explicitamente confiado pode apresentar
+        o cabeçalho saneado X-Snake-Client-IP; X-Forwarded-For nunca define a identidade.
+        Não há autenticação nem prova criptográfica da partida; pontos plausíveis podem ser forjados.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreSubmission'
+      responses:
+        '201':
+          description: Placar gravado; data e identificador ficam no servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoreSubmission'
+        '400':
+          description: Corpo, consulta, apelido, pontos ou campos extras inválidos; nenhum placar gravado.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '413':
+          description: Corpo acima de 1024 bytes; nenhum placar gravado.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '415':
+          description: Tipo de conteúdo não suportado; nenhum placar gravado.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '429':
+          description: Tentativas ou capacidade excedidas; nenhum placar gravado.
+          headers:
+            Retry-After:
+              description: Segundos até uma nova tentativa, de 1 a 60.
+              schema:
+                type: integer
+                minimum: 1
+                maximum: 60
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Falha interna ou de gravação; resposta sem detalhes internos.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
 components:
   schemas:
+    ScoreSubmission:
+      type: object
+      required: [nickname, points]
+      additionalProperties: false
+      properties:
+        nickname:
+          type: string
+          minLength: 3
+          maxLength: 12
+          pattern: '^[\p{L}\p{N}]{3,12}$'
+          description: Letras ou números Unicode; termos do filtro local sem caixa/acentos são recusados.
+        points:
+          type: integer
+          minimum: 0
+          maximum: 1890
+          multipleOf: 7
     Problem:
       type: object
       required: [type, title, status]
@@ -65,4 +143,4 @@ components:
           type: string
         status:
           type: integer
-          enum: [400, 500]
+          enum: [400, 413, 415, 429, 500]

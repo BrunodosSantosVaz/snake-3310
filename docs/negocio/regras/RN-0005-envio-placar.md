@@ -16,3 +16,13 @@ PRODUTO.md e protótipo aprovado da Fundação; épico #28 refinado e execução
 ## Testes que cobrem
 
 - `tests/aceite/28-partida-completa/scores.test.ts (CA-4 e CA-5); ui.test.ts (CA-7); browser.test.ts (CA-8)`
+
+## Implementação e verificação
+
+`validSubmission` mantém as regras no domínio e `SubmitScore` usa relógio do servidor e a porta `ScoreWriter`.
+A API usa esquema JSON sem coerção nem remoção de campos extras, corpo de até 1 KiB e respostas Problem Details
+controladas. A gravação é parametrizada e armazena ISO 8601 UTC. Os testes de domínio, aplicação, repositório
+SQLite e `src/interface/http/submit-score.test.ts` cobrem tipos, Unicode, UTC e falha sem detalhes internos.
+O filtro compara fragmentos `puta`, `puto`, `porra`, `caralho`, `merda`, `buceta`, `cacete`, `foder` e `fodase`,
+mais os nomes `cu` e `fdp` após retirar números, sem caixa/acentos. Esta lista local pode ter falsos positivos
+e não identifica todas as ofensas. O modal e suas proteções de envio são implementados na tarefa #33.

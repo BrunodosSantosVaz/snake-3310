@@ -15,7 +15,7 @@ async function scenario(work: (app: any, db: any) => Promise<void>): Promise<voi
 }
 
 describe('Envio público de placares (#28)', () => {
-  test.fails('CA-4 RN-0001 RN-0005: placar válido é gravado uma vez em UTC e aparece no ranking #32', () => scenario(async (app, db) => {
+  test('CA-4 RN-0001 RN-0005: placar válido é gravado uma vez em UTC e aparece no ranking #32', () => scenario(async (app, db) => {
     const result = await app.inject({ method: 'POST', url: `${BASE_PATH}/api/placares`, payload: { nickname: 'BRUNO', points: 70 } });
     expect(result.statusCode).toBe(201);
     expect((await app.inject({ method: 'GET', url: `${BASE_PATH}/api/placares` })).json()).toEqual({ scores: [{ nickname: 'BRUNO', points: 70 }] });
@@ -26,7 +26,7 @@ describe('Envio público de placares (#28)', () => {
     expect((await app.inject({ method: 'POST', url: `${BASE_PATH}-x/api/placares`, payload: { nickname: 'BRUNO', points: 70 } })).statusCode).toBe(404);
   }));
 
-  test.fails('CA-5 RN-0005: apelido, pontos e campos inválidos recebem 400 e nunca gravam #32', () => scenario(async (app, db) => {
+  test('CA-5 RN-0005: apelido, pontos e campos inválidos recebem 400 e nunca gravam #32', () => scenario(async (app, db) => {
     const invalid = [
       { nickname: 'AB', points: 7 }, { nickname: 'ABCDEFGHIJKLM', points: 7 },
       { nickname: 'A<script>', points: 7 }, { nickname: 'pUtÁ', points: 7 },
@@ -42,7 +42,7 @@ describe('Envio público de placares (#28)', () => {
     }
   }));
 
-  test.fails('CA-6 RN-0006: limite por IP recebe 429 sem gravação e cabeçalho forjado não muda a chave #32', () => scenario(async (app, db) => {
+  test('CA-6 RN-0006: limite por IP recebe 429 sem gravação e cabeçalho forjado não muda a chave #32', () => scenario(async (app, db) => {
     const request = { method: 'POST', url: `${BASE_PATH}/api/placares`, remoteAddress: '203.0.113.20', payload: { nickname: 'BRUNO', points: 7 } };
     for (let index = 0; index < 5; index++) expect((await app.inject(request)).statusCode).toBe(201);
     const blocked = await app.inject({ ...request, headers: { 'x-forwarded-for': '203.0.113.99', 'x-snake-client-ip': '203.0.113.99' } });

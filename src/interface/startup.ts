@@ -16,7 +16,7 @@ export async function startServer(config: Config, migrationsDir = 'migrations'):
   let app: FastifyInstance | undefined;
   try {
     const applied = await migrate(db, migrationsDir);
-    app = await buildApp({ basePath: config.basePath, db, webDir: config.webDir, logger: true, production: config.production });
+    app = await buildApp({ basePath: config.basePath, db, webDir: config.webDir, logger: true, production: config.production, trustedProxyIps: config.trustedProxyIps });
     await app.listen({ host: '0.0.0.0', port: config.port });
     app.log.info({ migrations: applied }, 'banco pronto');
   } catch (error) {
