@@ -30,6 +30,8 @@ Mudanças em português, no formato Keep a Changelog. A versão é preenchida pe
 
 ### Alterado
 
+- Fundação sincronizada após o bootstrap sem release #55, preservando os comandos, arquivos e aceites do jogo.
+
 - SQLite nativo substitui PostgreSQL/PGlite, sem servidor de banco adicional (ADR-0003).
 - Modo Flash persistente e seleção dos testes afetados, mantendo revisão independente e suíte completa nos portões.
 
