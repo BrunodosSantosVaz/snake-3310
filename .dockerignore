@@ -1,0 +1,13 @@
+*
+!Dockerfile
+!package.json
+!package-lock.json
+!tsconfig.json
+!vite.config.ts
+!src/
+!src/**
+!migrations/
+!migrations/**
+!docs/
+!docs/design/
+!docs/design/tokens.css

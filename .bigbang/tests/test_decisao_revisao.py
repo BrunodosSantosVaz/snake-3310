@@ -13,6 +13,7 @@ from test_integrar_publicar import ComGit
 BB = os.path.join(BIGBANG, "bin", "bb.py")
 sys.path.insert(0, BIGBANG)
 from bb import cli  # noqa: E402
+from unittest.mock import patch
 from bb.errors import EXIT_OK, EXIT_USAGE, EXIT_VERIFICATION_FAILED  # noqa: E402
 
 DIFF_SRC = "diff --git a/src/a.py b/src/a.py\n--- a/src/a.py\n+++ b/src/a.py\n@@ -1 +1 @@\n-x\n+y\n"
@@ -75,7 +76,47 @@ class RevisaoAprovar(ComCli):
     def pr(self, head="feature/12-tarefa", labels=(), diff=DIFF_SRC):
         self.estado.setdefault("prs", {})["30"] = {"head": head, "base": "epico/7-x", "labels": list(labels),
                                                    "state": "OPEN", "diff": diff}
+        files = []
+        for block in diff.split('diff --git ')[1:]:
+            header, _, content = block.partition('\n')
+            before, after = header.split(' b/', 1)
+            entry = {'filename': after, 'patch': content[content.index('@@'):], 'status': 'modified'}
+            if before[2:] != after:
+                entry['previous_filename'] = before[2:]
+            files.append(entry)
+        self.estado.setdefault('pr_files', {})['30'] = files
         self.gravar_estado()
+
+    def test_large_review_uses_paginated_files_without_diff_endpoint(self):
+        self.issue(12, 'Tarefa', labels=['task'])
+        self.pr()
+        self.estado['pr_files']['30'] = [{'filename': f'src/{n}.py'} for n in range(330)]
+        self.gravar_estado()
+        codigo, saida = self.bb('revisao', 'aprovar', '30')
+        self.assertEqual(codigo, EXIT_OK, saida)
+        self.assertFalse(any(c[:2] == ['pr', 'diff'] for c in self.chamadas()))
+        self.assertTrue(any('--paginate' in c and 'repos/dono/repo/pulls/30/files?per_page=100' in c
+                            for c in self.chamadas()))
+
+    def test_renamed_sensitive_path_still_requires_owner(self):
+        self.issue(12, 'Tarefa', labels=['task'])
+        self.pr()
+        self.estado['pr_files']['30'] = [{'filename': 'src/a.py',
+                                         'previous_filename': 'src/app/auth/login.py', 'status': 'renamed'}]
+        self.gravar_estado()
+        codigo, saida = self.bb('revisao', 'aprovar', '30')
+        self.assertEqual(codigo, EXIT_VERIFICATION_FAILED, saida)
+        self.assertNotIn('pr-aprovado', self.estado['prs']['30']['labels'])
+
+    def test_missing_acceptance_patch_fails_before_approval(self):
+        self.issue(12, 'Tarefa', labels=['task', 'dono:revisao-ia'])
+        self.pr()
+        self.estado['pr_files']['30'] = [{'filename': 'tests/aceite/test_rn.py', 'status': 'modified'}]
+        self.gravar_estado()
+        codigo, saida = self.bb('revisao', 'aprovar', '30')
+        self.assertEqual(codigo, EXIT_VERIFICATION_FAILED, saida)
+        self.assertIn('patch', saida)
+        self.assertNotIn('pr-aprovado', self.estado['prs']['30']['labels'])
 
     def test_aprova_pr_comum(self):
         self.issue(12, "Tarefa", labels=["task"])
@@ -100,6 +141,34 @@ class RevisaoAprovar(ComCli):
         self.issue(12, "Tarefa", labels=["task", "dono:revisao-ia"])
         self.pr(labels=["revisao-humana"], diff=DIFF_AUTH)
         self.assertEqual(self.bb("revisao", "aprovar", "30")[0], EXIT_OK)
+
+    def test_local_flash_cannot_change_target_review_policy(self):
+        path = os.path.join(self.projeto, 'bigbang.toml')
+        with open(path, encoding='utf-8') as handle:
+            text = handle.read()
+        with open(path, 'w', encoding='utf-8') as handle:
+            handle.write(text.replace('modo = "padrao"', 'modo = "flash"'))
+        self.issue(12, 'Tarefa', labels=['task'])
+        self.pr(diff=DIFF_AUTH)
+        with patch('bb.decisions._target_mode', return_value='padrao'):
+            self.assertEqual(self.bb('revisao', 'aprovar', '30')[0], EXIT_VERIFICATION_FAILED)
+
+    def test_target_flash_is_used_even_when_local_config_is_standard(self):
+        self.issue(12, 'Tarefa', labels=['task'])
+        self.pr(diff=DIFF_AUTH)
+        with patch('bb.decisions._target_mode', return_value='flash') as target:
+            self.assertEqual(self.bb('revisao', 'aprovar', '30')[0], EXIT_OK)
+        target.assert_called_once_with('dono/repo', 'epico/7-x')
+
+    def test_destination_config_is_fetched_from_github(self):
+        self.estado['repository_files'] = {'epico/7-x': {'bigbang.toml':
+            '[projeto]\nmodo="flash"\n'}}
+        self.issue(12, 'Tarefa', labels=['task'])
+        self.pr(diff=DIFF_AUTH)
+        self.assertEqual(self.bb('revisao', 'aprovar', '30')[0], EXIT_OK)
+        self.estado['repository_files']['epico/7-x']['bigbang.toml'] = '[projeto]\nmodo="padrao"\n'
+        self.pr(diff=DIFF_AUTH)
+        self.assertEqual(self.bb('revisao', 'aprovar', '30')[0], EXIT_VERIFICATION_FAILED)
 
     def test_testes_com_revisao_humana(self):
         self.issue(11, "Testes", labels=["teste-aceite", "testes-revisao-humana"])
