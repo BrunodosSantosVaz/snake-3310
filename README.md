@@ -38,8 +38,9 @@ foi escrito antes da tarefa #57 e agora passa com Node 24. A configuração usa 
 gerados oficiais 1.5.2; ver [ADR-0004](docs/decisoes/ADR-0004-flash-tsuru-ci.md) e [memória](docs/memoria.md).
 A publicação sem release da Fundação ainda aguarda a conclusão e revisão documental do épico.
 
-Em **Fundação**: as decisões de produto, stack, design e GitHub ainda estão sendo tomadas. Acompanhe pelas issues com a
-label `fundacao`.
+A **Fundação** contém as decisões de produto, stack e design e a configuração da esteira. O bootstrap
+Flash/Tsuru foi implementado no PR #61; sua publicação sem release aguarda os portões do épico #55. O artefato
+do jogo entra pela primeira release homologada. Consulte o [procedimento e as provas](docs/operacao/bootstrap-sem-release-55.md).
 
 <!-- Depois da primeira release: a versão em produção, o que ela já faz e o que vem a seguir, em duas ou três frases. -->
 
@@ -49,7 +50,8 @@ label `fundacao`.
 
 ## Recursos
 
-(a preencher) — o que o sistema faz hoje, um item por recurso entregue (atualize a cada épico publicado).
+A configuração da Fundação usa modo Flash, alvo Tsuru, imagem ARM64 e readiness. O CA nativo verifica essa
+configuração sem dependências novas. Os workflows foram regenerados pela distribuição oficial Big Bang 1.5.2.
 
 ## Instalação
 
