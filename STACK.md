@@ -7,17 +7,17 @@
 
 TypeScript ponta a ponta. O front é um jogo em Canvas feito com Vite. A API usa Fastify em Node 24 e guarda o
 ranking em SQLite embutido (`node:sqlite`), sem servidor de banco. Uma imagem `linux/arm64` serve as duas partes sob um prefixo de caminho configurável
-(`/snake-3310`). A entrega começa pelo alvo `vps-docker` no `vm-oracle`, na URL final, e passa para o Tsuru
-quando o framework tiver esse alvo.
+(`/snake-3310`). A entrega usa o Tsuru existente no `vm-oracle`, promovendo o digest da imagem OCI.
 
 Decisões registradas em [ADR-0001](docs/decisoes/ADR-0001-stack.md) e [ADR-0003](docs/decisoes/ADR-0003-sqlite-embutido.md), que substitui a escolha do banco.
+O [ADR-0004](docs/decisoes/ADR-0004-flash-tsuru-ci.md) define Flash, alvo Tsuru e runtime verificável da CI.
 
 ## Linguagens, frameworks e versões
 
 | Item | Escolha | Versão |
 | --- | --- | --- |
 | Linguagem | TypeScript | `~6.0.3`, fixa: o typescript-eslint 8.71 aceita só `<6.1.0` |
-| Runtime | Node.js LTS | 24.18.1 (imagem fixada na tarefa #19) |
+| Runtime | Node.js LTS | 24.18.1 (imagem fixada por digest na tarefa #19; CI verificada por SHA-256) |
 | Framework (API) | Fastify | 5.x |
 | Front-end | Canvas 2D com Vite, sem framework de UI | Vite 8.x |
 | Gerenciador de pacotes | npm (com `package-lock.json`) | o do Node 24 |
@@ -37,13 +37,14 @@ backup consistente e restauração. As exceções ARQ-07/DAD-03 estão no ADR-00
 ## Tipo de entrega e alvo
 
 - **Perfil:** `deploy`.
-- **Alvo:** `vps-docker` no `vm-oracle` (ARM64), com imagem `linux/arm64` no GHCR, publicada pelo digest.
+- **Alvo:** `tsuru` no `vm-oracle` (ARM64), com imagem `linux/arm64` no GHCR, publicada pelo digest.
 - **URLs:** produção em `https://tsuru.frontzap.com.br/snake-3310` e staging em
   `https://tsuru.frontzap.com.br/snake-3310-hom`. O NPM manda cada caminho para o contêiner do ambiente
   (*custom location*).
 - **Prefixo de caminho:** a variável `BASE_PATH` é lida na execução, e o Vite usa `base: './'`. A mesma imagem
   roda em qualquer caminho (ARQ-07).
-- **Próximo alvo:** Tsuru, por um épico no framework `big-bang`. A URL e a imagem não mudam. Ver o ADR-0001.
+- **Saúde da entrega:** `/api/ready`, que verifica o banco. Configure `TSURU_MIGRACAO=inicializacao` por ambiente,
+  conforme o ADR-0003 e [o guia do alvo](.bigbang/docs/deploy-tsuru.md).
 
 ## Arquitetura
 
@@ -73,6 +74,7 @@ C4Container
 | Para quê | Ferramenta | Comando (`[comandos]` no `bigbang.toml`) |
 | --- | --- | --- |
 | Testes | Vitest 5 | `npm test` |
+| Testes afetados (Flash) | Grafo Vitest/Vite, aceite mapeado e cobertura de módulos afetados | `npm run test:affected` |
 | Testes de aceite | Vitest 5, com a API via `fastify.inject` e SQLite real em memória e arquivo temporário ([ADR-0003](docs/decisoes/ADR-0003-sqlite-embutido.md)) | `npm run test:acceptance` |
 | Fumaça (smoke) | Playwright 1.63, contra a URL do ambiente | `npm run test:smoke` |
 | Lint e formatação | ESLint 10 com typescript-eslint 8 | `npm run lint` |
@@ -82,20 +84,25 @@ C4Container
 
 ## Cobertura mínima
 
-80% nas camadas de domínio e aplicação.
+80% nas camadas de domínio e aplicação. No Flash, os mesmos quatro limites se aplicam aos módulos afetados
+e suas dependências dessas camadas; estrutura, produção, major/minor e seleção incerta exigem suíte completa.
 
 ## Configuração da esteira
 
 <!-- bb:config:inicio -->
 <!-- Gerado pelo Big Bang v1.5.0 a partir de bigbang.toml. Não edite: personalize em bigbang.toml. -->
 
-**Perfil de entrega:** `deploy` · **Alvo:** `vps-docker`
+**Perfil de entrega:** `deploy` · **Alvo:** `tsuru`
 
 **Caminhos do artefato** (mudança aqui exige release):
 
 - `src/`
 - `migrations/`
 - `Dockerfile`
+- `.dockerignore`
+- `deploy/`
+- `scripts/`
+- `docs/design/`
 - `package.json`
 - `package-lock.json`
 - `vite.config.ts`
@@ -130,3 +137,4 @@ Dependências de desenvolvimento são livres. Linha nova só com ADR e pelo port
 | 06/10/2026 | Versão inicial (Fundação F2) | ADR-0001 |
 | 06/10/2026 | Testes de aceite e de integração com PGlite no lugar de contêiner (proposta) | ADR-0002 |
 | 06/10/2026 | SQLite nativo Node 24.18.1 substitui pg e PGlite; arquivo persistente e testes no mesmo motor | ADR-0003 |
+| 07/10/2026 | Flash, Tsuru e CI fixada em Node 24.18.1 | ADR-0004 |
