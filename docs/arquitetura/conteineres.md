@@ -1,6 +1,7 @@
 # Snake 3310 — Contêineres (C4, nível 2)
 
-O jogo fala só com a API da própria aplicação (ARQ-06, SEG-IA-01).
+O jogo fala só com a API da própria aplicação (ARQ-06, SEG-IA-01). O diagrama mostra o sistema do produto;
+a base do épico #13 implementa menu e leitura. Partida e envio são implementações do épico #28.
 
 ```mermaid
 C4Container
@@ -19,7 +20,7 @@ C4Container
 | Contêiner | Tecnologia | Responsabilidade | Onde roda |
 | --- | --- | --- | --- |
 | Jogo | TypeScript, Canvas 2D, Vite 8 | Tela e teclado do 3310, laço da partida e envio do placar | Navegador; arquivos servidos pela API |
-| API | TypeScript, Fastify 5, Node 24 | Validação do placar, filtro de apelido, limite de envios, ranking, saúde em `<BASE_PATH>/api/health` | Imagem `linux/arm64` no `vm-oracle`: Docker Compose (`vps-docker`) agora, Tsuru depois |
+| API | TypeScript, Fastify 5, Node 24 | Validação do placar, filtro de apelido, limite de envios, ranking, saúde em `<BASE_PATH>/api/health` | Imagem `linux/arm64` no `vm-oracle`: Tsuru existente, imagem ARM64 e uma réplica por ambiente |
 | Banco de dados | SQLite nativo | Placares (apelido, pontos, data UTC) | Arquivo `SQLITE_PATH` no volume persistente da API; uma réplica por ambiente, ADR-0003 |
 
-SQLite substitui o servidor PostgreSQL por decisão explícita do dono (ADR-0003). Não é um contêiner separado: o mesmo processo da API acessa o arquivo. A imagem/PVC e inicialização que migra antes de listen serão validados na entrega #19.
+SQLite substitui o servidor PostgreSQL por decisão explícita do dono (ADR-0003). Não é um contêiner separado: o mesmo processo da API acessa o arquivo. A tarefa #19 valida a imagem e o startup local; PVC, permissões, backup e restauração das apps precisam de comprovação na entrega real.

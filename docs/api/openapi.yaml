@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
-  title: Snake 3310 — Ranking público
+  title: Snake 3310 — API pública
   version: 0.0.0
-  description: Contrato do ranking e do envio público (RN-0001, RN-0005 e RN-0006).
+  description: Saúde, prontidão, ranking e envio público (RN-0001, RN-0003, RN-0005 e RN-0006).
 servers:
   - url: '{basePath}'
     variables:
@@ -10,6 +10,36 @@ servers:
         default: /snake-3310
         description: Prefixo BASE_PATH configurado no servidor; pode ser vazio na raiz.
 paths:
+  /api/health:
+    get:
+      operationId: checkLiveness
+      summary: Processo HTTP está vivo, independente do banco (RN-0003)
+      security: []
+      responses:
+        '200':
+          description: Processo respondendo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /api/ready:
+    get:
+      operationId: checkReadiness
+      summary: Banco responde à verificação (RN-0003)
+      security: []
+      responses:
+        '200':
+          description: Pronto para receber pedidos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        '503':
+          description: Banco indisponível, sem mensagem interna.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /api/placares:
     get:
       operationId: listRanking
@@ -133,6 +163,14 @@ components:
           minimum: 0
           maximum: 1890
           multipleOf: 7
+    Health:
+      type: object
+      required: [status]
+      additionalProperties: false
+      properties:
+        status:
+          type: string
+          const: ok
     Problem:
       type: object
       required: [type, title, status]
@@ -145,4 +183,4 @@ components:
           type: string
         status:
           type: integer
-          enum: [400, 413, 415, 429, 500]
+          enum: [400, 404, 413, 415, 429, 500, 503]
