@@ -40,6 +40,7 @@ test.fails('CA-8 RN-0004 RN-0005: build real joga por teclado em 360px, texto200
     expect(await page.evaluate(async () => (await (globalThis as unknown as { axe: typeof axe }).axe.run()).violations.map(({ id }) => id))).toEqual([]);
     await page.getByRole('button', { name: 'Jogar de novo', exact: true }).click();
     expect(await page.locator('dialog[open]').count()).toBe(0);
+    expect(await page.evaluate(() => document.activeElement?.closest('#play') !== null)).toBe(true);
     expect(errors).toEqual([]);
   } finally { await browser?.close(); await app.close(); }
 });

@@ -15,6 +15,7 @@
     "lint": "eslint . && node scripts/check-design.mjs",
     "typecheck": "tsc --noEmit && tsc --noEmit -p src/web",
     "test": "vitest run src tests/migracoes",
+    "pretest:acceptance": "node scripts/prepare-acceptance.mjs",
     "test:acceptance": "vitest run tests/aceite",
     "test:architecture": "depcruise src --config .dependency-cruiser.cjs",
     "test:coverage": "vitest run src --coverage",

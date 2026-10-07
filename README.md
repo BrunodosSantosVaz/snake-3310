@@ -79,7 +79,9 @@ C/Esc para voltar. No ranking, OK repete a consulta. A partida ainda não está 
   `npm run build` compila servidor e front em `dist/server` e `dist/web`, com caminhos relativos no front.
 - `npm run test:ui` serve o build real sob a CSP do Fastify e valida teclado, cinco linhas, contraste/acessibilidade
   com axe, layout em 360 px e texto ampliado em 200% no Chromium.
-  Instale o navegador de teste com `npx playwright install chromium` antes de executar esse comando. Os testes DOM
+  Instale o navegador de teste com `npx playwright install chromium` antes de executar esse comando.
+  `npm run test:acceptance` prepara o build antes do Vitest e, na CI, instala Chromium/dependências;
+  falta de navegador ou erro de build falha fora das marcas de pendente. Os testes DOM
   e de semântica com axe também rodam em `npm test` na CI.
 - Os testes usam um Postgres em memória (PGlite, ADR-0002); não é preciso instalar banco para desenvolver.
 - Variáveis de ambiente do servidor (os valores ficam só no servidor): `BASE_PATH` (endereço do jogo, por exemplo

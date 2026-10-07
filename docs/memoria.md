@@ -54,3 +54,6 @@ Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data 
 - 2026-10-07 (#30): CA-8 testa Chromium/build real, não JSDOM; execute build e instale Chromium antes do aceite.
   Identificadores acessíveis do jogo: `game-score`, `game-status`, canvas com nome/role img, modal dialog e formulário
   de apelido com label. Pendências referenciam apenas #31/#32/#33; libere com `bb aceite liberar`.
+- 2026-10-07 (#30, revisão): o prehook `prepare-acceptance.mjs` valida Chromium e compila antes do aceite.
+  Falta de tooling/build não pode ser mascarada por `test.fails`. CA-3 verifica direção passada ao motor em
+  todos os aliases físicos/toque e foco no reinício; CA-7 também verifica Enviando e GET/ranking depois do POST.
