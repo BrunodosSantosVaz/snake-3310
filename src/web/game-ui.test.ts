@@ -64,7 +64,7 @@ test('the end dialog restarts with focus in the game or dismisses back to the me
   click('[data-screen="play"]');
   vi.advanceTimersByTime(180 * 30);
   expect(doc.querySelector('dialog[open]')).not.toBeNull();
-  expect(doc.activeElement?.id).toBe('game-restart');
+  expect(doc.activeElement?.id).toBe('game-nickname');
   click('#game-restart');
   expect(doc.activeElement?.id).toBe('play-heading');
   expect(doc.querySelector('#game-score')!.textContent).toBe('Pontos: 0');
