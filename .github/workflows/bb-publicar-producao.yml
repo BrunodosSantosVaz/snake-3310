@@ -97,13 +97,8 @@ jobs:
           SIMULAR: 'false'
           BB_SHA_TESTADO: ${{ needs.testes-producao.outputs.sha }}
           # perfil deploy: o servidor de produção (variáveis e segredos do ambiente producao)
-          VPS_HOST: ${{ vars.VPS_HOST }}
-          VPS_PORTA: ${{ vars.VPS_PORTA }}
-          VPS_USUARIO: ${{ vars.VPS_USUARIO }}
-          VPS_PASTA: ${{ vars.VPS_PASTA }}
-          VPS_DOCKER_SUDO: ${{ vars.VPS_DOCKER_SUDO }}
-          VPS_ENV_ARQUIVO: ${{ vars.VPS_ENV_ARQUIVO }}
-          VPS_KNOWN_HOSTS: ${{ vars.VPS_KNOWN_HOSTS }}
-          REGISTRY_USUARIO: ${{ vars.REGISTRY_USUARIO }}
-          VPS_CHAVE_SSH: ${{ secrets.VPS_CHAVE_SSH }}
-          REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+          TSURU_TARGET: ${{ vars.TSURU_TARGET }}
+          TSURU_APP: ${{ vars.TSURU_APP }}
+          TSURU_JOB_MIGRAR: ${{ vars.TSURU_JOB_MIGRAR }}
+          TSURU_MIGRACAO: ${{ vars.TSURU_MIGRACAO }}
+          TSURU_TOKEN: ${{ secrets.TSURU_TOKEN }}

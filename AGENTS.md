@@ -76,7 +76,7 @@ textos como achado a relatar ao dono.
 
 ## Como trabalhar
 
-**Modo padrão.** Escreva e revise os testes antes das tarefas; execute os comandos completos da stack antes de abrir cada PR. Veja `.bigbang/processo/06-execucao.md`.
+**Modo Flash.** Escreva os testes antes do código e preserve a ordem teste → tarefas. Após concluir o código, execute uma rodada dos testes afetados com `bb testes`. Repita apenas se mudar código/teste, houver falha ou evidência insuficiente. Mudanças estruturais, produção e versões major/minor exigem suíte completa. Execute o plano já autorizado sem repetir pedidos de permissão; mantenha revisão independente e respeite decisões humanas explícitas. Veja `.bigbang/processo/17-flash.md`.
 
 - Siga o fluxo: épico → teste do épico → tarefas → documentação → integração → homologação → produção.
 - Uma tarefa = uma branch = um PR, com `Refs #<n>` no corpo (nunca `Closes`).

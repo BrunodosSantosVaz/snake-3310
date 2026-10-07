@@ -34,7 +34,9 @@ construírem e manterem sistemas profissionais.
 
 O [épico #55](https://github.com/BrunodosSantosVaz/snake-3310/issues/55) prepara o bootstrap da esteira
 Flash/Tsuru sem acrescentar o artefato do jogo à Fundação. O [CA de configuração](tests/aceite/55-bootstrap-flash-tsuru/bootstrap.acceptance.mjs)
-é executado explicitamente com Node 24, antes da tarefa #57; ver [memória](docs/memoria.md).
+foi escrito antes da tarefa #57 e agora passa com Node 24. A configuração usa Flash/Tsuru e readiness, com
+gerados oficiais 1.5.2; ver [ADR-0004](docs/decisoes/ADR-0004-flash-tsuru-ci.md) e [memória](docs/memoria.md).
+A publicação sem release da Fundação ainda aguarda a conclusão e revisão documental do épico.
 
 Em **Fundação**: as decisões de produto, stack, design e GitHub ainda estão sendo tomadas. Acompanhe pelas issues com a
 label `fundacao`.
