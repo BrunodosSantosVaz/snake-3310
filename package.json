@@ -14,13 +14,16 @@
     "migrar": "node dist/server/interface/migrate.js",
     "lint": "eslint . && node scripts/check-design.mjs",
     "typecheck": "tsc --noEmit && tsc --noEmit -p src/web",
-    "test": "vitest run src tests/migracoes",
+    "test": "npm run test:tooling && vitest run src tests/migracoes tests/empacotamento",
+    "test:tooling": "node --test tests/scripts/*.native.mjs",
+    "test:affected": "node scripts/affected-tests.mjs",
     "test:acceptance": "vitest run tests/aceite",
     "test:architecture": "depcruise src --config .dependency-cruiser.cjs",
     "test:coverage": "vitest run src --coverage",
     "test:migracoes": "vitest run tests/migracoes",
     "dev": "vite",
-    "test:ui": "npm run build && node scripts/check-ui.mjs"
+    "test:ui": "npm run build && node scripts/check-ui.mjs",
+    "test:smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
     "@fastify/static": "^10.1.0",
