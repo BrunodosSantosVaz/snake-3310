@@ -2,6 +2,13 @@
 
 Pegadinhas que a próxima sessão precisa saber. Uma linha por item, com a data e o PR de origem.
 
+- 2026-10-07 (#36): `BB_ARQUIVOS_ALTERADOS` aponta para arquivo JSON, nunca array inline. Seleção usa o grafo
+  estático Vitest e mapa de CA dinâmicos; desconhecido/deletado/grafo incerto executa completo. Cobertura Flash
+  inclui somente módulos domínio/aplicação afetados e dependências transitivas, com os mesmos quatro limites80.
+- 2026-10-07 (#36): Node24.18.1 é instalado antes de npmci com hash oficial fixado e GITHUB_PATH. Chromium
+  pertence ao preparo de aceite, não ao instalador. `npm test` inclui `test:tooling` com node:test; esses arquivos
+  usam sufixo `.native.mjs` para não serem coletados novamente pelo Vitest.
+
 - 2026-10-06 (#18): front em `src/web`, build separado do servidor, Vite com `base: './'`. A API é relativa à URL
   da página; não fixe `/api` no front, ou o `BASE_PATH` deixará de funcionar.
 - 2026-10-06 (#18): a API retorna dez placares, mas a tela desenhada comporta os cinco primeiros (DESIGN.md).
