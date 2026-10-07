@@ -33,10 +33,11 @@ construírem e manterem sistemas profissionais.
 ## Estado atual
 
 O épico [#13](https://github.com/BrunodosSantosVaz/snake-3310/issues/13) está em implementação. O código já tem
-servidor sob `BASE_PATH`, saúde, prontidão, migrações e listagem do ranking. A imagem leve ARM64 usa SQLite no volume e migra antes de abrir HTTP. A tela do aparelho já permite navegar
-no menu e consultar os cinco maiores placares. Ainda não há release publicada; a partida e a entrega do ambiente
-continuam pendentes. Os oito critérios da partida completa (#28) já têm testes de aceite escritos antes
-da implementação (#30): motor/controles (#31), validação e limite de envios (#32), modal e navegador real (#33).
+servidor sob `BASE_PATH`, saúde, prontidão, migrações e listagem do ranking. A imagem leve ARM64 usa SQLite no
+volume e migra antes de abrir HTTP. A tela do aparelho já permite navegar no menu e consultar os cinco maiores
+placares. O épico #28 acrescenta a partida jogável com motor, controles, pausa e reinício (#31). Ainda não há release
+publicada; validação/limite de envios (#32), envio pelo modal (#33) e entrega do ambiente continuam pendentes.
+Os oito critérios da partida completa (#28) têm testes de aceite escritos antes da implementação (#30).
 
 ![Menu do Snake 3310 na tela de um aparelho azul, com teclas numéricas clicáveis](docs/imagens/menu-3310.png)
 
@@ -52,7 +53,10 @@ da implementação (#30): motor/controles (#31), validação e limite de envios 
   empate, pelo envio mais antigo (RN-0001). Sem placares, retorna `{ "scores": [] }`.
 - Servidor Fastify com `/api/health`, `/api/ready` e migrações SQLite, sempre sob `BASE_PATH`.
 - Aparelho 3310 responsivo com menu, instruções e ranking conectado à API, operado por teclado ou pelas teclas
-  clicáveis. Trata carregando, vazio, erro e nova tentativa; a opção Jogar ainda informa “Em breve”.
+  clicáveis. Trata carregando, vazio, erro e nova tentativa.
+- Partida em pixels na grade 21×13: três segmentos iniciais, passo de 180 ms, crescimento e sete pontos por comida,
+  colisões, pausa manual ou ao perder foco e diálogo de fim com reinício. Inversões de 180 graus são ignoradas,
+  inclusive quando há vários comandos antes do próximo passo. A grade cheia termina com 1.890 pontos.
 
 ## Instalação
 
@@ -64,7 +68,9 @@ Para consultar o ranking local depois de configurar o banco, aplicar as migraç�
 `GET <BASE_PATH>/api/placares`. A resposta contém só `nickname` e `points`; datas e IDs ficam no servidor.
 A rota não aceita parâmetros de consulta: campos desconhecidos recebem 400. O contrato está em
 [docs/api/openapi.yaml](docs/api/openapi.yaml). Na tela, use 2/8, setas ou W/S para selecionar, OK/Enter para abrir e
-C/Esc para voltar. No ranking, OK repete a consulta. A partida ainda não está disponível; veja o
+C/Esc para voltar. No ranking, OK repete a consulta. Em Jogar, use setas, WASD ou 2/4/6/8 para mover e espaço/5
+para pausar e retomar. Perder o foco pausa; C/Esc volta ao menu. Após a partida, Jogar de novo começa com zero
+pontos e devolve o foco à arena. O envio de placar ainda está pendente da tarefa #33; veja o
 [guia da interface](docs/guias/interface.md).
 
 ## Para desenvolvedores
@@ -88,6 +94,9 @@ C/Esc para voltar. No ranking, OK repete a consulta. A partida ainda não está 
   `npm run test:acceptance` prepara o build antes do Vitest e, na CI, instala Chromium/dependências;
   falta de navegador ou erro de build falha fora das marcas de pendente. Os testes DOM
   e de semântica com axe também rodam em `npm test` na CI.
+- Depois do build, `node scripts/check-game-ui.mjs` verifica o movimento real do canvas, pausa, reinício,
+  foco, área de toque, layout de 360 px/texto200% e axe em Chromium com a CSP do servidor. A cobertura inclui
+  o motor puro do navegador, além das camadas de domínio e aplicação.
 - Os testes usam SQLite nativo real, isolado em memória e em arquivo temporário (ADR-0003); não é preciso instalar banco nem fornecer credenciais.
 - Variáveis de ambiente do servidor (os valores ficam só no servidor): `BASE_PATH` (endereço do jogo, por exemplo
   `/snake-3310`), `SQLITE_PATH` (arquivo persistente, padrão `data/snake-3310.sqlite`, fora de `dist`), `PORT` (padrão 8080), `WEB_DIR` (padrão `dist/web`) e `MIGRATIONS_DIR` (startup e CLI; padrão

@@ -16,3 +16,10 @@ PRODUTO.md e protótipo aprovado da Fundação; épico #28 refinado e execução
 ## Testes que cobrem
 
 - `tests/aceite/28-partida-completa/game.test.ts (CA-1 e CA-2); ui.test.ts (CA-3); browser.test.ts (CA-8)`
+
+## Implementação e verificação
+
+O motor puro `src/web/game.ts` é exercitado também por `src/web/game.test.ts`: movimentos, crescimento,
+colisão com todas as paredes e segmentos, reversão por comandos rápidos e grade cheia sem sortear comida.
+`src/web/game-ui.test.ts` verifica pausa por perda de foco, retomada explícita, saída/reinício e encerramento
+dos temporizadores e eventos. O canvas conserva a grade e os pixels do protótipo com os tokens do design kit.
