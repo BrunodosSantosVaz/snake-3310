@@ -1,11 +1,12 @@
 import { readConfig } from '../infra/config.js';
-import { createSqliteDatabase, describeError } from '../infra/database/db.js';
-import { buildApp } from './http/app.js';
+import { describeError } from '../infra/database/db.js';
+import { startServer } from './startup.js';
 
 // Composition root (ARQ-05): configuration, database and HTTP server.
+process.umask(0o077);
 const config = readConfig(process.env);
-const db = createSqliteDatabase(config.sqlitePath);
-const app = await buildApp({ basePath: config.basePath, db, webDir: config.webDir, logger: true, production: config.production });
+const server = await startServer(config, process.env.MIGRATIONS_DIR ?? 'migrations');
+const { app } = server;
 
 let stopping = false;
 async function shutdown(reason: string, code: number): Promise<void> {
@@ -15,8 +16,7 @@ async function shutdown(reason: string, code: number): Promise<void> {
   const deadline = setTimeout(() => process.exit(code || 1), 10_000);
   deadline.unref();
   try {
-    await app.close();
-    await db.close();
+    await server.close();
   } catch (error) {
     app.log.error({ erro: describeError(error) }, 'falha ao encerrar');
     code = code || 1;
@@ -34,5 +34,3 @@ process.on('uncaughtException', (error) => {
   app.log.fatal({ erro: describeError(error) }, 'exceção sem tratamento');
   void shutdown('uncaughtException', 1);
 });
-
-await app.listen({ host: '0.0.0.0', port: config.port });
