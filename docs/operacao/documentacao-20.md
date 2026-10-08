@@ -1,5 +1,7 @@
 # Conferência documental — tarefa #20, épico #13
 
+> Registro histórico de implementação/preparação. Para o estado publicado em 08/10/2026, veja o [recibo v0.1.0](producao-010.md).
+
 Base: SQLite #27/PR29, ranking #17/PR25, interface #18/PR26, empacotamento #19/PR40, Flash/Tsuru #36/PR41 e
 atualização oficial do framework PR37/39. Produção depende da candidata conjunta com a partida do épico #28.
 

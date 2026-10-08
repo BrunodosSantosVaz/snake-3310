@@ -27,4 +27,4 @@ precisa coincidir com o último peer real, e NPM precisa sobrescrever o cabeçal
 
 Na primeira entrega, registrar após cada execução: SHA/digest, run de candidata, importação Tsuru, smoke sob cada
 prefixo, PVC/UID e réplica, gravação/consulta após reinício, backup e restauração verificados. Os itens acima
-continuam como verificações dos portões; ainda não são declaração de produção pronta.
+continuam como definição dos portões. A execução real da v0.1.0 está comprovada no [recibo atual](producao-010.md).

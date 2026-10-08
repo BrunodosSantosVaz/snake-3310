@@ -1,5 +1,7 @@
 # Bootstrap da Fundação Flash/Tsuru — épico #55
 
+> Registro histórico de implementação/preparação. Para o estado publicado em 08/10/2026, veja o [recibo v0.1.0](producao-010.md).
+
 A Fundação configura a esteira para Tsuru antes da primeira promoção do jogo. O bootstrap é sem release:
 conserva os sete caminhos originais do artefato e os comandos originais; não acrescenta runtime, pacote,
 migração, Dockerfile, scripts do jogo ou recursos de design. A decisão é a já autorizada na

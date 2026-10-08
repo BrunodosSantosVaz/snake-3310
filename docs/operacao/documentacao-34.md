@@ -1,5 +1,7 @@
 # Conferência documental — tarefa #34, épico #28
 
+> Registro histórico de implementação/preparação. Para o estado publicado em 08/10/2026, veja o [recibo v0.1.0](producao-010.md).
+
 Estado em 07/10/2026: partida #31/PR44, backend #32/PR47 e modal #33/PR49 mesclados no épico. A base #13,
 SQLite #27 e empacotamento/Flash #19/#36 permanecem preservados. A primeira candidata conjunta #13+#28,
 homologação e publicação ainda aguardam a integração; este documento não é um recibo de produção.

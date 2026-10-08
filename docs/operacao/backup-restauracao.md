@@ -35,3 +35,8 @@ da chave e cópia independente dos snapshots ainda não foram feitas. Não impri
 Rotação deve preservar a identidade anterior enquanto houver snapshots antigos. Guia completo/script em
 [infra Tsuru](https://github.com/BrunodosSantosVaz/oraclecloud/tree/main/infra/tsuru), preparação no
 [PR #1](https://github.com/BrunodosSantosVaz/oraclecloud/pull/1).
+
+## Evidência executada
+
+A [produção v0.1.0](producao-010.md) registra os ensaios reais de ambos ambientes,
+persistência após reinício, execução do daemon cron e restauração local dos snapshots cifrados.
