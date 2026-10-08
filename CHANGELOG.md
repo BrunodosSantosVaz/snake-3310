@@ -4,6 +4,11 @@ Mudanças em português, no formato Keep a Changelog. A versão é preenchida pe
 
 ## [Não publicado]
 
+### Documentação
+
+- Recibos da produção v0.1.0, README e operação revisados pelo épico #65, sem nova imagem ou versão do jogo.
+- Atualização oficial do framework 1.5.3 pelo PR #64, preservando runtime, aceites e configuração Flash/Tsuru.
+
 ## [0.1.0] - 2026-10-07
 
 ### Adicionado
@@ -12,7 +17,7 @@ Mudanças em português, no formato Keep a Changelog. A versão é preenchida pe
 - SQLite nativo e persistente para o ranking (#29)
 - Criar aparelho 3310 com menu e ranking acessíveis (#26)
 - Listar os dez maiores placares públicos (#25)
-- Banco, migração inicial e readiness (#24)
+- Banco SQLite, migração inicial e readiness (#29); a proposta PostgreSQL/PGlite do PR #24 foi substituída pelo ADR-0003.
 - Estrutura do projeto, servidor sob BASE_PATH e health check (#23)
 - Enviar placar pelo modal acessível da partida (#49)
 - Valida e limita o envio público de placares (#47)
@@ -42,5 +47,5 @@ Mudanças em português, no formato Keep a Changelog. A versão é preenchida pe
   somente de proxy exato configurado, saneado no NPM; X-Forwarded-For não define a chave.
 - Validação sem coerção/campos extras, INSERT preparado, corpo de 1 KiB e nenhuma credencial no navegador.
 - CSP própria origem, nosniff, bloqueio de frames, permissões restritas e HSTS em produção.
-A entrada ainda não tem versão publicada. A candidata conjunta #13+#28 preencherá a versão/data na integração;
-recibos de homologação, persistência e restauração remotas serão registrados somente após as verificações reais.
+A data acima é a integração da versão; a promoção estável ocorreu em 08/10/2026.
+Os [recibos de homologação, persistência e restauração](docs/operacao/producao-010.md) registram as verificações reais.
