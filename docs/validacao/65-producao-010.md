@@ -42,3 +42,9 @@ Compare com a base os caminhos de artefato do TOML, tests/aceite, docs/negocio/r
 DOC-03/DOC-12/DOC-15: rastreabilidade, memória e README atuais. TST-02/TST-03: contrato preservado.
 Capturas usam dados sintéticos, sem segredo ou apelido real. Backup/chave no mesmo host não provam recuperação externa.
 A publicação sem release ainda exige revisão, CI verde, simulação e aprovação do ambiente já delegada pelo dono.
+
+## Conferência posterior à atualização
+
+O plano foi mesclado antes do PR70. A [conferência #68](../operacao/documentacao-68.md)
+registra critérios/checklist e os portões restantes da publicação sem release.
+O resultado final da esteira fica no recibo público do épico65, preservando este plano anterior ao trabalho.

@@ -30,6 +30,7 @@ Os 13 testes de aceite passaram na fonte exata antes da promoção, com suíte c
 Chromium confirmou partida, modal e ranking nos dois ambientes; SQLite persistiu após reinício e os snapshots
 cifrados gerados pelo cron foram restaurados com integridade. Veja o [mapa dos critérios](docs/operacao/documentacao-34.md)
 e o [plano de conferência documental](docs/validacao/65-producao-010.md).
+A [conferência final](docs/operacao/documentacao-68.md) reúne o checklist e a preservação do artefato.
 
 ![Partida do Snake 3310 com cobra, comida, pontuação e controles no aparelho azul](docs/imagens/partida-3310.png)
 

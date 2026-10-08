@@ -2,6 +2,7 @@
 
 | Situação | Runbook |
 | --- | --- |
+| Conferir checklist documental final | [Conferência #68](documentacao-68.md) |
 | Conferir produção v0.1.0 e provas remotas | [Recibo atual](producao-010.md) |
 | Publicar e verificar ambiente | [Deploy](deploy.md) |
 | Retornar à imagem anterior | [Voltar versão](voltar-versao.md) |

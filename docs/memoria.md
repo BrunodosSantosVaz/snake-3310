@@ -185,3 +185,7 @@ em checkout isolado, preservando a suíte congelada. Não apresentar essa prova 
   sem repetir merge nem enfraquecer checks. Finalização documental65 leva153 aMAIN sem nova imagem.
 - CA55 é histórico; suíte do jogo tem13 CA,135 unidade/integração e128 na cobertura100%.
   Não repetir suíte interna do framework no consumidor. Documentação reutiliza CI do SHA exato.
+
+- Conferência #68 em operacao/documentacao-68.md fecha o mapa dos cinco critérios documentais e checklist9.4.
+  Integrar65→develop e Publicar sem release pela MAIN encerram docs/configuração sem nova imagem;
+  resultado efetivo somente no recibo público65 após concluir o run. Regras e bytes do jogo permanecem.
