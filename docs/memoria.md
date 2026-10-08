@@ -166,3 +166,9 @@ O CA #55 verifica a etapa histórica F5 sem artefato, nos commits dos PRs #59/#6
 os caminhos adicionais e o runtime passam a existir por decisão já aprovada #36/#19; as provas da app continuam
 nos 13 CA Vitest. Para reproduzir a prova nativa da Fundação, use o SHA histórico `d53c0a2f54a946daa0f2c1db725b9865ba20689e`
 em checkout isolado, preservando a suíte congelada. Não apresentar essa prova histórica como execução da app.
+
+## Conferência pós-produção #65
+
+- Plano #66 precede atualização #67 e conferência #68. Produção v0.1.0 já publicada;
+  preservar runtime, seis RN,13CA,framework153 e a imagem. Três PRs documentais sem novo build.
+  Não executar CA55 histórico contra o jogo final nem criar testes que espelham textos.
