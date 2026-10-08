@@ -84,3 +84,22 @@ volume, persistência e backup real após migração; não declarar esses result
 | Changelog | Entrada sem versão em Não publicado, a concluir pelo fluxo sem release |
 | README/memória | Estado e alcance do bootstrap registrados, sem alegar produção do jogo |
 | Checklist de produção | Nota separa publicação sem release dos portões da release do jogo |
+
+## Alcance histórico depois da integração do jogo
+
+O CA nativo deste bootstrap exige uma Fundação sem runtime e os sete caminhos originais. Sua prova foi executada
+no SHA `d53c0a2f54a946daa0f2c1db725b9865ba20689e` do PR #61; pode ser reproduzida nesse checkout isolado. Depois
+da primeira entrega, a configuração da app inclui os caminhos adicionais e os comandos aprovados no #36, e seus
+13 CA Vitest continuam executados pela CI e antes da produção. Este teste histórico não substitui nem integra
+a suíte de comportamento do jogo. Nenhuma linha do aceite congelado foi modificada na sincronização.
+
+## Recibo do bootstrap concluído
+
+A [publicação sem release 37594560228](https://github.com/BrunodosSantosVaz/snake-3310/actions/runs/37594560228)
+terminou com sucesso em 07/10/2026, depois da simulação pela main 37594443006 e dos portões. `main` e `develop`
+avançaram para `cacf475b1a5bd0837ca64af31ea3e59e2eb4cdfc`, distribuição Big Bang1.5.2, Flash/Tsuru/readiness,
+e o épico #55 foi encerrado. A CI exata da main 37594667016 passou. O dispatch anterior pela develop foi recusado
+pela restrição correta do ambiente; a política foi preservada e a origem corrigida para main.
+
+Este recibo conclui apenas o bootstrap sem artefato. A promoção do jogo depende da nova candidata sincronizada,
+de sua homologação real e do portão oficial de produção; não foi realizada nesta publicação sem release.

@@ -7,7 +7,7 @@ versao = "1.5.2"                       # versão do framework instalada (igual a
 origem = "BrunodosSantosVaz/big-bang"  # de onde vêm as atualizações
 
 [projeto]
-modo = "flash"                       # decisão do dono #36; bootstrap sem release #55
+modo = "flash"
 nome = "Snake 3310"
 slug = "snake-3310"
 dono = "BrunodosSantosVaz"             # login do GitHub do dono
@@ -17,8 +17,8 @@ licenca = "MIT"                        # obrigatório se publico (identificador 
 
 [entrega]
 perfil = "deploy"                      # deploy | compilado
-alvo = "tsuru"                         # alvo oficial; decisão #36 e ADR-0004
-caminhos_artefato = ["src/", "migrations/", "Dockerfile", "package.json", "package-lock.json", "vite.config.ts", "tsconfig.json"]
+alvo = "tsuru"                         # distribuição oficial do framework, ADR-0004
+caminhos_artefato = ["src/", "migrations/", "Dockerfile", ".dockerignore", "deploy/", "scripts/", "docs/design/", "package.json", "package-lock.json", "vite.config.ts", "tsconfig.json"]
 arquivo_versao = "package.json"          # único arquivo com a versão do artefato (definido em F2)
 ecossistemas = ["npm", "docker"]           # pacotes da stack para o Dependabot (definido em F2)
 
@@ -43,10 +43,11 @@ caminho_saude = "/api/ready"
 # servico_migrar = "migrar", servico_checar = "" (pré-checagem do servidor antes de migrar).
 
 [comandos]                             # definidos em F2 para a stack escolhida
-instalar = "npm ci"
+instalar = "bash scripts/install-ci.sh"
 lint = "npm run lint"
 tipos = "npm run typecheck"
 testes = "npm test"
+testes_alterados = "npm run test:affected"
 testes_aceite = "npm run test:acceptance"
 arquitetura = "npm run test:architecture"
 cobertura = "npm run test:coverage"
