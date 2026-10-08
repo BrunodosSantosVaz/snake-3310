@@ -9,23 +9,27 @@
 Jogo da cobrinha para navegador, com visual do Nokia 3310 e ranking público. Construído com o
 [Big Bang](https://github.com/BrunodosSantosVaz/big-bang), no modo Flash.
 
-A esteira usa a distribuição oficial Big Bang v1.5.2, com modo Flash e alvo Tsuru.
+A esteira usa a distribuição oficial Big Bang v1.5.3, com modo Flash e alvo Tsuru.
 O [bootstrap da Fundação](docs/operacao/bootstrap-sem-release-55.md) prepara esses portões na `main` antes da primeira promoção.
 
 ## Estado atual
 
-A [produção v0.1.0](https://github.com/BrunodosSantosVaz/snake-3310/releases/tag/v0.1.0) foi publicada em 08/10/2026.
-A revisão dos recibos segue o [plano documental #65](docs/validacao/65-producao-010.md),
-anterior à atualização #67 e conferência #68. Os parágrafos históricos abaixo serão atualizados nessa tarefa.
+A **v0.1.0 está em produção** desde 08/10/2026:
+[jogar](https://tsuru.frontzap.com.br/snake-3310/) e
+[homologação](https://tsuru.frontzap.com.br/snake-3310-hom/).
+A [Release](https://github.com/BrunodosSantosVaz/snake-3310/releases/tag/v0.1.0) e o
+[recibo completo](docs/operacao/producao-010.md) registram candidata, revisão, CI, promoção da mesma imagem,
+ensaios reais, persistência e restauração dos backups dos dois ambientes.
 
 Os épicos [#13](https://github.com/BrunodosSantosVaz/snake-3310/issues/13) e
 [#28](https://github.com/BrunodosSantosVaz/snake-3310/issues/28) têm o código revisado: partida em canvas,
 controles por teclado/toque, pausa, reinício, modal de envio e ranking público persistente. A API valida apelidos
 Unicode e pontos, filtra vocabulário e limita tentativas por IP. SQLite migra antes de HTTP na imagem ARM64.
 
-A primeira candidata conjunta, homologação e produção ainda aguardam a integração. Os 13 testes de aceite
-passaram no SHA de implementação; isso comprova o código testado, não a disponibilidade remota.
-Veja [critérios e evidências](docs/operacao/documentacao-34.md).
+Os 13 testes de aceite passaram na fonte exata antes da promoção, com suíte completa no portão de produção.
+Chromium confirmou partida, modal e ranking nos dois ambientes; SQLite persistiu após reinício e os snapshots
+cifrados gerados pelo cron foram restaurados com integridade. Veja o [mapa dos critérios](docs/operacao/documentacao-34.md)
+e o [plano de conferência documental](docs/validacao/65-producao-010.md).
 
 ![Partida do Snake 3310 com cobra, comida, pontuação e controles no aparelho azul](docs/imagens/partida-3310.png)
 
@@ -56,11 +60,11 @@ aplicativo nem criar conta. O objetivo inclui demonstrar uma entrega completa pe
 
 ## Instalação
 
-O jogo é acessado pelo navegador; não precisa de instalação. Endereços configurados para a entrega:
+O jogo é acessado pelo navegador; não precisa de instalação. Endereços publicados:
 [produção](https://tsuru.frontzap.com.br/snake-3310/) e
 [homologação](https://tsuru.frontzap.com.br/snake-3310-hom/).
-A disponibilidade da primeira versão será confirmada pelos recibos da publicação e pela Release; endereço
-configurado não é prova de que a publicação já ocorreu.
+A primeira versão foi publicada pelo [workflow oficial](https://github.com/BrunodosSantosVaz/snake-3310/actions/runs/37766740098),
+com aprovação delegada pela autorização explícita do dono e portões preservados.
 
 Para executar o código localmente, use Node.js **24.18.1** e npm:
 
@@ -216,8 +220,8 @@ após a gravação, portanto uma nova tentativa pode criar outro placar; a API n
 - API `node:sqlite` em Stability 1.2 (Release Candidate); runtime fixado e testes com o mesmo motor (ADR-0003).
 - Uma réplica por ambiente; o arquivo SQLite não é banco distribuído.
 - Sem login, modo offline, sons, velocidade progressiva ou paredes atravessáveis.
-- O backup preparado é cifrado, horário e local ao mesmo host, com retenção de 14 dias; perda do host e da chave
-  exige uma cópia independente, que ainda não foi providenciada. A restauração real das apps será conferida após o deploy.
+- O backup é cifrado, horário e local ao mesmo host, com retenção de 14 dias; perda do host e da chave
+  exige uma cópia independente, que ainda não foi providenciada. A restauração local dos dois ambientes foi validada; isso não demonstra recuperação após perda total do host.
 
 ## Contribuindo
 

@@ -41,3 +41,8 @@ imagem/candidata anterior para rollback. Primeiro deploy pode partir de unidades
 até gravar/consultar dados controlados e reiniciar de forma verificada.
 
 [Adaptador oficial](../../.bigbang/docs/deploy-tsuru.md), [Checklist](checklist-producao.md).
+
+## Evidência executada
+
+A [produção v0.1.0](producao-010.md) registra os ensaios reais de ambos ambientes,
+persistência após reinício, execução do daemon cron e restauração local dos snapshots cifrados.

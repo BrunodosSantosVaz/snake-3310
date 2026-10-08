@@ -2,6 +2,7 @@
 
 | Situação | Runbook |
 | --- | --- |
+| Conferir produção v0.1.0 e provas remotas | [Recibo atual](producao-010.md) |
 | Publicar e verificar ambiente | [Deploy](deploy.md) |
 | Retornar à imagem anterior | [Voltar versão](voltar-versao.md) |
 | Recuperar placares | [Backup e restauração](backup-restauracao.md) |
@@ -13,6 +14,6 @@
 
 Configuração da infraestrutura é mantida no
 [OracleCloud/infra/tsuru](https://github.com/BrunodosSantosVaz/oraclecloud/tree/main/infra/tsuru).
-O PR de preparação ainda aguarda integração; consulte também
-[PR #1](https://github.com/BrunodosSantosVaz/oraclecloud/pull/1).
-Receitas de operação não equivalem a uma alegação de deploy/restauração já realizados nesta app.
+A preparação foi mesclada pelo [PR #1](https://github.com/BrunodosSantosVaz/oraclecloud/pull/1),
+e os recibos atuais pelo [PR #2](https://github.com/BrunodosSantosVaz/oraclecloud/pull/2).
+O [recibo v0.1.0](producao-010.md) identifica quais ensaios foram executados e seus limites.

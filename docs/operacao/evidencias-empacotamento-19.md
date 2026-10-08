@@ -1,5 +1,7 @@
 # Evidências locais de empacotamento — tarefa #19
 
+> Registro histórico de implementação/preparação. Para o estado publicado em 08/10/2026, veja o [recibo v0.1.0](producao-010.md).
+
 Em 2026-10-07, sem publicar ou alterar serviço Tsuru:
 
 - Testes anteriores ao runtime: commit `9cc5094`, startup e smoke nativo.

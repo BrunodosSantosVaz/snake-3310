@@ -172,3 +172,16 @@ em checkout isolado, preservando a suíte congelada. Não apresentar essa prova 
 - Plano #66 precede atualização #67 e conferência #68. Produção v0.1.0 já publicada;
   preservar runtime, seis RN,13CA,framework153 e a imagem. Três PRs documentais sem novo build.
   Não executar CA55 histórico contra o jogo final nem criar testes que espelham textos.
+
+## Produção v0.1.0 — 08/10/2026
+
+- Publicar produção 37766740098 SUCCESS: mesma origem OCI12fb06… da RC2; imagem/SBOM promovidos sem build.
+  Fonte da imagem7a770ff4 difere da tag/promoção3249621; recibo em operacao/producao-010.md.
+- Jogo/modal/ranking ensaiados em hom/prod; reinício preserva SQLite privado. Cron real11:07UTC gerou
+  snapshots de ambas apps, decifração/restauro em tmpfs passaram; horário original:17restaurado.
+  Limpeza removeu só linhas QA parametrizadas e preservou três placares reais de hom. Backup/chave mesmo host.
+- Framework oficial153 PR64 corrigiu Mesclar PR; workflow_run ainda usa MAIN152 até Publicar sem release.
+  Falha pós-merge69 foi recuperada via Criar branches sim37769591409→real37769677597 (refdevelop),
+  sem repetir merge nem enfraquecer checks. Finalização documental65 leva153 aMAIN sem nova imagem.
+- CA55 é histórico; suíte do jogo tem13 CA,135 unidade/integração e128 na cobertura100%.
+  Não repetir suíte interna do framework no consumidor. Documentação reutiliza CI do SHA exato.
