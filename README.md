@@ -14,6 +14,10 @@ O [bootstrap da Fundação](docs/operacao/bootstrap-sem-release-55.md) prepara e
 
 ## Estado atual
 
+A [produção v0.1.0](https://github.com/BrunodosSantosVaz/snake-3310/releases/tag/v0.1.0) foi publicada em 08/10/2026.
+A revisão dos recibos segue o [plano documental #65](docs/validacao/65-producao-010.md),
+anterior à atualização #67 e conferência #68. Os parágrafos históricos abaixo serão atualizados nessa tarefa.
+
 Os épicos [#13](https://github.com/BrunodosSantosVaz/snake-3310/issues/13) e
 [#28](https://github.com/BrunodosSantosVaz/snake-3310/issues/28) têm o código revisado: partida em canvas,
 controles por teclado/toque, pausa, reinício, modal de envio e ranking público persistente. A API valida apelidos
