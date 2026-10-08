@@ -8,3 +8,12 @@ dist/
 build/
 *.tar.gz
 .DS_Store
+node_modules/
+coverage/
+
+data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+
+deploy/app.env
