@@ -178,12 +178,26 @@
   function carregarRanking() {
     mostrar('ranking');
     const ol = $('lista-ranking');
-    ol.innerHTML = '<li>Carregando…</li>';
+    function renderMessages(...messages) {
+      ol.replaceChildren(...messages.map((message) => {
+        const entry = document.createElement('li');
+        entry.textContent = message;
+        return entry;
+      }));
+    }
+    renderMessages('Carregando…');
     setTimeout(() => {
       const r = opcao('r');
-      if (r === 'erro') { ol.innerHTML = '<li>Sem conexão.</li><li>OK tenta de novo</li>'; return; }
-      if (r === 'vazio') { ol.innerHTML = '<li>Ninguém ainda.</li><li>Seja o primeiro!</li>'; return; }
-      ol.innerHTML = ranking.slice(0, 5).map(([n, p], i) => `<li><span>${i + 1}. ${n}</span><span>${fmt.format(p)}</span></li>`).join('');
+      if (r === 'erro') { renderMessages('Sem conexão.', 'OK tenta de novo'); return; }
+      if (r === 'vazio') { renderMessages('Ninguém ainda.', 'Seja o primeiro!'); return; }
+      ol.replaceChildren(...ranking.slice(0, 5).map(([n, p], i) => {
+        const entry = document.createElement('li');
+        const name = document.createElement('span'), points = document.createElement('span');
+        name.textContent = `${i + 1}. ${n}`;
+        points.textContent = fmt.format(p);
+        entry.append(name, points);
+        return entry;
+      }));
     }, 600);
   }
 
