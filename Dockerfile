@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Multiarch official Node 24.18.1: one immutable image for staging and production.
-FROM --platform=$BUILDPLATFORM node:24.18.1-alpine@sha256:f70403e87646dc51b45295f4b8b70cdad0b63d2297c4c9899119b03f7af7a6b3 AS build
+FROM --platform=$BUILDPLATFORM node:26.10.0-alpine@sha256:0b36e8c136b94cd4fcf02188228e76c31ad5872eef3fec8cbd2eee500cfd9e80 AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -10,14 +10,14 @@ COPY docs/design/tokens.css ./docs/design/tokens.css
 RUN npm run build
 
 # Current runtime dependencies are pure JS: install on the builder, avoiding ARM64 emulation for cross builds.
-FROM --platform=$BUILDPLATFORM node:24.18.1-alpine@sha256:f70403e87646dc51b45295f4b8b70cdad0b63d2297c4c9899119b03f7af7a6b3 AS dependencies
+FROM --platform=$BUILDPLATFORM node:26.10.0-alpine@sha256:0b36e8c136b94cd4fcf02188228e76c31ad5872eef3fec8cbd2eee500cfd9e80 AS dependencies
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts \
     && test -z "$(find node_modules -name '*.node' -print -quit)" \
     && mkdir -p /data && chown node:node /data && chmod 700 /data
 
-FROM node:24.18.1-alpine@sha256:f70403e87646dc51b45295f4b8b70cdad0b63d2297c4c9899119b03f7af7a6b3 AS runtime
+FROM node:26.10.0-alpine@sha256:0b36e8c136b94cd4fcf02188228e76c31ad5872eef3fec8cbd2eee500cfd9e80 AS runtime
 ENV NODE_ENV=production \
     PORT=8888 \
     WEB_DIR=/app/dist/web \
