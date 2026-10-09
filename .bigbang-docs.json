@@ -1,0 +1,590 @@
+{
+  "schema": 1,
+  "repositorio": "BrunodosSantosVaz/snake-3310",
+  "visibilidade": "publico",
+  "wiki": {
+    "base": "b26c11fd992f6bf2a58a3abe38d3d022f1afe1e6",
+    "commit": "0848d517ee057c6a8288a8f1c94a868b6d99f89b",
+    "branch": "master",
+    "proposta": "bigbang/proposta-79-documentacao"
+  },
+  "paginas": {
+    "CHANGELOG.md": "Changelog",
+    "DESIGN.md": "Design",
+    "PRODUTO.md": "Produto",
+    "README.md": "Guia-de-inicio",
+    "STACK.md": "Tecnologia",
+    "docs/README.md": "Historico-docs-README",
+    "docs/arquitetura/README.md": "Historico-docs-arquitetura-README",
+    "docs/arquitetura/conteineres.md": "Historico-docs-arquitetura-conteineres",
+    "docs/arquitetura/contexto.md": "Historico-docs-arquitetura-contexto",
+    "docs/dados/inventario.md": "Historico-docs-dados-inventario",
+    "docs/decisoes/ADR-0001-stack.md": "ADR-0001-stack",
+    "docs/decisoes/ADR-0002-testes-com-pglite.md": "ADR-0002-testes-com-pglite",
+    "docs/decisoes/ADR-0003-sqlite-embutido.md": "ADR-0003-sqlite-embutido",
+    "docs/decisoes/ADR-0004-flash-tsuru-ci.md": "ADR-0004-flash-tsuru-ci",
+    "docs/guias/interface.md": "Historico-docs-guias-interface",
+    "docs/memoria.md": "Historico-docs-memoria",
+    "docs/negocio/regras/RN-0001-ranking-top-10.md": "RN-0001-ranking-top-10",
+    "docs/negocio/regras/RN-0002-endereco-do-jogo.md": "RN-0002-endereco-do-jogo",
+    "docs/negocio/regras/RN-0003-disponibilidade.md": "RN-0003-disponibilidade",
+    "docs/negocio/regras/RN-0004-partida.md": "RN-0004-partida",
+    "docs/negocio/regras/RN-0005-envio-placar.md": "RN-0005-envio-placar",
+    "docs/negocio/regras/RN-0006-limite-envios.md": "RN-0006-limite-envios",
+    "docs/operacao/README.md": "Historico-docs-operacao-README",
+    "docs/operacao/backup-restauracao.md": "Historico-docs-operacao-backup-restauracao",
+    "docs/operacao/bootstrap-sem-release-55.md": "Historico-docs-operacao-bootstrap-sem-release-55",
+    "docs/operacao/checklist-producao.md": "Historico-docs-operacao-checklist-producao",
+    "docs/operacao/ci.md": "Historico-docs-operacao-ci",
+    "docs/operacao/deploy.md": "Historico-docs-operacao-deploy",
+    "docs/operacao/documentacao-20.md": "Historico-docs-operacao-documentacao-20",
+    "docs/operacao/documentacao-34.md": "Historico-docs-operacao-documentacao-34",
+    "docs/operacao/documentacao-68.md": "Historico-docs-operacao-documentacao-68",
+    "docs/operacao/empacotamento.md": "Historico-docs-operacao-empacotamento",
+    "docs/operacao/evidencias-empacotamento-19.md": "Historico-docs-operacao-evidencias-empacotamento-19",
+    "docs/operacao/framework-155.md": "Historico-docs-operacao-framework-155",
+    "docs/operacao/incidente.md": "Historico-docs-operacao-incidente",
+    "docs/operacao/producao-010.md": "Historico-docs-operacao-producao-010",
+    "docs/operacao/rotacao-segredos.md": "Historico-docs-operacao-rotacao-segredos",
+    "docs/operacao/voltar-versao.md": "Historico-docs-operacao-voltar-versao",
+    "docs/padroes/excecoes.md": "Historico-docs-padroes-excecoes",
+    "docs/pesquisa/2026-10-06-sqlite.md": "Historico-docs-pesquisa-2026-10-06-sqlite",
+    "docs/pesquisa/2026-10-06-stack.md": "Historico-docs-pesquisa-2026-10-06-stack",
+    "docs/pesquisa/2026-10-07-ci-node-vitest.md": "Historico-docs-pesquisa-2026-10-07-ci-node-vitest",
+    "docs/produto/glossario.md": "Historico-docs-produto-glossario",
+    "docs/validacao/65-producao-010.md": "Historico-docs-validacao-65-producao-010",
+    "docs/decisoes/ADR-0005-wiki-publica.md": "ADR-0005-wiki-publica",
+    "docs/operacao/ambiente.md": "Ambiente"
+  },
+  "categorias": {
+    "produto": {
+      "pagina": "Produto"
+    },
+    "tecnologia": {
+      "pagina": "Tecnologia"
+    },
+    "arquitetura": {
+      "pagina": "Arquitetura"
+    },
+    "design": {
+      "pagina": "Design"
+    },
+    "requisitos": {
+      "pagina": "Requisitos"
+    },
+    "funcionalidades": {
+      "pagina": "Funcionalidades"
+    },
+    "uso": {
+      "pagina": "Guia-de-inicio"
+    },
+    "referencia": {
+      "pagina": "Referencia"
+    },
+    "seguranca": {
+      "pagina": "Seguranca"
+    },
+    "operacao": {
+      "pagina": "Operacao"
+    },
+    "historico": {
+      "pagina": "Historico"
+    }
+  },
+  "requisitos": {
+    "RN-0001": {
+      "pagina": "RN-0001-ranking-top-10"
+    },
+    "RN-0002": {
+      "pagina": "RN-0002-endereco-do-jogo"
+    },
+    "RN-0003": {
+      "pagina": "RN-0003-disponibilidade"
+    },
+    "RN-0004": {
+      "pagina": "RN-0004-partida"
+    },
+    "RN-0005": {
+      "pagina": "RN-0005-envio-placar"
+    },
+    "RN-0006": {
+      "pagina": "RN-0006-limite-envios"
+    },
+    "RF-QUALIDADE": {
+      "pagina": "Requisitos"
+    },
+    "RF-ENTREGA": {
+      "pagina": "Requisitos"
+    }
+  },
+  "codigo": {
+    "commit": "cd5115712481a2727492098ac425309f37e788e1",
+    "versao": "0.1.0",
+    "framework": "2.0.0",
+    "raizes": [
+      "src/",
+      "scripts/",
+      "migrations/",
+      "deploy/",
+      "Dockerfile",
+      ".dockerignore",
+      "package.json",
+      "package-lock.json",
+      "vite.config.ts",
+      "vitest.config.ts",
+      "tsconfig.json",
+      "eslint.config.js",
+      ".dependency-cruiser.cjs",
+      "docs/api/",
+      "docs/design/",
+      "docs/prototipos/fundacao/index.html",
+      ".github/",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "bigbang.toml",
+      ".bigbang-producao.json"
+    ],
+    "excluir": [
+      "src/aplicacao/health.test.ts",
+      "src/aplicacao/ranking.test.ts",
+      "src/aplicacao/submit-score.test.ts",
+      "src/dominio/ranking.test.ts",
+      "src/dominio/score-submission.test.ts",
+      "src/infra/config.test.ts",
+      "src/infra/database/db.test.ts",
+      "src/infra/database/persistence.test.ts",
+      "src/infra/database/score-repository.test.ts",
+      "src/interface/http/app.test.ts",
+      "src/interface/http/problem.test.ts",
+      "src/interface/http/ranking.test.ts",
+      "src/interface/http/security-headers.test.ts",
+      "src/interface/http/seguranca/score-limit.test.ts",
+      "src/interface/http/submit-score.test.ts",
+      "src/interface/startup.test.ts",
+      "src/web/game-ui.test.ts",
+      "src/web/game.test.ts",
+      "src/web/main.test.ts",
+      "src/web/ranking.test.ts",
+      "src/web/submission-ui.test.ts",
+      "src/web/ui.test.ts",
+      "tests/aceite/13-esqueleto-andante/esqueleto.test.ts",
+      "tests/aceite/28-partida-completa/browser.test.ts",
+      "tests/aceite/28-partida-completa/game.test.ts",
+      "tests/aceite/28-partida-completa/scores.test.ts",
+      "tests/aceite/28-partida-completa/ui.test.ts",
+      "tests/empacotamento/smoke.test.ts",
+      "tests/migracoes/migracoes.test.ts"
+    ],
+    "justificativas_exclusao": {
+      "testes_colocados": "Arquivos .test.ts são cenários de verificação, não módulos de execução; lista explícita mantém runtime inteiro inventariado.",
+      "framework": "Camada .bigbang é dependência instalada de release oficial 2.0.0, documentada e testada na Wiki do Big Bang; integrações/configuração do sistema são inventariadas aqui.",
+      "documentacao": "Prosa, imagens demonstrativas e registros migrados não implementam funcionalidades; contratos/runtime em docs permanecem inventariados.",
+      "derivados": "O próprio manifesto e README de entrada não são código executável; evitar hash recursivo e documentação duplicada."
+    }
+  },
+  "funcionalidades": [
+    {
+      "id": "SNAKE-01",
+      "titulo": "Partida e pontuação",
+      "pagina": "Funcionalidade-01",
+      "fontes": [
+        "src/web/game.ts"
+      ],
+      "testes": [
+        "src/web/game.test.ts:starts at the prototype position",
+        "src/web/game.test.ts:rapid turns cannot reverse",
+        "src/web/game.test.ts:a full board finishes"
+      ],
+      "requisitos": [
+        "RN-0004"
+      ],
+      "hashes": {
+        "src/web/game.ts": "sha256:828a974aa4d8f3c0043542b9c508fe94ea822cc805c8aa560e2d4f2afee77e28"
+      }
+    },
+    {
+      "id": "SNAKE-02",
+      "titulo": "Telas, teclado e pausa",
+      "pagina": "Funcionalidade-02",
+      "fontes": [
+        "src/web/index.html",
+        "src/web/main.ts",
+        "src/web/ui.ts"
+      ],
+      "testes": [
+        "src/web/ui.test.ts:keyboard navigation moves focus",
+        "src/web/game-ui.test.ts:leaving the game and destroying",
+        "src/web/submission-ui.test.ts:a successful game can submit only once"
+      ],
+      "requisitos": [
+        "RN-0002",
+        "RN-0004",
+        "RN-0005"
+      ],
+      "hashes": {
+        "src/web/index.html": "sha256:e309b58cf0ceb727e86f2fd60a39de37f90431660b8662a85cd516deb5304ed5",
+        "src/web/main.ts": "sha256:1357c8b4da5fbda2e9be05823b321dc8152493e68bc83afa1f80505ee5546867",
+        "src/web/ui.ts": "sha256:28dfdc0d848f5cf29124a1f5b4128b1c2f0659636473a804099fc6d2a1fc8aae"
+      }
+    },
+    {
+      "id": "SNAKE-03",
+      "titulo": "Renderização e identidade",
+      "pagina": "Funcionalidade-03",
+      "fontes": [
+        "docs/design/icone.svg",
+        "docs/design/logo.svg",
+        "docs/design/tokens.css",
+        "src/web/canvas.ts",
+        "src/web/public/icone.svg",
+        "src/web/styles.css",
+        "src/web/texts.ts"
+      ],
+      "testes": [
+        "tests/aceite/28-partida-completa/browser.test.ts:CA-8"
+      ],
+      "requisitos": [
+        "RN-0004"
+      ],
+      "hashes": {
+        "docs/design/icone.svg": "sha256:f2ec250f6da60ddf4aa92674424686e9a2c314207e550a712b85732a5c929a50",
+        "docs/design/logo.svg": "sha256:1a3f11138e84cf783959f1c5bd9d304451994a105290cc2bc0ec3b921a30ae25",
+        "docs/design/tokens.css": "sha256:c7e3e213e8e80f2d9aa340e9e1d262143c3f11b1563211df3a005d1c042840de",
+        "src/web/canvas.ts": "sha256:7757900ccae09748d781fceadb171433bf4f4629fb499ef430fa2cb8ba4e767f",
+        "src/web/public/icone.svg": "sha256:f2ec250f6da60ddf4aa92674424686e9a2c314207e550a712b85732a5c929a50",
+        "src/web/styles.css": "sha256:2036f56dec53b04a3aaee25c7ee0b0ea0a0a55355ad88097252a12a626bbcb65",
+        "src/web/texts.ts": "sha256:7818917382b86dd817b3ecc7b1618f6fbef6dc5c7eb049720d04675099cd8139"
+      }
+    },
+    {
+      "id": "SNAKE-04",
+      "titulo": "Ranking público e desempate",
+      "pagina": "Funcionalidade-04",
+      "fontes": [
+        "src/aplicacao/ranking.ts",
+        "src/dominio/ranking.ts",
+        "src/infra/database/score-repository.ts",
+        "src/web/ranking.ts"
+      ],
+      "testes": [
+        "tests/aceite/13-esqueleto-andante/esqueleto.test.ts:CA-3",
+        "tests/aceite/13-esqueleto-andante/esqueleto.test.ts:CA-4",
+        "src/infra/database/score-repository.test.ts:returns the highest scores first",
+        "src/web/ranking.test.ts:shows only the first five"
+      ],
+      "requisitos": [
+        "RN-0001"
+      ],
+      "hashes": {
+        "src/aplicacao/ranking.ts": "sha256:1250c8df24fcd5fad01f935d27d836db13f88049df0c258d8669e1a68c2d865d",
+        "src/dominio/ranking.ts": "sha256:13105a47001de339767b9c3c56affcadb36c485e1b2db3e8b4e1730636a7ddd4",
+        "src/infra/database/score-repository.ts": "sha256:3e619b4e420fd7071f5656f9f15534b3ebe919ac51405b3b9328f39055011147",
+        "src/web/ranking.ts": "sha256:5110e21b2725027b50f27bae1fef7a9b54ad44bf9e5a43e850d15e71db662082"
+      }
+    },
+    {
+      "id": "SNAKE-05",
+      "titulo": "Envio e validação de placar",
+      "pagina": "Funcionalidade-05",
+      "fontes": [
+        "src/aplicacao/submit-score.ts",
+        "src/dominio/score-submission.ts"
+      ],
+      "testes": [
+        "src/interface/http/submit-score.test.ts:201 stores once in SQLite",
+        "src/interface/http/submit-score.test.ts:strict JSON validation rejects",
+        "src/web/submission-ui.test.ts:failure %s allows retry"
+      ],
+      "requisitos": [
+        "RN-0005"
+      ],
+      "hashes": {
+        "src/aplicacao/submit-score.ts": "sha256:433dfcce504091d10762ba4424d72a48525023e48d969d56a91a4e5c49c0261d",
+        "src/dominio/score-submission.ts": "sha256:fdc4d7c9a7f6ac608974e4fa3378f251d40fbd9a1c2aa8eac92abb00455cd15d"
+      }
+    },
+    {
+      "id": "SNAKE-06",
+      "titulo": "Limite de envios e IP confiável",
+      "pagina": "Funcionalidade-06",
+      "fontes": [
+        "src/infra/ip.ts",
+        "src/interface/http/seguranca/client-ip.ts",
+        "src/interface/http/seguranca/score-limit.ts"
+      ],
+      "testes": [
+        "src/interface/http/seguranca/score-limit.test.ts:ScoreLimit"
+      ],
+      "requisitos": [
+        "RN-0006"
+      ],
+      "hashes": {
+        "src/infra/ip.ts": "sha256:62dd039e3e21359b2f6ec2b50b73453b9369aa7d65017b48423571f41bb968b8",
+        "src/interface/http/seguranca/client-ip.ts": "sha256:a7a71390b30cda4a32d4d1310ebb2e2e8a8b4e89d3670b3859987ffa9632cc50",
+        "src/interface/http/seguranca/score-limit.ts": "sha256:93a7bbc2960e8a025f486473b3c579e866a2ceb420344aac1579532ad9fb59cc"
+      }
+    },
+    {
+      "id": "SNAKE-07",
+      "titulo": "HTTP, saúde e proteção de respostas",
+      "pagina": "Funcionalidade-07",
+      "fontes": [
+        "src/aplicacao/health.ts",
+        "src/infra/database/probe.ts",
+        "src/interface/http/app.ts",
+        "src/interface/http/problem.ts",
+        "src/interface/http/seguranca/headers.ts"
+      ],
+      "testes": [
+        "tests/aceite/13-esqueleto-andante/esqueleto.test.ts:CA-1",
+        "tests/aceite/13-esqueleto-andante/esqueleto.test.ts:CA-2",
+        "src/interface/http/security-headers.test.ts:the game, API, redirect and errors",
+        "src/interface/http/app.test.ts:never serves dotfiles"
+      ],
+      "requisitos": [
+        "RN-0002",
+        "RN-0003"
+      ],
+      "hashes": {
+        "src/aplicacao/health.ts": "sha256:ca0d9afc686316d0c5a511332b77278fee7d9f2f4ebb93dd37439fb91417e471",
+        "src/infra/database/probe.ts": "sha256:b9d10bab8075b82cb678291b85576b7ddc199d78292222d9ab3a26e00281b0e3",
+        "src/interface/http/app.ts": "sha256:f0b965b49d8a981edce4b52b27439aec7018119dd0107bd8cd9a645808f570b0",
+        "src/interface/http/problem.ts": "sha256:a3ed6ccd604d8133bed0752f5ed5be136b7781d225bf4f9cb18d7128c8ae077c",
+        "src/interface/http/seguranca/headers.ts": "sha256:d04907fb02a4b2c99e03fd74265669a1050d6cc25834f54ee200346179edc07e"
+      }
+    },
+    {
+      "id": "SNAKE-08",
+      "titulo": "Persistência e migrações SQLite",
+      "pagina": "Funcionalidade-08",
+      "fontes": [
+        "migrations/0001_create_scores.sql",
+        "src/infra/database/db.ts",
+        "src/infra/database/migrations.ts",
+        "src/interface/migrate.ts"
+      ],
+      "testes": [
+        "tests/migracoes/migracoes.test.ts:rodam do zero, em ordem",
+        "tests/migracoes/migracoes.test.ts:uma migração que falha no meio",
+        "src/infra/database/db.test.ts:binds $n natively",
+        "src/infra/database/persistence.test.ts:real file preserves ranking"
+      ],
+      "requisitos": [
+        "RN-0001",
+        "RN-0003",
+        "RN-0005"
+      ],
+      "hashes": {
+        "migrations/0001_create_scores.sql": "sha256:2f1877a9afa7168bc6caa43af090503e30edcc8800628f75340519a408464801",
+        "src/infra/database/db.ts": "sha256:d13d736c6b1e160f40f67dd03d707ad8655bcc7195d4750a175b247e69d76f31",
+        "src/infra/database/migrations.ts": "sha256:9c089084f8ced95d6f0555592dfb9b55f6caa0eb8ea543edc40f31586b4e93ec",
+        "src/interface/migrate.ts": "sha256:67b1d742d937e0b0709ef0a98a8d398234bbd5fe1e807bf5af77b0a8f827f393"
+      }
+    },
+    {
+      "id": "SNAKE-09",
+      "titulo": "Inicialização e configuração",
+      "pagina": "Funcionalidade-09",
+      "fontes": [
+        "src/infra/config.ts",
+        "src/interface/main.ts",
+        "src/interface/startup.ts"
+      ],
+      "testes": [
+        "src/interface/startup.test.ts:startup migrates"
+      ],
+      "requisitos": [
+        "RN-0002",
+        "RN-0003"
+      ],
+      "hashes": {
+        "src/infra/config.ts": "sha256:9590980e350bf7333b4620ad8d6ae1202b8c49e1f50f682aba92153304ad246b",
+        "src/interface/main.ts": "sha256:4bf58efb44cb0b3770c8477c1148864174a533a67f8742622b9325b5de8f0716",
+        "src/interface/startup.ts": "sha256:dd37d5a720c4f176552e1d2885ff3de556d4892a608b737aeb9271081a434a56"
+      }
+    },
+    {
+      "id": "SNAKE-10",
+      "titulo": "Seleção de testes e ferramentas",
+      "pagina": "Funcionalidade-10",
+      "fontes": [
+        "scripts/affected-graph.mjs",
+        "scripts/affected-selection.mjs",
+        "scripts/affected-tests.mjs",
+        "scripts/check-design.mjs",
+        "scripts/check-game-ui.mjs",
+        "scripts/check-ui.mjs",
+        "scripts/install-ci.sh",
+        "scripts/prepare-acceptance.mjs",
+        "scripts/smoke.mjs"
+      ],
+      "testes": [
+        "tests/scripts/affected-tests.native.mjs:unknown, deleted, empty and unsafe"
+      ],
+      "requisitos": [
+        "RF-QUALIDADE"
+      ],
+      "hashes": {
+        "scripts/affected-graph.mjs": "sha256:39ae2b26bdcbb01f60795187d5c41732e361307fe3097ed1f1e139d8a0fd8447",
+        "scripts/affected-selection.mjs": "sha256:b799c62e5467769aba1416a654e9836b790785fab1e5ef94da31e9edbe4cc52a",
+        "scripts/affected-tests.mjs": "sha256:8eb75b682766d00359478a5d7a48710ae5115b8fe49f2fb4e0cc91fa92870409",
+        "scripts/check-design.mjs": "sha256:ed827d74e28dc6f0c2adff79e9efc3b5334c8564619552a856c48466e374d655",
+        "scripts/check-game-ui.mjs": "sha256:efd2a88b391ba9c1baeb3f6323a2eb979cfe36a0656af6e441e8c0197922f823",
+        "scripts/check-ui.mjs": "sha256:3874ddf99ffa4cd208dfdce742f688676d360e2f836e95722213e1b7a5aeb2d0",
+        "scripts/install-ci.sh": "sha256:22b1035726bc25d64ad29c015ea02acbe49c464726c17e5f36df306dd6b2a3ad",
+        "scripts/prepare-acceptance.mjs": "sha256:907129e415e6cb6558a2494f0c55d689af228875a324c4711bfb0d51143c899d",
+        "scripts/smoke.mjs": "sha256:d70eb6eb053af7ff035332624ca8e48369db099cad169c71cdfca082fa1470df"
+      }
+    },
+    {
+      "id": "SNAKE-11",
+      "titulo": "Build, contratos e distribuição",
+      "pagina": "Funcionalidade-11",
+      "fontes": [
+        ".dependency-cruiser.cjs",
+        ".dockerignore",
+        "Dockerfile",
+        "deploy/app.env.example",
+        "deploy/compose.yaml",
+        "docs/api/openapi.yaml",
+        "docs/prototipos/fundacao/index.html",
+        "eslint.config.js",
+        "package-lock.json",
+        "package.json",
+        "src/tsconfig.build.json",
+        "src/web/tsconfig.json",
+        "tsconfig.json",
+        "vite.config.ts",
+        "vitest.config.ts"
+      ],
+      "testes": [
+        "tests/empacotamento/smoke.test.ts:native smoke works without npm dependencies",
+        "tests/scripts/prototype-ranking.native.mjs:prototype renders a hostile nickname"
+      ],
+      "requisitos": [
+        "RF-ENTREGA"
+      ],
+      "hashes": {
+        ".dependency-cruiser.cjs": "sha256:8c78bb4d171464e3ae90ee3f1a8ccc9f96c4e363567776afc4bef43ade08af67",
+        ".dockerignore": "sha256:0d727061c46cb4a6389a1c1243307cdd7f32eedbeb4f159c39fc872752d2fc3a",
+        "Dockerfile": "sha256:8c8b9bf7e6d5b079547359ae93e55af64e5ca42626165fd6ccdccd5d8bb38b96",
+        "deploy/app.env.example": "sha256:773e7e2fcf94df677304d037b8c412f43af2d69a73c4a49174800cde5fe282cd",
+        "deploy/compose.yaml": "sha256:0967239c824e2d04bc821b078cee3648576a362b71758222a24c8ff6e1faee57",
+        "docs/api/openapi.yaml": "sha256:73c5c9ced71c9d1f95187ddec4c148131d7ddb6e0b9132b758c05e62a288e55e",
+        "docs/prototipos/fundacao/index.html": "sha256:b5be34dc6e04412beaa237672fc0150f6d55f409a85592a9191102a1d3c1c83b",
+        "eslint.config.js": "sha256:f7f7c5c417979a9acdcc3df8cd6ab7dfe25f8ddb33104866320b4a03427e7720",
+        "package-lock.json": "sha256:88c46b29c4bbdd27c43659b7232b42ad36a13cc3451eec5d74e9396cc8f3631e",
+        "package.json": "sha256:ef161b04e6ec4de6022d304da31d6c510b3b042496c3ebb753f58fd059d812c1",
+        "src/tsconfig.build.json": "sha256:2c279b3ee694acab3b42df6447ab1c364ff6d465496974dca1db98dafa62af5a",
+        "src/web/tsconfig.json": "sha256:72c0a0fdc94e44fac2545e484fee053dfb96619d6d56562e4025aef585b20ffa",
+        "tsconfig.json": "sha256:37143cf44cb9f537671e8321a41abe3c4832d33c3de31946a7ecaa284d98ace0",
+        "vite.config.ts": "sha256:472b1dac370a13c76ddb7584c26a014ebef33357e214f43b2a3ae6590d1ea77e",
+        "vitest.config.ts": "sha256:4e4435784afb5d0a32d35aef716448ab922e22fc0a02a5e6e74b51c02473f76f"
+      }
+    },
+    {
+      "id": "SNAKE-12",
+      "titulo": "Esteira, manutenção e documentação pública",
+      "pagina": "Funcionalidade-12",
+      "fontes": [
+        ".bigbang-producao.json",
+        ".github/ISSUE_TEMPLATE/bb-bug.yml",
+        ".github/ISSUE_TEMPLATE/bb-documentacao.yml",
+        ".github/ISSUE_TEMPLATE/bb-epico.yml",
+        ".github/ISSUE_TEMPLATE/bb-fundacao.yml",
+        ".github/ISSUE_TEMPLATE/bb-tarefa.yml",
+        ".github/ISSUE_TEMPLATE/bb-teste-aceite.yml",
+        ".github/ISSUE_TEMPLATE/config.yml",
+        ".github/dependabot.yml",
+        ".github/pull_request_template.md",
+        ".github/workflows/bb-candidata.yml",
+        ".github/workflows/bb-ci.yml",
+        ".github/workflows/bb-codeql.yml",
+        ".github/workflows/bb-criar-branches.yml",
+        ".github/workflows/bb-encerrar.yml",
+        ".github/workflows/bb-faxina.yml",
+        ".github/workflows/bb-iniciar-sprint.yml",
+        ".github/workflows/bb-integrar-release.yml",
+        ".github/workflows/bb-kanban.yml",
+        ".github/workflows/bb-mesclar-pr.yml",
+        ".github/workflows/bb-posses.yml",
+        ".github/workflows/bb-publicar-producao.yml",
+        ".github/workflows/bb-publicar-sem-release.yml",
+        ".github/workflows/bb-regras-pr.yml",
+        ".github/workflows/bb-seguranca.yml",
+        ".github/workflows/bb-tarefa-de-correcao.yml",
+        ".github/workflows/bb-ver-paineis.yml",
+        ".github/workflows/bb-voltar-versao.yml",
+        "AGENTS.md",
+        "CLAUDE.md",
+        "bigbang.toml"
+      ],
+      "testes": [
+        ".bigbang/tests/test_tsuru.py:test_initialization_publishes_exact_image_and_verifies_event",
+        ".bigbang/tests/test_wiki.py:test_cli_proposal_review_and_publication_preserve_original_until_confirmed",
+        ".bigbang/tests/test_wiki.py:test_new_implemented_module_without_documentation_blocks_delivery",
+        ".bigbang/tests/test_wiki.py:test_concurrent_owner_change_is_preserved_and_publication_rejected",
+        ".bigbang/tests/test_community_public.py:test_anonymous_reader_cannot_edit_public_board",
+        ".bigbang/tests/test_flash.py:test_structural_changes_run_complete_suite",
+        ".bigbang/tests/test_faxina.py:test_apaga_o_que_terminou_e_avisa_o_resto"
+      ],
+      "requisitos": [
+        "RF-ENTREGA"
+      ],
+      "hashes": {
+        ".bigbang-producao.json": "sha256:fd1ea805528f944ef727995a2ef7c5e16f930509c545d20f492fa18b01a68414",
+        ".github/ISSUE_TEMPLATE/bb-bug.yml": "sha256:5b6a48420e79afe4023704aa32ee2ee9e50ad0f0462b73ccbd2ff50357ffea4b",
+        ".github/ISSUE_TEMPLATE/bb-documentacao.yml": "sha256:95d7e3ae40717ec2cf127b9b76e1f3ba12079502ca76566a31ed9a9f351fec17",
+        ".github/ISSUE_TEMPLATE/bb-epico.yml": "sha256:c0fc820853c113a86e172e311169ce8cd127a193f1eba8ea7e4a9850ca15b9af",
+        ".github/ISSUE_TEMPLATE/bb-fundacao.yml": "sha256:2528c803b95c55d2383300d06ca37bd1db0cefe861810b8f58602bea978f75cf",
+        ".github/ISSUE_TEMPLATE/bb-tarefa.yml": "sha256:1d1313d36dd41539c8bd1edca89343edf907d6856a67b7f5bdada98453ee01cc",
+        ".github/ISSUE_TEMPLATE/bb-teste-aceite.yml": "sha256:2e0e7334a3d84a8322d6fff6e3abc281ffbb93e08868476342af1243c0491000",
+        ".github/ISSUE_TEMPLATE/config.yml": "sha256:8e81bfdc64f8278458eca34bf724cde0da466d0bcd1f6e1dfbe4a28b5b522050",
+        ".github/dependabot.yml": "sha256:8e328cf586387c48816a5b2d162e508a7733d80da7c3ae292b69c2ebec38c81d",
+        ".github/pull_request_template.md": "sha256:89902910cc6fb438a363cd32304ce002658aafee51f4ac70123012608a06a18f",
+        ".github/workflows/bb-candidata.yml": "sha256:2a91f1959610b6b93665f47ab3150b965d3e7a59d1688148f9ac7f0a0806323c",
+        ".github/workflows/bb-ci.yml": "sha256:37981ab7f5b330b04a739ab908ecbe4006d3e5f4fccb3a68e1c0a363cc9ec504",
+        ".github/workflows/bb-codeql.yml": "sha256:e288d819eab6cfb8bb5e9a4a0b5b9cf239cbb5bc4e021a01c2eaba0e9dbd34e0",
+        ".github/workflows/bb-criar-branches.yml": "sha256:e3ab09e71fc1a02615033adc87ea71113a48f9ac2a8f537f60d19b744b00f405",
+        ".github/workflows/bb-encerrar.yml": "sha256:e00f9b88a3404550b3efa5e6b53a343160ca7067a80c13969e46b05b5cf86370",
+        ".github/workflows/bb-faxina.yml": "sha256:48c2939bb754e7b2a55f2a05f914780e00f417c27ed6f5b1398eefa86206dfd1",
+        ".github/workflows/bb-iniciar-sprint.yml": "sha256:56220f738e872207f8e845b17b81578a13bd85ac8f05cdafba73cecca8d5dc21",
+        ".github/workflows/bb-integrar-release.yml": "sha256:bcb9044b2c5baa643e9f5697efb8ec9fc7cddd34047f92e69e4468fd80c306fe",
+        ".github/workflows/bb-kanban.yml": "sha256:aac2fb3ab0957bcd1ab148254b36c4fce026f6a2481fc5fc37c0cdbcf47dc9fb",
+        ".github/workflows/bb-mesclar-pr.yml": "sha256:7cb5927af58613a191d3c2ba4d700f47d94a549548a84eb51a03471a9e198973",
+        ".github/workflows/bb-posses.yml": "sha256:6ea8121b7382007105be42f1c6d19ef25c38cbeded195f9b7edf5a205d9c3b2a",
+        ".github/workflows/bb-publicar-producao.yml": "sha256:ff1dc0514f6898d6910d49c674f1ffdbcf4cf1d580ad6f07c928166b81138fb1",
+        ".github/workflows/bb-publicar-sem-release.yml": "sha256:aca32fe89e46605d2f547327f6bade6b118ddc1992b661f114ca6b40def488d7",
+        ".github/workflows/bb-regras-pr.yml": "sha256:35c704df1bbd8072939e1203d11b80e50adda0cef581f66b89cd9525b0ff53ba",
+        ".github/workflows/bb-seguranca.yml": "sha256:86061220aa99c7ce83657507a14bb392eb1ab19a24a205e41cc1c4ec5b8feb9d",
+        ".github/workflows/bb-tarefa-de-correcao.yml": "sha256:83f40ffa68fae74f2b271a95c345af235c4a9215bfa403c8331896867704d67f",
+        ".github/workflows/bb-ver-paineis.yml": "sha256:c56af104f6eed8c2d1f110f4d4e6b32ae99aa465943275f1a02a22a70ee284ba",
+        ".github/workflows/bb-voltar-versao.yml": "sha256:261172f29b3414b6e0bc23d116eaa618e47dc4c4a50caee2cf5d0c856c6284f2",
+        "AGENTS.md": "sha256:99b5003071eda14264e354ab1162e1d5ae9cf59d1ae0252a4bb8bb0fc1604fcd",
+        "CLAUDE.md": "sha256:336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
+        "bigbang.toml": "sha256:9c788f8c2793caf470611ba37caa37c140db9bc8705bf9eaadb0fc28cf97bc51"
+      }
+    }
+  ],
+  "arquivos_funcionais": [
+    {
+      "caminho": ".bigbang/MIGRACAO.md",
+      "motivo": "Contrato revisado consumido pelo atualizador oficial antes de instalar pacote."
+    }
+  ],
+  "revisao": {
+    "codigo": "cd5115712481a2727492098ac425309f37e788e1",
+    "wiki_base": "b26c11fd992f6bf2a58a3abe38d3d022f1afe1e6",
+    "independente": "aprovada pré-publicação",
+    "pr": 80,
+    "wiki_revisada": "0848d517ee057c6a8288a8f1c94a868b6d99f89b",
+    "revisor": "contexto limpo bb-revisor-pr",
+    "escopo": "Conteúdo, matriz, fontes, cenários, links, navegação e preservação dos originais; CI/finalPR após publicação."
+  },
+  "social_preview": {
+    "arquivo_wiki": "assets/social-preview.png",
+    "largura": 1280,
+    "altura": 640,
+    "upload_confirmado": false
+  }
+}
