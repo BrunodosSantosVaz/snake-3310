@@ -9,7 +9,9 @@
 Jogo da cobrinha para navegador, com visual do Nokia 3310 e ranking público. Construído com o
 [Big Bang](https://github.com/BrunodosSantosVaz/big-bang), no modo Flash.
 
-A esteira usa a distribuição oficial Big Bang v1.5.3, com modo Flash e alvo Tsuru.
+A esteira usa a distribuição oficial [Big Bang v1.5.5](https://github.com/BrunodosSantosVaz/big-bang/releases/tag/v1.5.5), com modo Flash e alvo Tsuru.
+A manutenção do framework e das Actions segue Publicar sem release. A faxina preserva PRs abertos e commits
+exclusivos; o botão Faxina permite simular e a recuperação diária confere sobras. [Procedimento](docs/operacao/framework-155.md).
 O [bootstrap da Fundação](docs/operacao/bootstrap-sem-release-55.md) prepara esses portões na `main` antes da primeira promoção.
 
 ## Estado atual
