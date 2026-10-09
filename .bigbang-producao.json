@@ -1,0 +1,46 @@
+{
+  "O backend sobe sem erro": [
+    "portao",
+    "staging"
+  ],
+  "O front compila": [
+    "portao",
+    "ci"
+  ],
+  "As migrações rodam do zero e a partir da versão anterior": [
+    "portao",
+    "testes"
+  ],
+  "O ambiente sobe pelo método de deploy do alvo": [
+    "portao",
+    "staging"
+  ],
+  "Nenhum segredo no pacote do front": [
+    "portao",
+    "seguranca"
+  ],
+  "Rotas privadas exigem autenticação": [
+    "nao-se-aplica",
+    "o sistema não tem login nem rotas privadas (PRODUTO.md)"
+  ],
+  "CORS de produção configurado por ambiente": [
+    "nao-se-aplica",
+    "o jogo e a API estão na mesma origem e no mesmo caminho; a API não habilita CORS"
+  ],
+  "Testes de limite de requisições presentes e passando": [
+    "portao",
+    "testes"
+  ],
+  "/api/health responde sem autenticação": [
+    "portao",
+    "staging"
+  ],
+  "O README documenta as variáveis de ambiente sem valores": [
+    "portao",
+    "builtin"
+  ],
+  "A auditoria de segurança não tem achado crítico ou alto aberto": [
+    "portao",
+    "builtin"
+  ]
+}
