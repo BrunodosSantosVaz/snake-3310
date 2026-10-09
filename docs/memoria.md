@@ -189,3 +189,20 @@ em checkout isolado, preservando a suíte congelada. Não apresentar essa prova 
 - Conferência #68 em operacao/documentacao-68.md fecha o mapa dos cinco critérios documentais e checklist9.4.
   Integrar65→develop e Publicar sem release pela MAIN encerram docs/configuração sem nova imagem;
   resultado efetivo somente no recibo público65 após concluir o run. Regras e bytes do jogo permanecem.
+
+## Framework v1.5.5 — manutenção sem release (09/10/2026)
+
+- Atualização #74 usa `bb atualizar` oficial: pacote com SHA-256 e atestação, seguida de `bb gerar` e `bb verificar`.
+  Origem v1.5.3; modo Flash preservado. README e Actions acompanham a atualização; configurações do artefato não mudam.
+- Framework/esteira são estruturais: CI completa e revisão independente no SHA final, sem repetir suíte interna do framework no consumidor.
+  Publicar sem release exige develop verde, diff vazio nos caminhos do artefato e autorização do ambiente producao já dada pelo dono.
+- Produção do aplicativo permanece v0.1.0: sem candidata, tag nova, imagem/APK novo ou promoção de artefato.
+- Faxina diária/botão executa scripts da main. Simular publicação/encerramento não dispara limpeza real.
+  Encerrar falha com sobras e falhas da API são explícitas; branches com PR aberto/commits exclusivos e tags são protegidas.
+  Não desligar portões nem apagar trabalho exclusivo para esconder aviso. Recibo final na issue #74.
+
+- Alerta CodeQL #1 apontava `innerHTML` no ranking do protótipo documental, que não entra na imagem Docker/Vite.
+  O renderer agora usa createElement/textContent/replaceChildren; teste nativo com fixture de apelido hostil
+  falhou antes do fix e passou depois, junto dos estados vazio/erro. A validação atual de apelido já recusava HTML;
+  a reprodução injeta o dado diretamente no ranking para provar a proteção da renderização, sem alegar exploração pela entrada normal.
+  Não dispensar o alerta: aguardar a análise na main para registrar fixed. O jogo publicado já usa textContent.
