@@ -570,34 +570,6 @@
     {
       "caminho": ".bigbang/MIGRACAO.md",
       "motivo": "Contrato revisado consumido pelo atualizador oficial antes de instalar pacote."
-    },
-    {
-      "caminho": "docs/negocio/regras/RN-0001-ranking-top-10.md",
-      "motivo": "Entrada transitória de rastreabilidade consumida pelo código confiado v1.5.5 da branch de destino durante atualização do framework; conteúdo congelado idêntico, Wiki já canônica. Remover na tarefa seguinte após destino 2.0.0."
-    },
-    {
-      "caminho": "docs/negocio/regras/RN-0002-endereco-do-jogo.md",
-      "motivo": "Entrada transitória de rastreabilidade consumida pelo código confiado v1.5.5 da branch de destino durante atualização do framework; conteúdo congelado idêntico, Wiki já canônica. Remover na tarefa seguinte após destino 2.0.0."
-    },
-    {
-      "caminho": "docs/negocio/regras/RN-0003-disponibilidade.md",
-      "motivo": "Entrada transitória de rastreabilidade consumida pelo código confiado v1.5.5 da branch de destino durante atualização do framework; conteúdo congelado idêntico, Wiki já canônica. Remover na tarefa seguinte após destino 2.0.0."
-    },
-    {
-      "caminho": "docs/negocio/regras/RN-0004-partida.md",
-      "motivo": "Entrada transitória de rastreabilidade consumida pelo código confiado v1.5.5 da branch de destino durante atualização do framework; conteúdo congelado idêntico, Wiki já canônica. Remover na tarefa seguinte após destino 2.0.0."
-    },
-    {
-      "caminho": "docs/negocio/regras/RN-0005-envio-placar.md",
-      "motivo": "Entrada transitória de rastreabilidade consumida pelo código confiado v1.5.5 da branch de destino durante atualização do framework; conteúdo congelado idêntico, Wiki já canônica. Remover na tarefa seguinte após destino 2.0.0."
-    },
-    {
-      "caminho": "docs/negocio/regras/RN-0006-limite-envios.md",
-      "motivo": "Entrada transitória de rastreabilidade consumida pelo código confiado v1.5.5 da branch de destino durante atualização do framework; conteúdo congelado idêntico, Wiki já canônica. Remover na tarefa seguinte após destino 2.0.0."
-    },
-    {
-      "caminho": "STACK.md",
-      "motivo": "Contrato transitório com somente tabela consumida pela Guarda da stack confiada v1.5.5 da branch de destino. Sem manual de sistema; Wiki canônica publicada. Remover quando destino instalado 2.0.0."
     }
   ],
   "revisao": {
@@ -617,9 +589,10 @@
     "upload_confirmado": false
   },
   "migracao": {
-    "fase": "ponte para atualizar o validador confiado da branch de destino",
+    "fase": "entradas transitórias removidas; entrega depende da revisão, CI e promoção deste PR",
     "commit_ponte": "a51de92b0c5d9dab77e97942d3129ae19f78f3cb",
-    "entradas_transitorias": [
+    "entradas_transitorias": [],
+    "entradas_removidas": [
       "docs/negocio/regras/RN-0001-ranking-top-10.md",
       "docs/negocio/regras/RN-0002-endereco-do-jogo.md",
       "docs/negocio/regras/RN-0003-disponibilidade.md",
@@ -628,6 +601,7 @@
       "docs/negocio/regras/RN-0006-limite-envios.md",
       "STACK.md"
     ],
-    "remocao_pendente": "tarefa seguinte depois que main/develop utilizarem Big Bang 2.0.0; não desativar portões nem alterar RNs/aceites"
+    "issue_final": 81,
+    "wiki_confirmada_antes_da_remocao": "d1e2fca4a46c1e04b968acd1320223cb0ca275af"
   }
 }
