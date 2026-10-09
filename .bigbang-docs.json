@@ -3,10 +3,10 @@
   "repositorio": "BrunodosSantosVaz/snake-3310",
   "visibilidade": "publico",
   "wiki": {
-    "base": "0848d517ee057c6a8288a8f1c94a868b6d99f89b",
-    "commit": "d1e2fca4a46c1e04b968acd1320223cb0ca275af",
+    "base": "d1e2fca4a46c1e04b968acd1320223cb0ca275af",
+    "commit": "1fd8b8a3ea5b5a7bda4047ace0afbf4a8171cd86",
     "branch": "master",
-    "proposta": "bigbang/proposta-79-documentacao"
+    "proposta": "bigbang/proposta-81-conclusao"
   },
   "paginas": {
     "CHANGELOG.md": "Changelog",
@@ -118,9 +118,9 @@
     }
   },
   "codigo": {
-    "commit": "cd5115712481a2727492098ac425309f37e788e1",
+    "commit": "d36b9cea1ffb0b1b75c68d24dcbb864156946c72",
     "versao": "0.1.0",
-    "framework": "2.0.0",
+    "framework": "2.0.1",
     "raizes": [
       "src/",
       "scripts/",
@@ -533,36 +533,36 @@
       ],
       "hashes": {
         ".bigbang-producao.json": "sha256:fd1ea805528f944ef727995a2ef7c5e16f930509c545d20f492fa18b01a68414",
-        ".github/ISSUE_TEMPLATE/bb-bug.yml": "sha256:5b6a48420e79afe4023704aa32ee2ee9e50ad0f0462b73ccbd2ff50357ffea4b",
-        ".github/ISSUE_TEMPLATE/bb-documentacao.yml": "sha256:95d7e3ae40717ec2cf127b9b76e1f3ba12079502ca76566a31ed9a9f351fec17",
-        ".github/ISSUE_TEMPLATE/bb-epico.yml": "sha256:c0fc820853c113a86e172e311169ce8cd127a193f1eba8ea7e4a9850ca15b9af",
-        ".github/ISSUE_TEMPLATE/bb-fundacao.yml": "sha256:2528c803b95c55d2383300d06ca37bd1db0cefe861810b8f58602bea978f75cf",
-        ".github/ISSUE_TEMPLATE/bb-tarefa.yml": "sha256:1d1313d36dd41539c8bd1edca89343edf907d6856a67b7f5bdada98453ee01cc",
-        ".github/ISSUE_TEMPLATE/bb-teste-aceite.yml": "sha256:2e0e7334a3d84a8322d6fff6e3abc281ffbb93e08868476342af1243c0491000",
-        ".github/ISSUE_TEMPLATE/config.yml": "sha256:8e81bfdc64f8278458eca34bf724cde0da466d0bcd1f6e1dfbe4a28b5b522050",
-        ".github/dependabot.yml": "sha256:8e328cf586387c48816a5b2d162e508a7733d80da7c3ae292b69c2ebec38c81d",
-        ".github/pull_request_template.md": "sha256:89902910cc6fb438a363cd32304ce002658aafee51f4ac70123012608a06a18f",
-        ".github/workflows/bb-candidata.yml": "sha256:2a91f1959610b6b93665f47ab3150b965d3e7a59d1688148f9ac7f0a0806323c",
-        ".github/workflows/bb-ci.yml": "sha256:37981ab7f5b330b04a739ab908ecbe4006d3e5f4fccb3a68e1c0a363cc9ec504",
-        ".github/workflows/bb-codeql.yml": "sha256:e288d819eab6cfb8bb5e9a4a0b5b9cf239cbb5bc4e021a01c2eaba0e9dbd34e0",
-        ".github/workflows/bb-criar-branches.yml": "sha256:e3ab09e71fc1a02615033adc87ea71113a48f9ac2a8f537f60d19b744b00f405",
-        ".github/workflows/bb-encerrar.yml": "sha256:e00f9b88a3404550b3efa5e6b53a343160ca7067a80c13969e46b05b5cf86370",
-        ".github/workflows/bb-faxina.yml": "sha256:48c2939bb754e7b2a55f2a05f914780e00f417c27ed6f5b1398eefa86206dfd1",
-        ".github/workflows/bb-iniciar-sprint.yml": "sha256:56220f738e872207f8e845b17b81578a13bd85ac8f05cdafba73cecca8d5dc21",
-        ".github/workflows/bb-integrar-release.yml": "sha256:bcb9044b2c5baa643e9f5697efb8ec9fc7cddd34047f92e69e4468fd80c306fe",
-        ".github/workflows/bb-kanban.yml": "sha256:aac2fb3ab0957bcd1ab148254b36c4fce026f6a2481fc5fc37c0cdbcf47dc9fb",
-        ".github/workflows/bb-mesclar-pr.yml": "sha256:7cb5927af58613a191d3c2ba4d700f47d94a549548a84eb51a03471a9e198973",
-        ".github/workflows/bb-posses.yml": "sha256:6ea8121b7382007105be42f1c6d19ef25c38cbeded195f9b7edf5a205d9c3b2a",
-        ".github/workflows/bb-publicar-producao.yml": "sha256:ff1dc0514f6898d6910d49c674f1ffdbcf4cf1d580ad6f07c928166b81138fb1",
-        ".github/workflows/bb-publicar-sem-release.yml": "sha256:aca32fe89e46605d2f547327f6bade6b118ddc1992b661f114ca6b40def488d7",
-        ".github/workflows/bb-regras-pr.yml": "sha256:35c704df1bbd8072939e1203d11b80e50adda0cef581f66b89cd9525b0ff53ba",
-        ".github/workflows/bb-seguranca.yml": "sha256:86061220aa99c7ce83657507a14bb392eb1ab19a24a205e41cc1c4ec5b8feb9d",
-        ".github/workflows/bb-tarefa-de-correcao.yml": "sha256:83f40ffa68fae74f2b271a95c345af235c4a9215bfa403c8331896867704d67f",
-        ".github/workflows/bb-ver-paineis.yml": "sha256:c56af104f6eed8c2d1f110f4d4e6b32ae99aa465943275f1a02a22a70ee284ba",
-        ".github/workflows/bb-voltar-versao.yml": "sha256:261172f29b3414b6e0bc23d116eaa618e47dc4c4a50caee2cf5d0c856c6284f2",
-        "AGENTS.md": "sha256:99b5003071eda14264e354ab1162e1d5ae9cf59d1ae0252a4bb8bb0fc1604fcd",
+        ".github/ISSUE_TEMPLATE/bb-bug.yml": "sha256:c0914f86bd42e201819953e8bfe96363992e78e4be88d07881a78b58fd554325",
+        ".github/ISSUE_TEMPLATE/bb-documentacao.yml": "sha256:8db06e78e06db49de776ed649e8bc46c0a5e49eb2193712b4facc12af9c33d68",
+        ".github/ISSUE_TEMPLATE/bb-epico.yml": "sha256:b3d4506fc09ff33f3a61dde0e218ac81d050b31a2b12abf6298e379dc69df899",
+        ".github/ISSUE_TEMPLATE/bb-fundacao.yml": "sha256:0334c472c90b6964a100fe90291a0de643342c2daf87770766d01519faf9412c",
+        ".github/ISSUE_TEMPLATE/bb-tarefa.yml": "sha256:d22d4ca7493ccbc0250b5e827ea98ffbda6cfc5e0bb4aaf4e3b8fdd559c602df",
+        ".github/ISSUE_TEMPLATE/bb-teste-aceite.yml": "sha256:496e9e0cbb96a34ca413ac92b421c1acc79a41ed2d1e2e7804d752d82c71073e",
+        ".github/ISSUE_TEMPLATE/config.yml": "sha256:d254501ac56c9170992d89d088f52182a9c568cf109ee840e430e8ceca4f2cca",
+        ".github/dependabot.yml": "sha256:70e91923627df9cb876390eca61e233bc379daae87883765256bbf45d45078a6",
+        ".github/pull_request_template.md": "sha256:f1df9b9205cbbded5752b8866d4ce1eb4071bdadb1f0a907c5223b6399e856d9",
+        ".github/workflows/bb-candidata.yml": "sha256:cb58c7911f40bf2a3a5585332c80cb12453f184a802fb08191a84ca383a2f352",
+        ".github/workflows/bb-ci.yml": "sha256:b2ad182d1f51bf41333653c73e99428e7d4e814d2796827c36ef2b48720fbc14",
+        ".github/workflows/bb-codeql.yml": "sha256:046f056db4d56c79042702f0d8c2a0b36126c6d33dde9351c99cfd5d9003c556",
+        ".github/workflows/bb-criar-branches.yml": "sha256:3ca63d7c6dfc8f6f0159b0f408f06304563834d29fb2f5a681696876d4c6f01e",
+        ".github/workflows/bb-encerrar.yml": "sha256:0fe8f7a730c9c2bb42344f6040192a44d0c3632c21233efe2bd6c8e36c79df01",
+        ".github/workflows/bb-faxina.yml": "sha256:32c2ba841830df4631e21cd143c06f211bf7f146ae781446cb335f1442574730",
+        ".github/workflows/bb-iniciar-sprint.yml": "sha256:8ae6d6f2180a4c30b2784a38d6ee5455dc776c3e3f2ee5c9df6e476099312dd5",
+        ".github/workflows/bb-integrar-release.yml": "sha256:2c7736b15d2b87b312e1653de155e376e6b438f9518540528340371601c1737e",
+        ".github/workflows/bb-kanban.yml": "sha256:e3fc188629822bc6c2126a39a23da422b8b397c4c696d5ed080521af5befc75c",
+        ".github/workflows/bb-mesclar-pr.yml": "sha256:b44106fc5224b3b0ae2d684158ff3c14acf93708cf4e80de4e4e97172dac51da",
+        ".github/workflows/bb-posses.yml": "sha256:cbf693129136a5c5cf31507813371fa9abdcb3468eec4b1072868911ac7fc0bc",
+        ".github/workflows/bb-publicar-producao.yml": "sha256:2745856dee8e27737901927c09b405dc984afe05917369a12efca09f447be6b0",
+        ".github/workflows/bb-publicar-sem-release.yml": "sha256:068046227389df4faeaefbb43069544e762f09fbddad33dd899776b500daa8af",
+        ".github/workflows/bb-regras-pr.yml": "sha256:0eeca12b4b066b8a3db496ce7cde8662f4e054c21bcce16dc8e0b865e60fc066",
+        ".github/workflows/bb-seguranca.yml": "sha256:cebcff4a25035e3edaebe60e4e593e0fbf29a1e6fdbfd3dccb267d7980091272",
+        ".github/workflows/bb-tarefa-de-correcao.yml": "sha256:3b731befdb93893e3f5ffe97c709d356a2e8d340b5445f68a0a8f35039d89c88",
+        ".github/workflows/bb-ver-paineis.yml": "sha256:438ebf265f4601130bd6558b4fd756911de9e37b799348756e6293a5f1590ebf",
+        ".github/workflows/bb-voltar-versao.yml": "sha256:bdb696e87d6d67480dcf76477d1012920260ec90888fdd5943cf9c0183549eb1",
+        "AGENTS.md": "sha256:9d8860a040f7d1e5f41c168b84b7ff4896827145d22e216bac24bcc3222a4b20",
         "CLAUDE.md": "sha256:336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
-        "bigbang.toml": "sha256:9c788f8c2793caf470611ba37caa37c140db9bc8705bf9eaadb0fc28cf97bc51"
+        "bigbang.toml": "sha256:8268461713b8a7ed57fdcffee5fda287359af63bec1b1237a231680b45b45972"
       }
     }
   ],
@@ -573,14 +573,14 @@
     }
   ],
   "revisao": {
-    "codigo": "cd5115712481a2727492098ac425309f37e788e1",
-    "wiki_base": "b26c11fd992f6bf2a58a3abe38d3d022f1afe1e6",
-    "independente": "aprovada pré-publicação incluindo ponte",
-    "pr": 80,
-    "wiki_revisada": "d1e2fca4a46c1e04b968acd1320223cb0ca275af",
-    "revisor": "contexto limpo bb-revisor-pr",
-    "escopo": "Conteúdo, matriz, fontes, cenários, links, navegação e preservação dos originais; CI/finalPR após publicação.",
-    "commit_ponte": "a51de92b0c5d9dab77e97942d3129ae19f78f3cb"
+    "codigo": "d36b9cea1ffb0b1b75c68d24dcbb864156946c72",
+    "wiki_base": "d1e2fca4a46c1e04b968acd1320223cb0ca275af",
+    "independente": "aprovada",
+    "issue": 81,
+    "revisor": "revisar_wiki_snake_79",
+    "pr": 84,
+    "wiki_revisada": "1fd8b8a3ea5b5a7bda4047ace0afbf4a8171cd86",
+    "publicada": true
   },
   "social_preview": {
     "arquivo_wiki": "assets/social-preview.png",
@@ -589,7 +589,7 @@
     "upload_confirmado": false
   },
   "migracao": {
-    "fase": "entradas transitórias removidas; entrega depende da revisão, CI e promoção deste PR",
+    "fase": "documentação canônica publicada; entradas transitórias e exceções removidas",
     "commit_ponte": "a51de92b0c5d9dab77e97942d3129ae19f78f3cb",
     "entradas_transitorias": [],
     "entradas_removidas": [
