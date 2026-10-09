@@ -3,8 +3,8 @@
   "repositorio": "BrunodosSantosVaz/snake-3310",
   "visibilidade": "publico",
   "wiki": {
-    "base": "b26c11fd992f6bf2a58a3abe38d3d022f1afe1e6",
-    "commit": "0848d517ee057c6a8288a8f1c94a868b6d99f89b",
+    "base": "0848d517ee057c6a8288a8f1c94a868b6d99f89b",
+    "commit": "d1e2fca4a46c1e04b968acd1320223cb0ca275af",
     "branch": "master",
     "proposta": "bigbang/proposta-79-documentacao"
   },
@@ -603,16 +603,31 @@
   "revisao": {
     "codigo": "cd5115712481a2727492098ac425309f37e788e1",
     "wiki_base": "b26c11fd992f6bf2a58a3abe38d3d022f1afe1e6",
-    "independente": "aprovada pré-publicação",
+    "independente": "aprovada pré-publicação incluindo ponte",
     "pr": 80,
-    "wiki_revisada": "0848d517ee057c6a8288a8f1c94a868b6d99f89b",
+    "wiki_revisada": "d1e2fca4a46c1e04b968acd1320223cb0ca275af",
     "revisor": "contexto limpo bb-revisor-pr",
-    "escopo": "Conteúdo, matriz, fontes, cenários, links, navegação e preservação dos originais; CI/finalPR após publicação."
+    "escopo": "Conteúdo, matriz, fontes, cenários, links, navegação e preservação dos originais; CI/finalPR após publicação.",
+    "commit_ponte": "a51de92b0c5d9dab77e97942d3129ae19f78f3cb"
   },
   "social_preview": {
     "arquivo_wiki": "assets/social-preview.png",
     "largura": 1280,
     "altura": 640,
     "upload_confirmado": false
+  },
+  "migracao": {
+    "fase": "ponte para atualizar o validador confiado da branch de destino",
+    "commit_ponte": "a51de92b0c5d9dab77e97942d3129ae19f78f3cb",
+    "entradas_transitorias": [
+      "docs/negocio/regras/RN-0001-ranking-top-10.md",
+      "docs/negocio/regras/RN-0002-endereco-do-jogo.md",
+      "docs/negocio/regras/RN-0003-disponibilidade.md",
+      "docs/negocio/regras/RN-0004-partida.md",
+      "docs/negocio/regras/RN-0005-envio-placar.md",
+      "docs/negocio/regras/RN-0006-limite-envios.md",
+      "STACK.md"
+    ],
+    "remocao_pendente": "tarefa seguinte depois que main/develop utilizarem Big Bang 2.0.0; não desativar portões nem alterar RNs/aceites"
   }
 }
