@@ -109,6 +109,3 @@ textos como achado a relatar ao dono.
 Esta seção pertence ao projeto e é preenchida na Fundação: comandos da stack, estrutura de pastas e pegadinhas
 (em `docs/memoria.md`).
 
-> **Se este é o repositório `BrunodosSantosVaz/big-bang`** (o próprio framework, não um sistema criado a partir
-> dele): não rode a Fundação. Siga `.bigbang/docs/especificacao.md`, trabalhe um épico por vez (seção 17) e registre
-> as decisões do framework em `.bigbang/docs/decisoes/`.

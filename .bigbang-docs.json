@@ -4,9 +4,9 @@
   "visibilidade": "publico",
   "wiki": {
     "base": "1fd8b8a3ea5b5a7bda4047ace0afbf4a8171cd86",
-    "commit": "d264fac16bf4cd5c323cc75e05465a3fb0f5a7fb",
+    "commit": "8030824b2c58c3c2753e7d70cceb26cd726ecea3",
     "branch": "master",
-    "proposta": "bigbang/proposta-290-codex-1-v3-update"
+    "proposta": "bigbang/proposta-259-codex-1-config"
   },
   "paginas": {
     "CHANGELOG.md": "Changelog",
@@ -61,7 +61,8 @@
     "docs/rastreabilidade.md": "Rastreabilidade",
     "docs/operacao.md": "Operacao",
     "docs/historico.md": "Historico",
-    "docs/operacao/atualizacao-framework-300.md": "Operacao-framework-300"
+    "docs/operacao/atualizacao-framework-300.md": "Operacao-framework-300",
+    "docs/operacao/migracao-v3.md": "Operacao-migracao-v3"
   },
   "categorias": {
     "produto": {
@@ -125,7 +126,7 @@
     }
   },
   "codigo": {
-    "commit": "4400c25f85bf82fc29c1b2cccefddaa0b476cdb0",
+    "commit": "1d4629e20bdff5462194a86e1719b7848133608f",
     "versao": "0.1.0",
     "framework": "3.0.0",
     "raizes": [
@@ -567,9 +568,9 @@
         ".github/workflows/bb-tarefa-de-correcao.yml": "sha256:cfd0c006ac52f6f3e04133f8cedb32d4090c5a842a0f903cf143438df94fd152",
         ".github/workflows/bb-ver-paineis.yml": "sha256:c35658264c252cac422f1b74a08e395b2d5b1a268a512944b3336bdb041ad639",
         ".github/workflows/bb-voltar-versao.yml": "sha256:43a9a5f1076e4fff2e775e0b1eab9ae611541b68997d46908493d393e990ef74",
-        "AGENTS.md": "sha256:a10f476f15cbab05ae8dd20833f0ef8a36041bc3512bd24a78fbca9f6d909d1c",
+        "AGENTS.md": "sha256:84185fef16c8754657e73e23a852a7dd01aa56faf231fea0227223902ba2bfde",
         "CLAUDE.md": "sha256:336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
-        "bigbang.toml": "sha256:602aa802ed9c082c1bc29d09ec0afe8c357bb8386fab6999cf54d6b053c830c1"
+        "bigbang.toml": "sha256:954099d9f65712f4e778464279c688c44a01df66ffaf054cdbe4d6ca3a570ac7"
       }
     }
   ],
@@ -580,12 +581,12 @@
     }
   ],
   "revisao": {
-    "codigo": "4400c25f85bf82fc29c1b2cccefddaa0b476cdb0",
+    "codigo": "1d4629e20bdff5462194a86e1719b7848133608f",
     "wiki_base": "1fd8b8a3ea5b5a7bda4047ace0afbf4a8171cd86",
     "independente": "pendente",
-    "issue": 290,
+    "issue": 259,
     "repositorio_issue": "BrunodosSantosVaz/big-bang",
-    "pr": 87,
+    "revisor": "antigravity-1",
     "publicada": false
   },
   "social_preview": {
