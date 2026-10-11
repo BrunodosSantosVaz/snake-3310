@@ -6,7 +6,7 @@ Jogo da cobrinha inspirado no Nokia 3310, com teclado/toque, pausa e ranking pú
 
 [Jogar em produção](https://tsuru.frontzap.com.br/snake-3310/) · [Homologação](https://tsuru.frontzap.com.br/snake-3310-hom/)
 
-Aplicativo **v0.1.0**, framework **Big Bang 3.0.0**, modo **Flash**. Esta manutenção conserva os artefatos publicados e o fluxo legado; quadro único e modo autonomous serão adotados em PRs separados.
+Aplicativo **v0.1.0**, framework **Big Bang 3.0.0**, modo **Flash**. A configuração já usa chaves em inglês e conserva os artefatos publicados, epic-branch, três painéis e labels legadas; quadro único e modo autonomous serão adotados em PRs separados. [Migração e volta](https://github.com/BrunodosSantosVaz/snake-3310/wiki/Operacao-migracao-v3) registram cada etapa.
 
 A documentação oficial está na **[Wiki](https://github.com/BrunodosSantosVaz/snake-3310/wiki)**:
 
