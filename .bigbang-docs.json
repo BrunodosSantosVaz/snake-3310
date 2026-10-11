@@ -3,10 +3,10 @@
   "repositorio": "BrunodosSantosVaz/snake-3310",
   "visibilidade": "publico",
   "wiki": {
-    "base": "d1e2fca4a46c1e04b968acd1320223cb0ca275af",
-    "commit": "1fd8b8a3ea5b5a7bda4047ace0afbf4a8171cd86",
+    "base": "1fd8b8a3ea5b5a7bda4047ace0afbf4a8171cd86",
+    "commit": "d264fac16bf4cd5c323cc75e05465a3fb0f5a7fb",
     "branch": "master",
-    "proposta": "bigbang/proposta-81-conclusao"
+    "proposta": "bigbang/proposta-290-codex-1-v3-update"
   },
   "paginas": {
     "CHANGELOG.md": "Changelog",
@@ -54,7 +54,14 @@
     "docs/produto/glossario.md": "Historico-docs-produto-glossario",
     "docs/validacao/65-producao-010.md": "Historico-docs-validacao-65-producao-010",
     "docs/decisoes/ADR-0005-wiki-publica.md": "ADR-0005-wiki-publica",
-    "docs/operacao/ambiente.md": "Ambiente"
+    "docs/operacao/ambiente.md": "Ambiente",
+    "docs/funcionalidades/esteira.md": "Funcionalidade-12",
+    "Home.md": "Home",
+    "_Sidebar.md": "_Sidebar",
+    "docs/rastreabilidade.md": "Rastreabilidade",
+    "docs/operacao.md": "Operacao",
+    "docs/historico.md": "Historico",
+    "docs/operacao/atualizacao-framework-300.md": "Operacao-framework-300"
   },
   "categorias": {
     "produto": {
@@ -118,9 +125,9 @@
     }
   },
   "codigo": {
-    "commit": "d36b9cea1ffb0b1b75c68d24dcbb864156946c72",
+    "commit": "4400c25f85bf82fc29c1b2cccefddaa0b476cdb0",
     "versao": "0.1.0",
-    "framework": "2.0.1",
+    "framework": "3.0.0",
     "raizes": [
       "src/",
       "scripts/",
@@ -177,7 +184,7 @@
     ],
     "justificativas_exclusao": {
       "testes_colocados": "Arquivos .test.ts são cenários de verificação, não módulos de execução; lista explícita mantém runtime inteiro inventariado.",
-      "framework": "Camada .bigbang é dependência instalada de release oficial 2.0.0, documentada e testada na Wiki do Big Bang; integrações/configuração do sistema são inventariadas aqui.",
+      "framework": "Camada .bigbang é dependência instalada da release oficial 3.0.0, documentada e testada na Wiki do Big Bang; integrações/configuração do sistema são inventariadas aqui.",
       "documentacao": "Prosa, imagens demonstrativas e registros migrados não implementam funcionalidades; contratos/runtime em docs permanecem inventariados.",
       "derivados": "O próprio manifesto e README de entrada não são código executável; evitar hash recursivo e documentação duplicada."
     }
@@ -533,36 +540,36 @@
       ],
       "hashes": {
         ".bigbang-producao.json": "sha256:fd1ea805528f944ef727995a2ef7c5e16f930509c545d20f492fa18b01a68414",
-        ".github/ISSUE_TEMPLATE/bb-bug.yml": "sha256:c0914f86bd42e201819953e8bfe96363992e78e4be88d07881a78b58fd554325",
-        ".github/ISSUE_TEMPLATE/bb-documentacao.yml": "sha256:8db06e78e06db49de776ed649e8bc46c0a5e49eb2193712b4facc12af9c33d68",
-        ".github/ISSUE_TEMPLATE/bb-epico.yml": "sha256:b3d4506fc09ff33f3a61dde0e218ac81d050b31a2b12abf6298e379dc69df899",
-        ".github/ISSUE_TEMPLATE/bb-fundacao.yml": "sha256:0334c472c90b6964a100fe90291a0de643342c2daf87770766d01519faf9412c",
-        ".github/ISSUE_TEMPLATE/bb-tarefa.yml": "sha256:d22d4ca7493ccbc0250b5e827ea98ffbda6cfc5e0bb4aaf4e3b8fdd559c602df",
-        ".github/ISSUE_TEMPLATE/bb-teste-aceite.yml": "sha256:496e9e0cbb96a34ca413ac92b421c1acc79a41ed2d1e2e7804d752d82c71073e",
-        ".github/ISSUE_TEMPLATE/config.yml": "sha256:d254501ac56c9170992d89d088f52182a9c568cf109ee840e430e8ceca4f2cca",
-        ".github/dependabot.yml": "sha256:70e91923627df9cb876390eca61e233bc379daae87883765256bbf45d45078a6",
-        ".github/pull_request_template.md": "sha256:f1df9b9205cbbded5752b8866d4ce1eb4071bdadb1f0a907c5223b6399e856d9",
-        ".github/workflows/bb-candidata.yml": "sha256:cb58c7911f40bf2a3a5585332c80cb12453f184a802fb08191a84ca383a2f352",
-        ".github/workflows/bb-ci.yml": "sha256:b2ad182d1f51bf41333653c73e99428e7d4e814d2796827c36ef2b48720fbc14",
-        ".github/workflows/bb-codeql.yml": "sha256:046f056db4d56c79042702f0d8c2a0b36126c6d33dde9351c99cfd5d9003c556",
-        ".github/workflows/bb-criar-branches.yml": "sha256:3ca63d7c6dfc8f6f0159b0f408f06304563834d29fb2f5a681696876d4c6f01e",
-        ".github/workflows/bb-encerrar.yml": "sha256:0fe8f7a730c9c2bb42344f6040192a44d0c3632c21233efe2bd6c8e36c79df01",
-        ".github/workflows/bb-faxina.yml": "sha256:32c2ba841830df4631e21cd143c06f211bf7f146ae781446cb335f1442574730",
-        ".github/workflows/bb-iniciar-sprint.yml": "sha256:8ae6d6f2180a4c30b2784a38d6ee5455dc776c3e3f2ee5c9df6e476099312dd5",
-        ".github/workflows/bb-integrar-release.yml": "sha256:2c7736b15d2b87b312e1653de155e376e6b438f9518540528340371601c1737e",
-        ".github/workflows/bb-kanban.yml": "sha256:e3fc188629822bc6c2126a39a23da422b8b397c4c696d5ed080521af5befc75c",
-        ".github/workflows/bb-mesclar-pr.yml": "sha256:b44106fc5224b3b0ae2d684158ff3c14acf93708cf4e80de4e4e97172dac51da",
-        ".github/workflows/bb-posses.yml": "sha256:cbf693129136a5c5cf31507813371fa9abdcb3468eec4b1072868911ac7fc0bc",
-        ".github/workflows/bb-publicar-producao.yml": "sha256:2745856dee8e27737901927c09b405dc984afe05917369a12efca09f447be6b0",
-        ".github/workflows/bb-publicar-sem-release.yml": "sha256:068046227389df4faeaefbb43069544e762f09fbddad33dd899776b500daa8af",
-        ".github/workflows/bb-regras-pr.yml": "sha256:0eeca12b4b066b8a3db496ce7cde8662f4e054c21bcce16dc8e0b865e60fc066",
-        ".github/workflows/bb-seguranca.yml": "sha256:cebcff4a25035e3edaebe60e4e593e0fbf29a1e6fdbfd3dccb267d7980091272",
-        ".github/workflows/bb-tarefa-de-correcao.yml": "sha256:3b731befdb93893e3f5ffe97c709d356a2e8d340b5445f68a0a8f35039d89c88",
-        ".github/workflows/bb-ver-paineis.yml": "sha256:438ebf265f4601130bd6558b4fd756911de9e37b799348756e6293a5f1590ebf",
-        ".github/workflows/bb-voltar-versao.yml": "sha256:bdb696e87d6d67480dcf76477d1012920260ec90888fdd5943cf9c0183549eb1",
-        "AGENTS.md": "sha256:9d8860a040f7d1e5f41c168b84b7ff4896827145d22e216bac24bcc3222a4b20",
+        ".github/ISSUE_TEMPLATE/bb-bug.yml": "sha256:751eb9fcfbee628c1142e459acd9972e51621d343d13d4393105464609bcfa8d",
+        ".github/ISSUE_TEMPLATE/bb-documentacao.yml": "sha256:2fc9fe42ae435d3d1c6776c095df616c5feb2f0801dec38fe3267042da9415d7",
+        ".github/ISSUE_TEMPLATE/bb-epico.yml": "sha256:00b90306ed3509807ca1b4da144fe9a93f8cf62910aa0b8424f99e18c9e11850",
+        ".github/ISSUE_TEMPLATE/bb-fundacao.yml": "sha256:800031cee1b5315cbfc4f3365fe7d4a1daff039e78ecbe37e3429ab649ccd49d",
+        ".github/ISSUE_TEMPLATE/bb-tarefa.yml": "sha256:1cd45b9f2234e62073710f652dbfe757711000f224bde56ff6579d9d41a7ceab",
+        ".github/ISSUE_TEMPLATE/bb-teste-aceite.yml": "sha256:ae58bc61ebcb5aa25b99d0744078f51ac731a3b27c913e4959bfdd73bc54f708",
+        ".github/ISSUE_TEMPLATE/config.yml": "sha256:51f3706aa83510eaca754cee3958d7fe1892669f070d8490ba8ee88cd14449ef",
+        ".github/dependabot.yml": "sha256:a3fbf20760a8f8d8f400baa13fe9bc90eba5a427c1eb199770eee91a12964f06",
+        ".github/pull_request_template.md": "sha256:7213ca2b6dd37c37aed560852a1538c36449fa3cea380001709db7664d4218ad",
+        ".github/workflows/bb-candidata.yml": "sha256:dabca61cea8d134ef9da9e7e7a4565e2b78172d67ece398e1a8d3eac73569a03",
+        ".github/workflows/bb-ci.yml": "sha256:ffbfeb0a650057b45ed80f16f673c8eacbe4120102ce6484614b43cd50359369",
+        ".github/workflows/bb-codeql.yml": "sha256:b28c78ff78bdcf7eddfb93320ba82987f9f27d6a29f56a83fff45d7de3db0da0",
+        ".github/workflows/bb-criar-branches.yml": "sha256:03aba3d83080a13d4ace0364b01d4f1870d079f3b682948c18bb1399b9afb1fc",
+        ".github/workflows/bb-encerrar.yml": "sha256:0264b6d00ac8462feab8d280d8fd2d327b7c1e01f896ca1b50e1d4e21eda9b2a",
+        ".github/workflows/bb-faxina.yml": "sha256:e6dd5b23a91cfcad74ad38d94ef284e8129af8eebfe61dc7032d1337ed8b5b5a",
+        ".github/workflows/bb-iniciar-sprint.yml": "sha256:a3851f66f3cbc70e9116fe07d8ce0608dd81881034c1f85e063acfcda1e8b578",
+        ".github/workflows/bb-integrar-release.yml": "sha256:9c28619cc9cc7721ffcf81fe78d280f578a187621c25e866765f1abaea9ba4b1",
+        ".github/workflows/bb-kanban.yml": "sha256:63b3ecf0cd9fb2d30c5ced15de2454da02b2abed5e62657509d4cbd209392878",
+        ".github/workflows/bb-mesclar-pr.yml": "sha256:d5f3a9b56364fd3de0b653397167e606fd22791bbf15d4b6db7a25e69c925d41",
+        ".github/workflows/bb-posses.yml": "sha256:dca4146e99280b0a74d95c923494d1bea2626fa3019cdcadf8679e3bc4c15c32",
+        ".github/workflows/bb-publicar-producao.yml": "sha256:edfabb7f67ea64479c0ca937e1579162802104f561295e6c5d9dcafc4c879d52",
+        ".github/workflows/bb-publicar-sem-release.yml": "sha256:e524011850e068af3f55f33a4f97ea6dbb90d884716ac2d53e3bda507e6b0135",
+        ".github/workflows/bb-regras-pr.yml": "sha256:2b528e86a6ca323573351d7e5d4b71bcd344abd3ef2bfded33e85c27b81cf574",
+        ".github/workflows/bb-seguranca.yml": "sha256:0b0af6131223fb4d281d1e9bf875d4018f4547478d15a1d8078d2312069622e6",
+        ".github/workflows/bb-tarefa-de-correcao.yml": "sha256:cfd0c006ac52f6f3e04133f8cedb32d4090c5a842a0f903cf143438df94fd152",
+        ".github/workflows/bb-ver-paineis.yml": "sha256:c35658264c252cac422f1b74a08e395b2d5b1a268a512944b3336bdb041ad639",
+        ".github/workflows/bb-voltar-versao.yml": "sha256:43a9a5f1076e4fff2e775e0b1eab9ae611541b68997d46908493d393e990ef74",
+        "AGENTS.md": "sha256:a10f476f15cbab05ae8dd20833f0ef8a36041bc3512bd24a78fbca9f6d909d1c",
         "CLAUDE.md": "sha256:336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
-        "bigbang.toml": "sha256:8268461713b8a7ed57fdcffee5fda287359af63bec1b1237a231680b45b45972"
+        "bigbang.toml": "sha256:602aa802ed9c082c1bc29d09ec0afe8c357bb8386fab6999cf54d6b053c830c1"
       }
     }
   ],
@@ -573,14 +580,13 @@
     }
   ],
   "revisao": {
-    "codigo": "d36b9cea1ffb0b1b75c68d24dcbb864156946c72",
-    "wiki_base": "d1e2fca4a46c1e04b968acd1320223cb0ca275af",
-    "independente": "aprovada",
-    "issue": 81,
-    "revisor": "revisar_wiki_snake_79",
-    "pr": 84,
-    "wiki_revisada": "1fd8b8a3ea5b5a7bda4047ace0afbf4a8171cd86",
-    "publicada": true
+    "codigo": "4400c25f85bf82fc29c1b2cccefddaa0b476cdb0",
+    "wiki_base": "1fd8b8a3ea5b5a7bda4047ace0afbf4a8171cd86",
+    "independente": "pendente",
+    "issue": 290,
+    "repositorio_issue": "BrunodosSantosVaz/big-bang",
+    "pr": 87,
+    "publicada": false
   },
   "social_preview": {
     "arquivo_wiki": "assets/social-preview.png",
